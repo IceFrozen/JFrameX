@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
+<!-- 以下所有 module 指定的name，没有添加property的配置，都是选择官方网站上默认的配置参数。-->
+<module name="Checker">
+<!--    <module name="JavadocPackage"/>  package-info.java miss-->
+    <module name="TreeWalker">
+
+    </module>
+</module>
