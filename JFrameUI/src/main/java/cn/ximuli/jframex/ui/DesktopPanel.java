@@ -1,5 +1,6 @@
 package cn.ximuli.jframex.ui;
 
+import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,9 @@ public class DesktopPanel extends JDesktopPane {
 
     private static final long serialVersionUID = 1L;
     private final Image backImage;
+
+    @Autowired
+    ResourceLoaderManager resources;
 
     @Autowired
     public DesktopPanel() {

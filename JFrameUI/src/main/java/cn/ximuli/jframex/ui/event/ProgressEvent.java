@@ -7,9 +7,7 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 @Setter
 public class ProgressEvent extends ApplicationEvent {
-
     private int value;
-
     private String message;
 
     private ProgressEvent(Object source) {
@@ -20,6 +18,5 @@ public class ProgressEvent extends ApplicationEvent {
         super(progress);
         this.value = progress;
         this.message = message;
-
     }
 }

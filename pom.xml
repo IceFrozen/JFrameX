@@ -12,6 +12,7 @@
 
         <module>JFrameUI</module>
         <module>JFrameService</module>
+        <module>JFrameModel</module>
         <module>JFrameCommon</module>
     </modules>
 
@@ -57,6 +58,12 @@
             <dependency>
                 <groupId>cn.ximuli.jframex</groupId>
                 <artifactId>jframe-common</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.ximuli.jframex</groupId>
+                <artifactId>jframe-model</artifactId>
                 <version>${version}</version>
             </dependency>
 

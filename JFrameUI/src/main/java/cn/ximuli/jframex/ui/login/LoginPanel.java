@@ -5,12 +5,10 @@ import java.net.URL;
 import javax.swing.*;
 
 public class LoginPanel extends JPanel {
-    public int width, height;
     private Image img;
-    public LoginPanel() {
+    public LoginPanel(Image img) {
         super();
-        URL url = getClass().getResource("/frame/login.jpg");
-        img = new ImageIcon(url).getImage();
+        this.img = img;
     }
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

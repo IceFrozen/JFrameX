@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>cn.ximuli.jframex</groupId>
         <artifactId>parent</artifactId>
@@ -10,8 +11,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>jframe-service</artifactId>
-    <name>JFrameService</name>
+    <artifactId>jframe-model</artifactId>
+    <name>JFrameModel</name>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -21,19 +22,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>cn.ximuli.jframex</groupId>
-            <artifactId>jframe-common</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.ximuli.jframex</groupId>
-            <artifactId>jframe-model</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
 
     </dependencies>

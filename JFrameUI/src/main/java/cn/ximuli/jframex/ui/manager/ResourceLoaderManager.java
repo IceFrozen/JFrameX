@@ -5,6 +5,7 @@ import cn.ximuli.jframex.common.constants.SystemConstants;
 import cn.ximuli.jframex.common.utils.FileUtil;
 import cn.ximuli.jframex.common.utils.StringUtil;
 import cn.ximuli.jframex.ui.event.ProgressEvent;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,12 @@ import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -37,13 +40,16 @@ public class ResourceLoaderManager {
     @Value("${app.style.name}")
     private String defaultStyle;
 
+    @PostConstruct
+    private void init() {
+        UIManager.getLookAndFeelDefaults();
+        loadAllImages(defaultStyle);
+    }
     public void loading() {
         new SwingWorker<Void, Void>() {
             protected Void doInBackground() throws InterruptedException {
                 // 预加载字体/图片等资源
-                UIManager.getLookAndFeelDefaults();
-                loadAllImages(defaultStyle);
-                FrameManager.publishEvent(new ProgressEvent(90,"images init"));
+                FrameManager.publishEvent(new ProgressEvent(90,"loading other file init"));
                 return null;
             }
         }.execute();
@@ -53,15 +59,23 @@ public class ResourceLoaderManager {
         return imageCache.get(path);
     }
 
+    public Image getImage(String path) {
+        ImageIcon imageIcon = imageCache.get(path);
+        if (imageIcon != null) {
+            return imageIcon.getImage();
+        }
+        return null;
+    }
+
     public void loadAllImages(String styleName) {
         try {
-            String scanRoot = StringUtil.joinWith(CharConstants.STR_SLASH, "classpath*:style", styleName, "*.*");
+            String scanRoot = StringUtil.joinWith(CharConstants.STR_SLASH, "classpath*:style", styleName, "**", "*");
             Resource[] resources = resourcePatternResolver.getResources(scanRoot);
             for (Resource resource : resources) {
                 // 将资源转换为ImageIcon
                 String pathStr = StringUtil.substringAfter(resource.getURL().getPath(), styleName).substring(1);
                 pathStr = StringUtil.substringBefore(pathStr, CharConstants.DOT);
-                if(isImageFile(resource.getFilename())) {
+                if(isImageFile(Objects.requireNonNull(resource.getFilename()))) {
                     ImageIcon imageIcon = loadIcon(resource);
                     imageCache.put(pathStr, imageIcon);
                 }

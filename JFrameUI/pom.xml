@@ -35,6 +35,12 @@
             <artifactId>jframe-common</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cn.ximuli.jframex</groupId>
+            <artifactId>jframe-service</artifactId>
+        </dependency>
+
+
 
     </dependencies>
 

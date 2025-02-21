@@ -4,7 +4,9 @@ import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.Status;
 import cn.ximuli.jframex.ui.event.ProgressEvent;
 import cn.ximuli.jframex.ui.event.ResourceReadyEvent;
+import cn.ximuli.jframex.ui.event.UserLoginEvent;
 import cn.ximuli.jframex.ui.login.LoginDialog;
+import cn.ximuli.jframex.ui.storage.FrameStore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +59,7 @@ public class FrameManager implements ApplicationContextAware {
     public void resourceLoadFinish(ResourceReadyEvent readyEvent) {
         if (this.status == Status.LOADING) {
             boolean closeSuccess = AppSplashScreen.close();
+//            mainFrame.setVisible(true);
             // TODO 这里判断直接登录
             if (closeSuccess) {
                 loginDialog.initialize();
@@ -66,6 +69,13 @@ public class FrameManager implements ApplicationContextAware {
             updateStatus(Status.STARTED);
         }
     }
+    @EventListener(UserLoginEvent.class)
+    public void userLogin(UserLoginEvent userLoginEvent) {
+        FrameStore.setUser(userLoginEvent.getUser());
+        loginDialog.setVisible(false);
+        mainFrame.setVisible(true);
+    }
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         context = applicationContext;
