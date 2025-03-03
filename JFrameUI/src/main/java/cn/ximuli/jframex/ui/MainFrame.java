@@ -1,20 +1,15 @@
 package cn.ximuli.jframex.ui;
 
+import cn.ximuli.jframex.ui.component.DesktopPanel;
+import cn.ximuli.jframex.ui.component.StatePanel;
 import cn.ximuli.jframex.ui.menu.MenuBar;
 import cn.ximuli.jframex.ui.menu.ToolBar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import static java.awt.BorderLayout.*;
-import static javax.swing.border.EtchedBorder.RAISED;
 
 import java.awt.*;
-import java.lang.reflect.Constructor;
-import java.util.Date;
-import java.util.Map;
 import javax.swing.*;
-import javax.swing.event.InternalFrameAdapter;
-import javax.swing.event.InternalFrameEvent;
 
 @Component
 public class MainFrame extends JFrame {
@@ -22,15 +17,15 @@ public class MainFrame extends JFrame {
     private static final double SCREEN_RATIO_HEIGHT = 0.65; // 高度占屏幕65%
     private static final long serialVersionUID = 1L;
 
-    JPanel frameContentPane;
+    private final JPanel frameContentPane;
 
-    ToolBar toolBar;
+    private final ToolBar toolBar;
 
-    DesktopPanel desktopPanel;
+    private final DesktopPanel desktopPanel;
 
-    StatePanel statePanel;
+    private final StatePanel statePanel;
 
-    MenuBar menuBar;
+    private final MenuBar menuBar;
 
     @Autowired
     public MainFrame(DesktopPanel desktopPanel, ToolBar toolBar, StatePanel statePanel, MenuBar menuBar) throws HeadlessException {
@@ -54,5 +49,9 @@ public class MainFrame extends JFrame {
         frameContentPane.add(toolBar,NORTH);
         frameContentPane.add(statePanel, SOUTH);
         this.setContentPane(frameContentPane);
+    }
+
+    public StatePanel getStatePanel() {
+        return this.statePanel;
     }
 }

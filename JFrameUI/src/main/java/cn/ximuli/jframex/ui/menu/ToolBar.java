@@ -10,9 +10,6 @@ import java.awt.*;
 @Component
 public class ToolBar extends JToolBar {
     private MenuBar menuBar;
-    /**
-     * 默认的构造方法
-     */
     private ToolBar() {
     }
     @Autowired
@@ -22,10 +19,6 @@ public class ToolBar extends JToolBar {
         initialize();
     }
 
-    /**
-     * 界面初始化方法
-     *
-     */
     private void initialize() {
         setSize(new Dimension(600, 30));
         setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -42,11 +35,6 @@ public class ToolBar extends JToolBar {
         }
     }
 
-    /**
-     * 创建工具栏按钮的方法
-     *
-     * @return javax.swing.JButton
-     */
     private JButton createToolButton(final JMenuItem item) {
         JButton button = new JButton();
         button.setText(item.getText());

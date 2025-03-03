@@ -8,6 +8,8 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -17,13 +19,14 @@ import org.springframework.stereotype.Component;
  * @author lizhipeng             new SpringUtils()
  */
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationContextAware {
     /**
      * Spring应用上下文环境
      */
     private static ConfigurableListableBeanFactory beanFactory;
 
-    private static ApplicationContext applicationContext;
+    public static ApplicationContext applicationContext;
 
     private static Environment env;
 

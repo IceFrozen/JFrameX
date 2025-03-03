@@ -1,13 +1,13 @@
 package cn.ximuli.jframex.ui.manager;
 
 import cn.ximuli.jframex.common.constants.CharConstants;
-import cn.ximuli.jframex.common.constants.SystemConstants;
 import cn.ximuli.jframex.common.utils.FileUtil;
 import cn.ximuli.jframex.common.utils.StringUtil;
+import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.event.ProgressEvent;
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -28,28 +28,35 @@ import java.util.Objects;
 @Slf4j
 @Component
 @Getter
-public class ResourceLoaderManager {
-    @Autowired
-    private ApplicationEventPublisher publisher;
-    @Autowired
-    private ResourceLoader resourceLoader;
-    @Autowired
-    private ResourcePatternResolver resourcePatternResolver;
-    private Map<String, ImageIcon> imageCache = new HashMap<>();
+public class ResourceLoaderManager implements InitializingBean {
+    private volatile int total = 90;
+    private final ApplicationEventPublisher publisher;
+    private final ResourceLoader resourceLoader;
+    private final ResourcePatternResolver resourcePatternResolver;
+    private final Map<String, ImageIcon> imageCache = new HashMap<>();
 
     @Value("${app.style.name}")
     private String defaultStyle;
 
-    @PostConstruct
-    private void init() {
+    @Autowired
+    public ResourceLoaderManager(ApplicationEventPublisher publisher, ResourceLoader resourceLoader, ResourcePatternResolver resourcePatternResolver) {
+        this.publisher = publisher;
+        this.resourceLoader = resourceLoader;
+        this.resourcePatternResolver = resourcePatternResolver;
+    }
+
+
+    @Override
+    public void afterPropertiesSet() {
         UIManager.getLookAndFeelDefaults();
         loadAllImages(defaultStyle);
     }
+
     public void loading() {
         new SwingWorker<Void, Void>() {
-            protected Void doInBackground() throws InterruptedException {
-                // 预加载字体/图片等资源
-                FrameManager.publishEvent(new ProgressEvent(90,"loading other file init"));
+            protected Void doInBackground() {
+                //Do other resource loading
+                AppSplashScreen.setProgressBarValue(new ProgressEvent(total, "finish"));
                 return null;
             }
         }.execute();
@@ -70,26 +77,22 @@ public class ResourceLoaderManager {
     public void loadAllImages(String styleName) {
         try {
             String scanRoot = StringUtil.joinWith(CharConstants.STR_SLASH, "classpath*:style", styleName, "**", "*");
+            AppSplashScreen.setProgressBarValue(new ProgressEvent(10, I18nHelper.getMessage("app.resource.scan.start"))); total -= 10;
             Resource[] resources = resourcePatternResolver.getResources(scanRoot);
-            for (Resource resource : resources) {
-                // 将资源转换为ImageIcon
+            AppSplashScreen.setProgressBarValue(new ProgressEvent(10, I18nHelper.getMessage("app.resource.scan.end", resources.length)));total -= 10;
+            for (int i = 0; i < resources.length; i++) {
+                Resource resource = resources[i];
                 String pathStr = StringUtil.substringAfter(resource.getURL().getPath(), styleName).substring(1);
                 pathStr = StringUtil.substringBefore(pathStr, CharConstants.DOT);
-                if(isImageFile(Objects.requireNonNull(resource.getFilename()))) {
+                if(FileUtil.isImageFile(Objects.requireNonNull(resource.getFilename()))) {
                     ImageIcon imageIcon = loadIcon(resource);
+                    AppSplashScreen.setProgressBarValue(new ProgressEvent(1, I18nHelper.getMessage("app.resource.scan.loading", i, resources.length)));   total -= 1;
                     imageCache.put(pathStr, imageIcon);
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private boolean isImageFile(String fileName) {
-        return fileName.endsWith(".png")  ||
-                fileName.endsWith(".jpg")  ||
-                fileName.endsWith(".jpeg")  ||
-                fileName.endsWith(".gif");
     }
 
     private ImageIcon loadIcon(Resource resource) {

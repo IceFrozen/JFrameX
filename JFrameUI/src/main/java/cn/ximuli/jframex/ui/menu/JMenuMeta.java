@@ -10,7 +10,8 @@ import java.lang.annotation.*;
 public @interface JMenuMeta {
     String value() default "";
     String role() default Anyone;
-    static String Anyone = "*";
+    String Anyone = "*";
+    String icon() default "";
 
     int shortKey() default -1;
 }

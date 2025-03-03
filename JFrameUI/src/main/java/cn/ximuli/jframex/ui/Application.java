@@ -1,13 +1,16 @@
 package cn.ximuli.jframex.ui;
 
 import cn.ximuli.jframex.ui.manager.AppSplashScreen;
+import cn.ximuli.jframex.ui.util.SpringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.core.env.Environment;
 
 @SpringBootApplication(scanBasePackages = {"cn.ximuli.jframex"})
 @Slf4j
-public class Application {
+public class Application implements CommandLineRunner {
     public static void main(String[] args) {
         AppSplashScreen appSplashScreen = AppSplashScreen.getInstance();
         // TODO 这里reading configuration file in personal folder
@@ -20,4 +23,8 @@ public class Application {
                 .run(args);
     }
 
+    @Override
+    public void run(String... args) throws Exception {
+        Environment env = SpringUtils.getEnv();
+    }
 }

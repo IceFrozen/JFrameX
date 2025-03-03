@@ -285,4 +285,12 @@ public class FileUtil {
             throw new RuntimeException("Error occured when get URL!", e);
         }
     }
+
+    public static boolean isImageFile(String fileName) {
+        return fileName.endsWith(".png")  ||
+                fileName.endsWith(".jpg")  ||
+                fileName.endsWith(".jpeg")  ||
+                fileName.endsWith(".gif");
+    }
+
 }

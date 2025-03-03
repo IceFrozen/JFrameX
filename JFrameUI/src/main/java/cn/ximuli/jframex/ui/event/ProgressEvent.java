@@ -10,10 +10,6 @@ public class ProgressEvent extends ApplicationEvent {
     private int value;
     private String message;
 
-    private ProgressEvent(Object source) {
-        super(source);
-    }
-
     public ProgressEvent(int progress, String message) {
         super(progress);
         this.value = progress;

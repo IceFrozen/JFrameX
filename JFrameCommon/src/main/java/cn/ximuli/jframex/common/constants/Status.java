@@ -1,4 +1,4 @@
-package cn.ximuli.jframex.ui;
+package cn.ximuli.jframex.common.constants;
 
 public enum Status {
 

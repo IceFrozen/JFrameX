@@ -1,10 +1,12 @@
 package cn.ximuli.jframex.ui.manager;
 
-import cn.ximuli.jframex.ui.DesktopPanel;
+import cn.ximuli.jframex.common.utils.Formatter;
 import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.component.DesktopPanel;
 import cn.ximuli.jframex.ui.event.ProgressEvent;
 import cn.ximuli.jframex.ui.event.ResourceReadyEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.helpers.MessageFormatter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,7 +71,7 @@ public class AppSplashScreen extends JWindow {
     }
 
     public void updateProgress(ProgressEvent event) {
-        log.info("Update progress ... {}", event.getValue());
+        log.debug("Update progress ... {}", event.getValue());
         int addedValue = event.getValue();
         SwingUtilities.invokeLater(() -> {
             progressBar.setIndeterminate(false);
@@ -79,7 +81,8 @@ public class AppSplashScreen extends JWindow {
                 FrameManager.publishEvent(new ResourceReadyEvent(""));
             }
             progressBar.setValue(finalValue);
-            progressBar.setString("Loading(" + event.getMessage() + ")..." + finalValue + "%");
+            String totalMessage = Formatter.format("{}({}) ... {} %", I18nHelper.getMessage("app.resource.scan.load.prefix"), event.getMessage(), finalValue);
+            progressBar.setString(totalMessage);
         });
     }
     public static AppSplashScreen getInstance() {

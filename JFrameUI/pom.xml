@@ -40,8 +40,6 @@
             <artifactId>jframe-service</artifactId>
         </dependency>
 
-
-
     </dependencies>
 
 </project>
