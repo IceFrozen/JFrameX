@@ -1,6 +1,6 @@
 package cn.ximuli.jframex.ui;
 
-import org.springframework.boot.autoconfigure.web.WebProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +11,7 @@ import java.util.Locale;
 
 
 @Configuration
+@Slf4j
 public class I18nConfig {
 
     @Bean
@@ -21,6 +22,7 @@ public class I18nConfig {
         I18nHelper.setMessageSource(messageSource, defaultLocal);
 
         messageSource.setDefaultLocale(defaultLocal);
+        log.info("Service language: {}", defaultLocal);
         return messageSource;
     }
 

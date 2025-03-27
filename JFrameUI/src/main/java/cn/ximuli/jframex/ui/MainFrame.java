@@ -38,6 +38,7 @@ public class MainFrame extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int adaptedWidth = (int)(screenSize.width  * SCREEN_RATIO_WIDTH);
         int adaptedHeight = (int)(screenSize.height  * SCREEN_RATIO_HEIGHT);
+        desktopPanel.setSize(adaptedWidth,adaptedHeight);
         setJMenuBar(menuBar);
         setSize(adaptedWidth, adaptedHeight);
         setLocationRelativeTo(null); // 屏幕居中

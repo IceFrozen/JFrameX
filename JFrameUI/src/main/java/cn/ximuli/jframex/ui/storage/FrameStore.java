@@ -1,15 +1,15 @@
 package cn.ximuli.jframex.ui.storage;
 
-import cn.ximuli.jframex.model.User;
+import cn.ximuli.jframex.model.LoggedInUser;
 
 public class FrameStore {
-    private static User loginedUser;
-    public static synchronized void setUser(User user) {
-        loginedUser = user;
+    private static LoggedInUser loggedInUser;
+    public static synchronized void setUser(LoggedInUser loggedInUser) {
+        FrameStore.loggedInUser = loggedInUser;
     }
 
-    public static User getUser() {
-        return loginedUser;
+    public static LoggedInUser getUser() {
+        return loggedInUser;
     }
 
 }

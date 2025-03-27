@@ -1,6 +1,6 @@
 package cn.ximuli.jframex.ui.login;
 
-import cn.ximuli.jframex.model.User;
+import cn.ximuli.jframex.model.LoggedInUser;
 import cn.ximuli.jframex.service.LoginService;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.event.UserLoginEvent;
@@ -96,7 +96,7 @@ public class LoginDialog extends JFrame {
             loginButton.addActionListener(e -> {
                 String username = userField.getText();
                 String passStr = new String(passwordField.getPassword());
-                User login = loginService.login(username, passStr);
+                LoggedInUser login = loginService.login(username, passStr);
                 if (login == null) {
                     JOptionPane.showMessageDialog(LoginDialog.this, I18nHelper.getMessage("app.message.login.invalidate")
                             , I18nHelper.getMessage("app.message.title.error"),

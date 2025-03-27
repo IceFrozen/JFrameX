@@ -1,11 +1,12 @@
 package cn.ximuli.jframex.ui.menu;
 
 
-import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.component.Jinhuo_Tuihuo_IFram;
 import cn.ximuli.jframex.ui.component.UserServiceInternalFrame;
 import cn.ximuli.jframex.ui.event.MenuButtonClickEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
+import cn.ximuli.jframex.service.util.SpringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,11 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 @Slf4j
 @Component
-@JMenuMeta(value = "app.menu.example.title", shortKey = KeyEvent.VK_F)
-public class ExampleMenu extends JMenu {
+@JMenuMeta(value = "app.menu.user.title", shortKey = KeyEvent.VK_F)
+public class UserMenu extends JMenu {
     ResourceLoaderManager resources;
     @Autowired
-    public ExampleMenu(ResourceLoaderManager resources) {
+    public UserMenu(ResourceLoaderManager resources) {
         this.resources = resources;
         createJMenuItem().forEach(this::add);
     }
@@ -29,18 +30,21 @@ public class ExampleMenu extends JMenu {
     public List<JMenuItem> createJMenuItem() {
         List<JMenuItem> result = new ArrayList<>();
         JMenuItem item = new JMenuItem();
-        item.setText(I18nHelper.getMessage("app.menu.example.internal.userservice.name"));
-        item.setIcon(resources.getIcon("icon/left_arrow"));
-        item.putClientProperty("class", UserServiceInternalFrame.class);
+
+        UserServiceInternalFrame jInternalFrame = SpringUtils.getBean(UserServiceInternalFrame.class);
+        item.setText(jInternalFrame.getTitle());
+        item.setIcon(jInternalFrame.getFrameIcon());
+        item.putClientProperty("class", jInternalFrame.getClass());
         item.addActionListener(e -> FrameManager.publishEvent(new MenuButtonClickEvent(item)));
         result.add(item);
 
 
-//        JMenuItem item2 = new JMenuItem();
-//        item2.setText("list2");
-//        item2.setIcon(resources.getIcon("icon/jinhuo_tuihuo"));
-//        item2.putClientProperty("class", Jinhuo_Tuihuo_IFram.class);
-//        item2.addActionListener(e -> FrameManager.publishEvent(new MenuButtonClickEvent(item2)));
+        JMenuItem item2 = new JMenuItem();
+        item2.setText("list2");
+        item2.setIcon(resources.getIcon("icon/jinhuo_tuihuo"));
+        item2.putClientProperty("class", Jinhuo_Tuihuo_IFram.class);
+        item2.addActionListener(e -> FrameManager.publishEvent(new MenuButtonClickEvent(item2)));
+        result.add(item2);
 //
 //        JMenuItem item3 = new JMenuItem();
 //        item3.setText("list2");
@@ -60,7 +64,7 @@ public class ExampleMenu extends JMenu {
 //        item5.putClientProperty("class", Jinhuo_Tuihuo_IFram.class);
 //        item5.addActionListener(e -> FrameManager.publishEvent(new MenuButtonClickEvent(item5)));
 
-        return  List.of(item);
+        return  result;
     }
 
 }

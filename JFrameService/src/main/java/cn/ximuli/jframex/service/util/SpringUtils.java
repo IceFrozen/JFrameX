@@ -1,4 +1,4 @@
-package cn.ximuli.jframex.ui.util;
+package cn.ximuli.jframex.service.util;
 
 import cn.ximuli.jframex.common.utils.StringUtil;
 import org.springframework.aop.framework.AopContext;
@@ -12,6 +12,8 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import java.util.Locale;
 
 /**
  * spring工具类 方便在非spring管理环境中获取bean
@@ -142,5 +144,9 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
 
     public static Environment getEnv() {
         return env;
+    }
+
+    public static Locale getDefaultLocale() {
+        return applicationContext.getBean(Locale.class);
     }
 }

@@ -22,6 +22,8 @@ public class DesktopPanel extends JDesktopPane {
         int width = getWidth();
         int height = this.getHeight();
         g.drawImage(backImage, 0, 0, width, height, this);
+
     }
+
 }
 

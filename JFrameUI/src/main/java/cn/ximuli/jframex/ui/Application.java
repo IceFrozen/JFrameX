@@ -1,7 +1,7 @@
 package cn.ximuli.jframex.ui;
 
 import cn.ximuli.jframex.ui.manager.AppSplashScreen;
-import cn.ximuli.jframex.ui.util.SpringUtils;
+import cn.ximuli.jframex.service.util.SpringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +15,7 @@ public class Application implements CommandLineRunner {
         AppSplashScreen appSplashScreen = AppSplashScreen.getInstance();
         // TODO 这里reading configuration file in personal folder
         System.setProperty("app.style.name", "default");
-        // System.setProperty("user.language","en");
+        System.setProperty("user.language","en");
 
         appSplashScreen.setVisible(true);
         new SpringApplicationBuilder(Application.class)

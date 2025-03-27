@@ -24,18 +24,19 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Component
 @Getter
 public class ResourceLoaderManager implements InitializingBean {
-    private volatile int total = 90;
+    private AtomicInteger total = new AtomicInteger(90);
     private final ApplicationEventPublisher publisher;
     private final ResourceLoader resourceLoader;
     private final ResourcePatternResolver resourcePatternResolver;
     private final Map<String, ImageIcon> imageCache = new HashMap<>();
 
-    @Value("${app.style.name}")
+    @Value("${app.style.name:default}")
     private String defaultStyle;
 
     @Autowired
@@ -56,7 +57,7 @@ public class ResourceLoaderManager implements InitializingBean {
         new SwingWorker<Void, Void>() {
             protected Void doInBackground() {
                 //Do other resource loading
-                AppSplashScreen.setProgressBarValue(new ProgressEvent(total, "finish"));
+                AppSplashScreen.setProgressBarValue(new ProgressEvent(total.get(), "finish"));
                 return null;
             }
         }.execute();
@@ -77,16 +78,19 @@ public class ResourceLoaderManager implements InitializingBean {
     public void loadAllImages(String styleName) {
         try {
             String scanRoot = StringUtil.joinWith(CharConstants.STR_SLASH, "classpath*:style", styleName, "**", "*");
-            AppSplashScreen.setProgressBarValue(new ProgressEvent(10, I18nHelper.getMessage("app.resource.scan.start"))); total -= 10;
+            AppSplashScreen.setProgressBarValue(new ProgressEvent(10, I18nHelper.getMessage("app.resource.scan.start")));
+            total.addAndGet(-10);
             Resource[] resources = resourcePatternResolver.getResources(scanRoot);
-            AppSplashScreen.setProgressBarValue(new ProgressEvent(10, I18nHelper.getMessage("app.resource.scan.end", resources.length)));total -= 10;
+            AppSplashScreen.setProgressBarValue(new ProgressEvent(10, I18nHelper.getMessage("app.resource.scan.end", resources.length)));
+            total.addAndGet(-10);
             for (int i = 0; i < resources.length; i++) {
                 Resource resource = resources[i];
                 String pathStr = StringUtil.substringAfter(resource.getURL().getPath(), styleName).substring(1);
                 pathStr = StringUtil.substringBefore(pathStr, CharConstants.DOT);
                 if(FileUtil.isImageFile(Objects.requireNonNull(resource.getFilename()))) {
                     ImageIcon imageIcon = loadIcon(resource);
-                    AppSplashScreen.setProgressBarValue(new ProgressEvent(1, I18nHelper.getMessage("app.resource.scan.loading", i, resources.length)));   total -= 1;
+                    AppSplashScreen.setProgressBarValue(new ProgressEvent(1, I18nHelper.getMessage("app.resource.scan.loading", i, resources.length)));
+                    total.getAndDecrement();
                     imageCache.put(pathStr, imageIcon);
                 }
             }

@@ -21,6 +21,10 @@ public class StatePanel extends JPanel {
     private static JLabel czyStateLabel = null;
     private JSeparator jSeparator2 = null;
 
+    private JInternalFrame currentFrame;
+
+    private String statusPanelDefaultContext;
+
 
     public StatePanel() {
         init();
@@ -75,6 +79,7 @@ public class StatePanel extends JPanel {
         add(getCzyStateLabel(), gridBagConstraints4);
         add(getJSeparator2(), gridBagConstraints6);
 
+        statusPanelDefaultContext = I18nHelper.getMessage("app.mainframe.state.selected");
 
     }
 
@@ -118,5 +123,23 @@ public class StatePanel extends JPanel {
 
     public void setStateLabelText(String text) {
         this.stateLabel.setText(text);
+    }
+
+
+    public void frameSelected(JInternalFrame frame) {
+        this.currentFrame = frame;
+        String currentContext = "";
+        if (this.currentFrame == null) {
+            currentContext = statusPanelDefaultContext;
+        } else {
+            currentContext = frame.getTitle();
+        }
+        String finalCurrentContext = currentContext;
+        SwingUtilities.invokeLater(() -> this.setStateLabelText(finalCurrentContext));
+
+    }
+
+    public boolean isFrameSelected(JInternalFrame frame) {
+        return frame == this.currentFrame;
     }
 }

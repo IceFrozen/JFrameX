@@ -1,18 +1,15 @@
 package cn.ximuli.jframex.ui.manager;
 
-import cn.ximuli.jframex.model.User;
+import cn.ximuli.jframex.model.LoggedInUser;
 import cn.ximuli.jframex.ui.component.DesktopPanel;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.common.constants.Status;
 import cn.ximuli.jframex.ui.component.StatePanel;
-import cn.ximuli.jframex.ui.event.MenuButtonClickEvent;
-import cn.ximuli.jframex.ui.event.ProgressEvent;
-import cn.ximuli.jframex.ui.event.ResourceReadyEvent;
-import cn.ximuli.jframex.ui.event.UserLoginEvent;
+import cn.ximuli.jframex.ui.event.*;
 import cn.ximuli.jframex.ui.login.LoginDialog;
 import cn.ximuli.jframex.ui.storage.FrameStore;
-import cn.ximuli.jframex.ui.util.SpringUtils;
+import cn.ximuli.jframex.service.util.SpringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -24,8 +21,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
-import javax.swing.event.InternalFrameAdapter;
-import javax.swing.event.InternalFrameEvent;
+import java.util.Arrays;
 
 @Slf4j
 @Component
@@ -72,7 +68,7 @@ public class FrameManager {
     public void resourceLoadFinish(ResourceReadyEvent readyEvent) {
         if (this.status == Status.LOADING) {
             boolean closeSuccess = AppSplashScreen.close();
-            userLogin(new UserLoginEvent(new User("username", "password")));
+            userLogin(new UserLoginEvent(new LoggedInUser("username", "password")));
             // TODO 这里判断直接登录
             if (closeSuccess) {
                 // loginDialog.initialize();
@@ -86,7 +82,7 @@ public class FrameManager {
 
     @EventListener(UserLoginEvent.class)
     public void userLogin(UserLoginEvent userLoginEvent) {
-        FrameStore.setUser(userLoginEvent.getUser());
+        FrameStore.setUser(userLoginEvent.getLoggedInUser());
         loginDialog.setVisible(false);
         mainFrame.setVisible(true);
         updateStatus(Status.STARTED);
@@ -102,9 +98,7 @@ public class FrameManager {
 
     public JInternalFrame createIFrame(JMenuItem item, Class<?> clazz) {
         JInternalFrame iFrame = (JInternalFrame) SpringUtils.getBean(clazz);
-
         try {
-            iFrame.setFrameIcon(item.getIcon());
             iFrame.setLocation(nextFrameX, nextFrameY);
             int frameH = iFrame.getPreferredSize().height;
             int panelH = iFrame.getContentPane().getPreferredSize().height;
@@ -115,27 +109,32 @@ public class FrameManager {
                 nextFrameX = 0;
             if (nextFrameY + iFrame.getHeight() > desktopPanel.getHeight())
                 nextFrameY = 0;
-            desktopPanel.add(iFrame);
-            iFrame.setResizable(true);
-            iFrame.setMaximizable(false);
-            iFrame.setVisible(true);
+            if (!hasComponent(iFrame)) {
+                desktopPanel.add(iFrame);
+            }
 
+//            iFrame.setResizable(true);
+//            iFrame.setMaximizable(false);
+            iFrame.setVisible(true);
             iFrame.setSelected(true);
-            updateStatuePanel(iFrame.getTitle());
-            iFrame.addInternalFrameListener(new InternalFrameAdapter() {
-                public void internalFrameActivated(InternalFrameEvent e) {
-                    super.internalFrameActivated(e);
-                    JInternalFrame frame = e.getInternalFrame();
-                    updateStatuePanel(frame.getTitle());
-                }
-                public void internalFrameDeactivated(InternalFrameEvent e) {
-                    updateStatuePanel(I18nHelper.getMessage("app.mainframe.state.selected"));
-                }
-            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return iFrame;
+    }
+
+    @EventListener
+    public void JInternalFrameSelected(FrameSelectedEvent e) {
+        SwingUtilities.invokeLater(() -> {
+            String statusPanelContext = I18nHelper.getMessage("app.mainframe.state.selected");
+            if (e.isSelected() && !statePanel.isFrameSelected(e.getJInternalFrame())) {
+                updateStatuePanel(e.getJInternalFrame());
+            } else {
+                updateStatuePanel(null);
+            }
+
+        });
     }
 
 
@@ -147,7 +146,11 @@ public class FrameManager {
         this.status = status;
     }
 
-    public synchronized void updateStatuePanel(String info) {
-        SwingUtilities.invokeLater(() -> statePanel.setStateLabelText(info));
+    public synchronized void updateStatuePanel(JInternalFrame frame) {
+        statePanel.frameSelected(frame);
+    }
+
+    public boolean hasComponent(JComponent com) {
+        return Arrays.asList(desktopPanel.getComponents()).contains(com);
     }
 }
