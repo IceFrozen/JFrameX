@@ -14,6 +14,8 @@ public class Department {
 
     private String parentId;
 
+    private String path;
+
     public String toString() {
         return this.name;
     }

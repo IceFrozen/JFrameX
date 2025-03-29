@@ -1,15 +1,14 @@
 package cn.ximuli.jframex.ui.component;
 
-
 import cn.ximuli.jframex.ui.event.FrameSelectedEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
-import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import java.awt.*;
@@ -20,7 +19,7 @@ import java.awt.event.ComponentListener;
 @Component
 @Slf4j
 @Lazy
-abstract public class JCommonInternalFrame extends JInternalFrame implements ComponentListener, InternalFrameListener {
+abstract public class JCommonInternalFrame extends JInternalFrame implements ComponentListener, InternalFrameListener, InitializingBean {
 
 
     ResourceLoaderManager resources;
@@ -36,7 +35,6 @@ abstract public class JCommonInternalFrame extends JInternalFrame implements Com
         setIconifiable(true);
         setMaximizable(true);
         setClosable(true);
-        initUI();
     }
 
     abstract void initUI();
@@ -105,5 +103,9 @@ abstract public class JCommonInternalFrame extends JInternalFrame implements Com
     @Override
     public void internalFrameDeactivated(InternalFrameEvent e) {
         FrameManager.publishEvent(new FrameSelectedEvent(e.getInternalFrame(), false));
+    }
+
+    public void afterPropertiesSet() {
+        initUI();
     }
 }

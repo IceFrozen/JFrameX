@@ -14,7 +14,6 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 @Slf4j
 @Getter
@@ -31,14 +30,12 @@ public class TablePanel<T> extends JPanel {
     private JButton nextPage;
     private JLabel pageTotalLabel;
 
-    private BiFunction<String,  Page<T>,  Page<T>> fetchAction;
+    private transient BiFunction<String, Page<T>, Page<T>> fetchAction;
     private final Map<Field, String> columnMaps = new LinkedHashMap<>();
     private final Map<Class<?>, BiFunction<T, Object, String>> converterMaps = new HashMap<>();
 
     private final Class<T> dataClass;
-
     private transient Page<T> page;
-
 
     public TablePanel(Class<T> t) {
         dataClass = t;
@@ -49,8 +46,7 @@ public class TablePanel<T> extends JPanel {
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
-
-    public TablePanel<T> addFetchAction(BiFunction<String,  Page<T>,  Page<T>> fetchAction) {
+    public TablePanel<T> addFetchAction(BiFunction<String, Page<T>, Page<T>> fetchAction) {
         this.fetchAction = fetchAction;
         return this;
     }
@@ -117,7 +113,6 @@ public class TablePanel<T> extends JPanel {
                     }).toArray();
             values.add(array);
         }
-
         fillTableData(values);
     }
 
@@ -139,7 +134,6 @@ public class TablePanel<T> extends JPanel {
         this.pageTextField.setEnabled(page.getTotalPage() > 1);
         this.pageTextField.setText(String.valueOf(this.page.getPage()));
         this.goToPageButton.setEnabled(page.getTotalPage() > 1);
-
     }
 
     private JPanel initBottomPanel() {
@@ -178,52 +172,107 @@ public class TablePanel<T> extends JPanel {
                     }
                     page.setPage(i);
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(table, I18nHelper.getMessage("app.message.error.illegal.pageNum", pageText),
-                            I18nHelper.getMessage("app.message.title.error"), JOptionPane.ERROR_MESSAGE);
+                    showMessageDialog("app.message.error.illegal.pageNum", pageText);
                 }
             }
         });
 
+        searchButton.addActionListener(e -> executeWithLoading(() -> {
+            try {
+                Page<T> currentPage = getPage();
+                Thread.sleep(5000); // 模拟加载时间
+                Page<T> newPage = fetchAction.apply(searchField.getText(), currentPage);
+                renderData(newPage);
+            } catch (Exception ex) {
+                log.error("Error during search", ex);
+                showMessageDialog("app.message.error", ex.getMessage());
+            }
+        }));
 
-        searchButton.addActionListener(e -> {
-            Page<T> currentPage = this.getPage();
-            Page<T> newPage = fetchAction.apply(pageTextField.getText(), currentPage);
-            this.renderData(newPage);
-        });
-
-        goToPageButton.addActionListener(e -> {
+        goToPageButton.addActionListener(e -> executeWithLoading(() -> {
             String pageText = pageTextField.getText();
             try {
-                int nextPage = Integer.parseInt(pageText);
+                int targetPage = Integer.parseInt(pageText); // 重命名局部变量
                 Page<T> currentPage = this.getPage();
-                currentPage.setPage(nextPage);
-                if (nextPage > currentPage.getTotalPage()) {
-                    JOptionPane.showMessageDialog(this, I18nHelper.getMessage("app.message.error.illegal.pageNum", pageText),
-                            I18nHelper.getMessage("app.message.title.error"), JOptionPane.ERROR_MESSAGE);
+                if (targetPage > currentPage.getTotalPage()) {
+                    showMessageDialog("app.message.error.illegal.pageNum", pageText);
                     return;
                 }
-
-                Page<T> newPage = fetchAction.apply(pageTextField.getText(), currentPage);
+                currentPage.setPage(targetPage); // 使用重命名后的变量
+                Page<T> newPage = fetchAction.apply(searchField.getText(), currentPage);
                 this.renderData(newPage);
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, I18nHelper.getMessage("app.message.error.illegal.pageNum", pageText),
-                        I18nHelper.getMessage("app.message.title.error"), JOptionPane.ERROR_MESSAGE);
+                showMessageDialog("app.message.error.illegal.pageNum", pageText);
             }
-        });
+        }));
 
-        nextPage.addActionListener(e -> {
+        nextPage.addActionListener(e -> executeWithLoading(() -> {
             Page<T> currentPage = this.page;
             currentPage.next();
-            this.getSearchButton().doClick();
-        });
+            Page<T> newPage = fetchAction.apply(searchField.getText(), currentPage);
+            this.renderData(newPage);
+        }));
 
-        prePage.addActionListener(e -> {
+        prePage.addActionListener(e -> executeWithLoading(() -> {
             Page<T> currentPage = this.page;
             currentPage.pre();
-            this.getSearchButton().doClick();
-        });
+            Page<T> newPage = fetchAction.apply(searchField.getText(), currentPage);
+            this.renderData(newPage);
+        }));
 
         return bottomPanel;
+    }
+
+    private void executeWithLoading(Runnable task) {
+        enableAllButton(false);
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    task.run();
+                } catch (Exception ex) {
+                    log.error("Error during background task execution", ex);
+                    showMessageDialog("app.message.error", ex.getMessage());
+                }
+                return null;
+            }
+            @Override
+            protected void done() {
+                enableAllButton(true);
+            }
+        };
+        worker.execute();
+    }
+
+    public void enableAllButton(boolean enable) {
+        Component[] components = this.getComponents();
+        for (Component component : components) {
+            if (component instanceof AbstractButton abstractButton) {
+                abstractButton.setEnabled(enable);
+            }
+        }
+
+        for (Component component : components) {
+            if (component instanceof Container container) {
+                enableButtonsInContainer(container, enable);
+            }
+        }
+    }
+
+    private void enableButtonsInContainer(Container container, boolean enable) {
+        Component[] components = container.getComponents();
+        for (Component component : components) {
+            if (component instanceof AbstractButton abstractButton) {
+                abstractButton.setEnabled(enable);
+            } else if (component instanceof Container subContainer) {
+                enableButtonsInContainer(subContainer, enable);
+            }
+        }
+    }
+
+    public void showMessageDialog(String messageCode, Object... args) {
+        JOptionPane.showMessageDialog(this, I18nHelper.getMessage(messageCode, args),
+                I18nHelper.getMessage("app.message.title.error"), JOptionPane.ERROR_MESSAGE);
     }
 
     public Page<T> getPage() {
@@ -244,11 +293,8 @@ public class TablePanel<T> extends JPanel {
 
     public static class TablePanelBuilder<T> {
         private final Class<T> dataClass;
-
         private String searchLabelStr;
-
-        private BiFunction<String,  Page<T>, Page<T>> fetchAction;
-
+        private BiFunction<String, Page<T>, Page<T>> fetchAction;
         private final Map<Class<?>, BiFunction<T, Object, String>> converterMaps = new HashMap<>();
 
         public TablePanelBuilder(Class<T> dataClass) {
@@ -260,7 +306,7 @@ public class TablePanel<T> extends JPanel {
             return this;
         }
 
-        public TablePanelBuilder<T> searchAction(BiFunction<String,  Page<T>, Page<T>> fetchAction) {
+        public TablePanelBuilder<T> searchAction(BiFunction<String, Page<T>, Page<T>> fetchAction) {
             this.fetchAction = fetchAction;
             return this;
         }
@@ -280,8 +326,7 @@ public class TablePanel<T> extends JPanel {
                 tablePanel.getSearchLabel().setText(searchLabelStr);
             }
             converterMaps.forEach(tablePanel::addConvert);
-            tablePanel.addFetchAction(this.fetchAction);
-            tablePanel.initTable();
+            tablePanel.addFetchAction(this.fetchAction).initTable();
             return tablePanel;
         }
     }

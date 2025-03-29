@@ -21,5 +21,5 @@ public interface UserService {
     Page<User> searchUserByPage(String searchInput, int page, int pageSize);
 
 
-    Page<User> searchUserByPage(String departmentId, String searchInput, int page, int pageSize);
+    Page<User> searchUserByPage(String dpPath, String searchInput, int page, int pageSize);
 }

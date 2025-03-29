@@ -1,5 +1,6 @@
 package cn.ximuli.jframex.ui.component;
 
+import cn.ximuli.jframex.common.utils.DateUtil;
 import cn.ximuli.jframex.model.Department;
 import cn.ximuli.jframex.model.Page;
 import cn.ximuli.jframex.model.User;
@@ -16,10 +17,10 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,20 +29,23 @@ import java.util.Map;
 @Component
 @Slf4j
 @Lazy
-public class UserServiceInternalFrame extends JCommonInternalFrame {
+public class UserInternalFrame extends JCommonInternalFrame {
+    private static final String LEFT_ARROW_ICON_PATH = "icon/left_arrow";
+    private static final String USER_INTERNAL_FRAME_TITLE_KEY = "app.menu.user.internal.userService.title";
+
     private JSplitPane splitPane;
     private JTree departmentTree;
-    private DefaultTreeModel treeModel;
-    private final DepartmentService departmentService;
-    private final UserService userService;
-    private TablePanel<User> tablePanel;
-    private Department selectedDepartment;
     private JPanel departmentPanel;
+    private DefaultTreeModel treeModel;
+    private final transient DepartmentService departmentService;
+    private final transient UserService userService;
+    private TablePanel<User> tablePanel;
+    private transient Department selectedDepartment;
 
-    public UserServiceInternalFrame(ResourceLoaderManager resources,
-                                    JDesktopPane desktopPane,
-                                    DepartmentService departmentService,
-                                    UserService userService) {
+    public UserInternalFrame(ResourceLoaderManager resources,
+                             JDesktopPane desktopPane,
+                             DepartmentService departmentService,
+                             UserService userService) {
         super(resources, desktopPane);
         this.departmentService = departmentService;
         this.userService = userService;
@@ -49,8 +53,8 @@ public class UserServiceInternalFrame extends JCommonInternalFrame {
 
     @Override
     void initUI() {
-        setTitle(I18nHelper.getMessage("app.menu.user.internal.userService.title"));
-        setFrameIcon(resources.getIcon("icon/left_arrow"));
+        setTitle(I18nHelper.getMessage(USER_INTERNAL_FRAME_TITLE_KEY));
+        setFrameIcon(resources.getIcon(LEFT_ARROW_ICON_PATH));
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         departmentPanel = initLeftPanel();
         tablePanel = initRightPanel();
@@ -66,12 +70,6 @@ public class UserServiceInternalFrame extends JCommonInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         this.setClosable(true);
-
-        adjustSizeAndPosition(desktopPane);
-    }
-
-    private void adjustSizeAndPosition(JDesktopPane desktopPane) {
-
     }
 
     private JPanel initLeftPanel() {
@@ -83,14 +81,20 @@ public class UserServiceInternalFrame extends JCommonInternalFrame {
 
         departmentTree.addTreeSelectionListener(e -> {
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) departmentTree.getLastSelectedPathComponent();
-            String dpId = null;
+            String dpPath = null;
+            String searchInput = tablePanel.getSearchField().getText();
+            Page<User> page = tablePanel.getPage();
             if (selectedNode != null && selectedNode.getUserObject() instanceof Department department && department != selectedDepartment) {
                 selectedDepartment = department;
-                dpId = department.getId();
-                Page<User> page = tablePanel.getPage();
+                dpPath = department.getPath();
                 page.setPage(1);
-                Page<User> userPage = userService.searchUserByPage(dpId, null, page.getPage(), page.getPageSize());
+            }
+            try {
+                Page<User> userPage = userService.searchUserByPage(dpPath, searchInput, page.getPage(), page.getPageSize());
                 tablePanel.renderData(userPage);
+            } catch (Exception ex) {
+                log.error("Failed to search users by page", ex);
+                JOptionPane.showMessageDialog(this, "Failed to load users", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -101,30 +105,42 @@ public class UserServiceInternalFrame extends JCommonInternalFrame {
         return TablePanel.TablePanelBuilder
                 .newBuilder(User.class)
                 .searchAction((input, page) -> {
-                    String dpId = selectedDepartment == null ? null : selectedDepartment.getId();
-                    return userService.searchUserByPage(dpId, input, page.getPage(), page.getPageSize());
-                }).converter(UserType.class, (user, value) -> {
-                    if (value instanceof UserType userType) {
-                        return userType.getName();
-                    } else {
-                        return value.toString();
-                    }
+                    String dpPath = selectedDepartment == null ? null : selectedDepartment.getPath();
+                    return userService.searchUserByPage(dpPath, input, page.getPage(), page.getPageSize());
                 })
-                .converter(Department.class, (user, value) -> {
-                    if (value instanceof Department department) {
-                        return department.getName();
-                    } else {
-                        return value.toString();
-                    }
-                })
-                .converter(Status.class, (user, value) -> I18nHelper.i8nConvert((Status) value))
+                .converter(UserType.class, this::convertUserType)
+                .converter(Department.class, this::convertDepartment)
+                .converter(Status.class, this::convertStatus)
+                .converter(LocalDateTime.class, (user, value) -> DateUtil.formatTime((LocalDateTime) value, DateUtil.DEFAULT_PATTERN))
                 .build();
     }
 
+    private String convertUserType(User user, Object value) {
+        if (value instanceof UserType userType) {
+            return userType.getName();
+        } else {
+            return value.toString();
+        }
+    }
+
+    private String convertDepartment(User user, Object value) {
+        if (value instanceof Department department) {
+            return department.getName();
+        } else {
+            return value.toString();
+        }
+    }
+
+    private String convertStatus(User user, Object value) {
+        return I18nHelper.i8nConvert((Status) value);
+    }
+
     private JTree createDepartmentTree(List<Department> departments) {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode(I18nHelper.getMessage("app.message.department.root"));
+        Department rootDepartment = departmentService.getRootDepartment();
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootDepartment);
+        departments.remove(rootDepartment);
         treeModel = new DefaultTreeModel(root);
-        if (departments != null && !departments.isEmpty()) {
+        if (!departments.isEmpty()) {
             buildTree(root, departments);
         }
         return new JTree(treeModel);
@@ -153,12 +169,14 @@ public class UserServiceInternalFrame extends JCommonInternalFrame {
         }
     }
 
-    // 更新部门树
     public void updateDepartmentTree(List<Department> newDepartments) {
         if (treeModel == null) {
             departmentTree = createDepartmentTree(newDepartments);
             return;
         }
+
+        Department rootDepartment = departmentService.getRootDepartment();
+        newDepartments.remove(rootDepartment);
 
         List<TreePath> expandedPaths = new ArrayList<>();
         for (int i = 0; i < departmentTree.getRowCount(); i++) {
@@ -167,14 +185,12 @@ public class UserServiceInternalFrame extends JCommonInternalFrame {
                 expandedPaths.add(path);
             }
         }
-
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) treeModel.getRoot();
         root.removeAllChildren();
 
-        if (newDepartments != null && !newDepartments.isEmpty()) {
+        if (!newDepartments.isEmpty()) {
             buildTree(root, newDepartments);
         }
-
         treeModel.reload();
 
         for (TreePath path : expandedPaths) {
@@ -182,12 +198,14 @@ public class UserServiceInternalFrame extends JCommonInternalFrame {
         }
     }
 
-
     @Override
     public void internalFrameOpened(InternalFrameEvent e) {
-        List<Department> departments = departmentService.queryAllDepartments();
-        SwingUtilities.invokeLater(() -> {
-            updateDepartmentTree(departments);
-        });
+        try {
+            List<Department> departments = departmentService.queryAllDepartments();
+            SwingUtilities.invokeLater(() -> updateDepartmentTree(departments));
+        } catch (Exception ex) {
+            log.error("Failed to query departments", ex);
+            JOptionPane.showMessageDialog(this, "Failed to load departments", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

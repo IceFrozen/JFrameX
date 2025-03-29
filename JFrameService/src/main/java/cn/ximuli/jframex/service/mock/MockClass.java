@@ -69,34 +69,58 @@ public class MockClass {
 
         // 创建部门列表
         List<Department> departments = new ArrayList<>();
+        Map<String, Department> departmentMap = new HashMap<>();
+
         for (String[] data : departmentData) {
-            departments.add(createDepartment(data[0], data[1], data[2]));
+            Department dept = createDepartment(data[0], data[1], data[2]);
+            departments.add(dept);
+            departmentMap.put(dept.getId(), dept);
+        }
+
+        // 设置部门路径
+        for (Department dept : departments) {
+            setDepartmentPath(dept, departmentMap);
         }
         return departments;
+    }
+
+    private static void setDepartmentPath(Department dept, Map<String, Department> departmentMap) {
+        if (dept.getParentId() == null) {
+            dept.setPath("/" + dept.getId());
+        } else {
+            Department parentDept = departmentMap.get(dept.getParentId());
+            if (parentDept != null) {
+                dept.setPath(parentDept.getPath() + "/" + dept.getId());
+            } else {
+                dept.setPath("/" + dept.getId());
+            }
+        }
     }
 
     private static String[][] getDepartmentData(boolean isEnglish) {
         if (isEnglish) {
             return new String[][]{
-                    {"1", "Human Resources Department", null},
+                    {"0", "Company", null},
+                    {"1", "Human Resources Department", "0"},
                     {"2", "Recruitment Group", "1"},
                     {"3", "Training Group", "1"},
-                    {"4", "Technology Department", null},
+                    {"4", "Technology Department", "0"},
                     {"5", "Frontend Group", "4"},
                     {"6", "Backend Group", "4"},
-                    {"7", "Sales Department", null},
+                    {"7", "Sales Department", "0"},
                     {"8", "Domestic Sales Group", "7"},
                     {"9", "International Sales Group", "7"}
             };
         } else {
             return new String[][]{
-                    {"1", "人力资源部", null},
+                    {"0", "公司", null},
+                    {"1", "人力资源部", "0"},
                     {"2", "招聘组", "1"},
                     {"3", "培训组", "1"},
-                    {"4", "技术部", null},
+                    {"4", "技术部", "0"},
                     {"5", "前端组", "4"},
                     {"6", "后端组", "4"},
-                    {"7", "销售部", null},
+                    {"7", "销售部", "0"},
                     {"8", "国内销售组", "7"},
                     {"9", "国际销售组", "7"}
             };
@@ -111,10 +135,10 @@ public class MockClass {
         return dept;
     }
 
-    public static Page<User> searchUserByPage(String departmentId, String searchInput, int page, int pageSize) {
+    public static Page<User> searchUserByPage(String depath, String searchInput, int page, int pageSize) {
         List<User> filteredUser = allUser;
-        if (StringUtil.isNoneBlank(departmentId)) {
-            filteredUser = filteredUser.stream().filter(user -> departmentId.equals(user.getDepartment().getId())).toList();
+        if (StringUtil.isNoneBlank(depath)) {
+            filteredUser = filteredUser.stream().filter(user -> user.getDepartment().getPath().contains(depath)).toList();
         }
         if (StringUtil.isNoneBlank(searchInput)) {
             filteredUser = filteredUser.stream().filter(user ->
@@ -171,7 +195,7 @@ public class MockClass {
         public static Department randomDepartment() {
             List<Department> leafDepartments = getLeafDepartments(departmentList);
             if (leafDepartments.isEmpty()) {
-                return null; // 或者抛出异常，根据需求决定
+                return null;
             }
             return leafDepartments.get(RandomUtil.randomInt(0, leafDepartments.size()));
         }
@@ -206,6 +230,4 @@ public class MockClass {
             return statuses[RANDOM.nextInt(statuses.length)];
         }
     }
-
-
 }
