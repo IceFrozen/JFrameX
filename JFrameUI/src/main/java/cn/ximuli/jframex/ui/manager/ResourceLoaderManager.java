@@ -5,6 +5,7 @@ import cn.ximuli.jframex.common.utils.FileUtil;
 import cn.ximuli.jframex.common.utils.StringUtil;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.event.ProgressEvent;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -45,7 +46,6 @@ public class ResourceLoaderManager implements InitializingBean {
         this.resourceLoader = resourceLoader;
         this.resourcePatternResolver = resourcePatternResolver;
     }
-
 
     @Override
     public void afterPropertiesSet() {
@@ -101,6 +101,9 @@ public class ResourceLoaderManager implements InitializingBean {
 
     private ImageIcon loadIcon(Resource resource) {
         try(InputStream is = resource.getInputStream()) {
+            if (Objects.equals(FileUtil.extName(resource.getFilename()), "svg")) {
+                return new FlatSVGIcon(is);
+            }
             return new ImageIcon(ImageIO.read(is));
         } catch (IOException e) {
             throw new RuntimeException("resource not exist!");

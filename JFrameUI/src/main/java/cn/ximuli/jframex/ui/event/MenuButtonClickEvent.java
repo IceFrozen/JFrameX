@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationEvent;
 import javax.swing.*;
 
 public class MenuButtonClickEvent  extends ApplicationEvent {
+
     public MenuButtonClickEvent(JMenuItem source) {
         super(source);
     }

@@ -1,13 +1,13 @@
 package cn.ximuli.jframex.ui.menu;
 
 
-import java.awt.event.KeyEvent;
 import java.lang.annotation.*;
 
 @Target({ ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface JMenuMeta {
+    int order() default 0;
     String value() default "";
     String role() default Anyone;
     String Anyone = "*";

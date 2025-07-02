@@ -14,7 +14,6 @@ public interface UserService {
     List<User> queryAllUserByPage(int page, int pageSize);
 
 
-
     Page<User> queryUserByPage(int page, int pageSize);
 
 

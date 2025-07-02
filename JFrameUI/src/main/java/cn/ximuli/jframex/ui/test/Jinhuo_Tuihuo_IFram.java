@@ -1,4 +1,4 @@
-package cn.ximuli.jframex.ui.component;
+package cn.ximuli.jframex.ui.test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -6,11 +6,9 @@ import org.springframework.stereotype.Component;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JInternalFrame;
-import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import java.awt.GridLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 

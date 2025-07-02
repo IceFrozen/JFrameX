@@ -17,19 +17,11 @@ import java.util.concurrent.Executors;
 @Slf4j
 public class AppSplashScreen extends JWindow {
     private static AppSplashScreen INSTANCE = new AppSplashScreen();
-
-    private ExecutorService animExecutor = Executors.newSingleThreadExecutor();
     private JProgressBar progressBar;
 
     public AppSplashScreen() {
         ImageIcon icon = loadSplashImage();
         JLabel splashLabel = new JLabel(icon);
-//        Image scaled = icon.getImage().getScaledInstance(
-//                (int)(600 * Toolkit.getDefaultToolkit().getScreenResolution()  / 96f),
-//                (int)(400 * Toolkit.getDefaultToolkit().getScreenResolution()  / 96f),
-//                Image.SCALE_SMOOTH
-//        );
-//        JLabel splashLabel = new JLabel(new ImageIcon(scaled));
         splashLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
         progressBar = new JProgressBar(0, 100);
         progressBar.setValue(0);

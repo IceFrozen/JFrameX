@@ -20,8 +20,6 @@ import java.awt.event.ComponentListener;
 @Slf4j
 @Lazy
 abstract public class JCommonInternalFrame extends JInternalFrame implements ComponentListener, InternalFrameListener, InitializingBean {
-
-
     ResourceLoaderManager resources;
     JDesktopPane desktopPane;
 
@@ -37,7 +35,7 @@ abstract public class JCommonInternalFrame extends JInternalFrame implements Com
         setClosable(true);
     }
 
-    abstract void initUI();
+    protected abstract void initUI();
 
     @Override
     public void componentShown(ComponentEvent e) {

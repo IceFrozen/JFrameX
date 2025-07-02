@@ -1,4 +1,4 @@
-package cn.ximuli.jframex.ui.component;
+package cn.ximuli.jframex.ui.test;
 import cn.ximuli.jframex.model.TbKucun;
 import cn.ximuli.jframex.model.TbRkthDetail;
 import cn.ximuli.jframex.model.TbRkthMain;
@@ -6,10 +6,8 @@ import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
 import java.util.*;
 import java.util.Date;
-import java.util.List;
 
 import javax.swing.*;
 import javax.swing.event.*;

@@ -36,6 +36,9 @@
         <kaptcha.version>2.3.2</kaptcha.version>
         <bitwalker.version>1.19</bitwalker.version>
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
+        <flatlat.version>3.6</flatlat.version>
+        <flatlat.fonts.version>4.1</flatlat.fonts.version>
+        <miglayout.version>5.3</miglayout.version>
     </properties>
 
     <dependencyManagement>
@@ -84,6 +87,51 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.formdev</groupId>
+                <artifactId>flatlaf</artifactId>
+                <version>3.6</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.formdev</groupId>
+                <artifactId>flatlaf-extras</artifactId>
+                <version>${flatlat.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.formdev</groupId>
+                <artifactId>flatlaf-intellij-themes</artifactId>
+                <version>${flatlat.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.formdev</groupId>
+                <artifactId>flatlaf-extras</artifactId>
+                <version>${flatlat.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.formdev</groupId>
+                <artifactId>flatlaf-fonts-inter</artifactId>
+                <version>${flatlat.fonts.version}</version>
+            </dependency>
+
+            <!-- MiGLayout Core -->
+            <dependency>
+                <groupId>com.miglayout</groupId>
+                <artifactId>miglayout-core</artifactId>
+                <version>${miglayout.version}</version>
+            </dependency>
+            <!-- MiGLayout Swing（如果使用 Swing） -->
+            <dependency>
+                <groupId>com.miglayout</groupId>
+                <artifactId>miglayout-swing</artifactId>
+                <version>${miglayout.version}</version>
+            </dependency>
+
+
 
             <!-- 全局单元测试 -->
             <dependency>

@@ -290,6 +290,7 @@ public class FileUtil {
         return fileName.endsWith(".png")  ||
                 fileName.endsWith(".jpg")  ||
                 fileName.endsWith(".jpeg")  ||
+                fileName.endsWith(".svg")  ||
                 fileName.endsWith(".gif");
     }
 

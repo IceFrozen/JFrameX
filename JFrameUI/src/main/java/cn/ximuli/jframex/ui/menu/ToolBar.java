@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 @Component
 public class ToolBar extends JToolBar {
@@ -41,6 +42,7 @@ public class ToolBar extends JToolBar {
         button.setToolTipText(item.getText());
         button.setIcon(item.getIcon());
         button.setFocusable(false);
+        ActionListener[] actionListeners = item.getActionListeners();
         button.addActionListener(e -> item.doClick());
         return button;
     }

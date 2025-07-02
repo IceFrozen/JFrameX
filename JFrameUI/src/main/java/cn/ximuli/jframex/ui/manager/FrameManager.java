@@ -34,8 +34,6 @@ public class FrameManager {
     private final ResourceLoaderManager loaderManager;
     private final StatePanel statePanel;
     private final DesktopPanel desktopPanel;
-    private int nextFrameX;
-    private int nextFrameY;
 
     @Autowired
     public FrameManager(MainFrame mainFrame, LoginDialog loginDialog, ResourceLoaderManager loaderManager, StatePanel statePanel, DesktopPanel desktopPanel) {
@@ -45,6 +43,8 @@ public class FrameManager {
         this.statePanel = statePanel;
         this.desktopPanel = desktopPanel;
     }
+
+
 
     @EventListener(ContextRefreshedEvent.class)
     public void initMainUI() {
@@ -75,8 +75,6 @@ public class FrameManager {
                 // loginDialog.setVisible(true);
                 // updateStatus(Status.SIGN_UP);
             }
-
-
         }
     }
 
@@ -93,32 +91,39 @@ public class FrameManager {
     public void menuButtonClick(MenuButtonClickEvent event) {
         JMenuItem jMenuItem = event.getJMenuItem();
         Object aClass = jMenuItem.getClientProperty("class");
-        createIFrame(jMenuItem, (Class<?>) aClass);
+        createIFrame((Class<?>) aClass);
     }
 
-    public JInternalFrame createIFrame(JMenuItem item, Class<?> clazz) {
-        JInternalFrame iFrame = (JInternalFrame) SpringUtils.getBean(clazz);
+
+    @EventListener(CreateFrameEvent.class)
+    public void createFrameEvent(CreateFrameEvent<? extends JInternalFrame> event) {
+        Class<?> clazz = (Class<?>) event.getSource();
+        createIFrame(clazz, event.getArgs());
+    }
+
+    public JInternalFrame createIFrame(Class<?> clazz, Object... args) {
+        JInternalFrame iFrame = (JInternalFrame) SpringUtils.getBean(clazz, args);
         try {
-            iFrame.setLocation(nextFrameX, nextFrameY);
-            int frameH = iFrame.getPreferredSize().height;
-            int panelH = iFrame.getContentPane().getPreferredSize().height;
-            int fSpacing = frameH - panelH;
-            nextFrameX += fSpacing;
-            nextFrameY += fSpacing;
-            if (nextFrameX + iFrame.getWidth() > desktopPanel.getWidth())
-                nextFrameX = 0;
-            if (nextFrameY + iFrame.getHeight() > desktopPanel.getHeight())
-                nextFrameY = 0;
             if (!hasComponent(iFrame)) {
                 desktopPanel.add(iFrame);
             }
-
+            if (iFrame.isVisible()) {
+                iFrame.setSelected(true);
+                return iFrame;
+            }
+            //TODO center
+            int frameH = iFrame.getPreferredSize().height;
+            int panelH = iFrame.getContentPane().getPreferredSize().height;
+            int fSpacing = frameH - panelH;
+            int nextFrameX = fSpacing;
+            int nextFrameY = fSpacing;
+            iFrame.setLocation(nextFrameX, nextFrameY);
 //            iFrame.setResizable(true);
 //            iFrame.setMaximizable(false);
             iFrame.setVisible(true);
             iFrame.setSelected(true);
-
         } catch (Exception e) {
+            //TODO op
             e.printStackTrace();
         }
         return iFrame;
@@ -133,10 +138,8 @@ public class FrameManager {
             } else {
                 updateStatuePanel(null);
             }
-
         });
     }
-
 
     public static void publishEvent(ApplicationEvent event) {
         SpringUtils.applicationContext.publishEvent(event);

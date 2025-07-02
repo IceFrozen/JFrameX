@@ -10,10 +10,14 @@ import lombok.extern.slf4j.Slf4j;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 @Slf4j
 @Getter
@@ -29,6 +33,10 @@ public class TablePanel<T> extends JPanel {
     private JButton prePage;
     private JButton nextPage;
     private JLabel pageTotalLabel;
+    private BiConsumer<TablePanel<T>, T> doubleClick;
+    private BiConsumer<TablePanel<T>, T> rightClick;
+    private BiConsumer<TablePanel<T>, T> editClick;
+    private BiConsumer<TablePanel<T>, T> delClick;
 
     private transient BiFunction<String, Page<T>, Page<T>> fetchAction;
     private final Map<Field, String> columnMaps = new LinkedHashMap<>();
@@ -36,6 +44,10 @@ public class TablePanel<T> extends JPanel {
 
     private final Class<T> dataClass;
     private transient Page<T> page;
+
+    private JPopupMenu popupMenu;
+    private JMenuItem editMenuItem;
+    private JMenuItem deleteMenuItem;
 
     public TablePanel(Class<T> t) {
         dataClass = t;
@@ -56,6 +68,26 @@ public class TablePanel<T> extends JPanel {
         return this;
     }
 
+    public TablePanel<T> addDoubleClick(BiConsumer<TablePanel<T>, T> doubleClick) {
+        this.doubleClick = doubleClick;
+        return this;
+    }
+
+    public TablePanel<T> addEditClick(BiConsumer<TablePanel<T>, T> editClick) {
+        this.editClick = editClick;
+        return this;
+    }
+
+    public TablePanel<T> addDelClick(BiConsumer<TablePanel<T>, T> delClick) {
+        this.delClick = delClick;
+        return this;
+    }
+
+    public TablePanel<T> addRightClick(BiConsumer<TablePanel<T>, T> rightClick) {
+        this.rightClick = rightClick;
+        return this;
+    }
+
     private JPanel initTopPanel() {
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         String searchLabelStr = I18nHelper.getMessage("app.message.search.label");
@@ -70,7 +102,12 @@ public class TablePanel<T> extends JPanel {
 
     private void initTable() {
         Field[] declaredFields = dataClass.getDeclaredFields();
-        tableModel = new DefaultTableModel();
+        tableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         String messagePrefix = "app.message.table." + dataClass.getSimpleName().toLowerCase() + ".";
         for (Field declaredField : declaredFields) {
             String messageCode = messagePrefix + declaredField.getName();
@@ -82,9 +119,79 @@ public class TablePanel<T> extends JPanel {
         table = new JTable(tableModel);
         scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
+
+        // 初始化右键菜单
+        popupMenu = new JPopupMenu();
+        editMenuItem = new JMenuItem(I18nHelper.getMessage("app.message.edit"));
+        deleteMenuItem = new JMenuItem(I18nHelper.getMessage("app.message.delete"));
+
+        popupMenu.add(editMenuItem);
+        popupMenu.add(deleteMenuItem);
+
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                log.info("e:{}", e);
+                if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow >= 0) {
+                        T selectedData = page.getData().get(selectedRow);
+                        if (doubleClick != null) {
+                            doubleClick.accept(TablePanel.this, selectedData);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                log.info("Mouse released: button={}, clickCount={}, isPopupTrigger={}", e.getButton(), e.getClickCount(), e.isPopupTrigger());
+                if (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3) {
+                    showPopupMenu(e);
+                }
+            }
+
+
+            private void showPopupMenu(MouseEvent e) {
+                log.info("showPopupMenu3");
+                int row = table.rowAtPoint(e.getPoint());
+                log.info("row:{}", row);
+                if (row >= 0) {
+                    table.setRowSelectionInterval(row, row);
+                    popupMenu.show(table, e.getX(), e.getY());
+                }
+            }
+        });
+
+        editMenuItem.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow >= 0) {
+                T selectedData = page.getData().get(selectedRow);
+                handleEdit(selectedData);
+            }
+        });
+
+        deleteMenuItem.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow >= 0) {
+                T selectedData = page.getData().get(selectedRow);
+                handleDelete(selectedData);
+            }
+        });
     }
 
+    private void handleEdit(T data) {
+        if (this.editClick != null) {
+            this.editClick.accept(this, data);
+        }
+    }
 
+    private void handleDelete(T data) {
+        if (this.delClick != null) {
+            this.delClick.accept(this, data);
+        }
+    }
+    
     public void renderData(Page<T> page) {
         if (page == null) {
             return;
@@ -297,6 +404,11 @@ public class TablePanel<T> extends JPanel {
         private BiFunction<String, Page<T>, Page<T>> fetchAction;
         private final Map<Class<?>, BiFunction<T, Object, String>> converterMaps = new HashMap<>();
 
+        private BiConsumer<TablePanel<T>, T> doubleClick;
+
+        private BiConsumer<TablePanel<T>, T> editClick;
+        private BiConsumer<TablePanel<T>, T> delClick;
+
         public TablePanelBuilder(Class<T> dataClass) {
             this.dataClass = dataClass;
         }
@@ -311,6 +423,11 @@ public class TablePanel<T> extends JPanel {
             return this;
         }
 
+        public TablePanelBuilder<T> doubleClick(BiConsumer<TablePanel<T>, T> doubleClick) {
+            this.doubleClick = doubleClick;
+            return this;
+        }
+
         public static <T> TablePanelBuilder<T> newBuilder(Class<T> dataClass) {
             return new TablePanelBuilder<>(dataClass);
         }
@@ -320,11 +437,24 @@ public class TablePanel<T> extends JPanel {
             return this;
         }
 
+        public TablePanelBuilder<T> editClick(BiConsumer<TablePanel<T>, T> editClick) {
+            this.editClick = editClick;
+            return this;
+        }
+        public TablePanelBuilder<T> delClick(BiConsumer<TablePanel<T>, T> delClick) {
+            this.delClick = delClick;
+            return this;
+        }
+
+
         public TablePanel<T> build() {
             TablePanel<T> tablePanel = new TablePanel<>(dataClass);
             if (StringUtil.isNotBlank(searchLabelStr)) {
                 tablePanel.getSearchLabel().setText(searchLabelStr);
             }
+            tablePanel.addDoubleClick(this.doubleClick);
+            tablePanel.addDelClick(this.delClick);
+            tablePanel.addEditClick(this.editClick);
             converterMaps.forEach(tablePanel::addConvert);
             tablePanel.addFetchAction(this.fetchAction).initTable();
             return tablePanel;

@@ -1,4 +1,4 @@
-package cn.ximuli.jframex.ui.component;
+package cn.ximuli.jframex.ui.test;
 
 import cn.ximuli.jframex.model.TbRukuDetail;
 import cn.ximuli.jframex.model.TbRukuMain;

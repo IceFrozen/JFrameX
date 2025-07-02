@@ -2,6 +2,7 @@ package cn.ximuli.jframex.ui;
 
 import cn.ximuli.jframex.common.utils.StringUtil;
 import cn.ximuli.jframex.model.UserType;
+import cn.ximuli.jframex.model.constants.Sex;
 import cn.ximuli.jframex.model.constants.Status;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
@@ -9,7 +10,7 @@ import java.util.Locale;
 
 public class I18nHelper {
 
-    private static final String commonPrefix = "app.message.table.";
+    private static final String commonPrefix = "app.message.table";
     private static MessageSource messageSource;
 
     private static Locale defaultLocale;
@@ -51,6 +52,11 @@ public class I18nHelper {
 
     public static String i8nConvert(Status status) {
         return getMessage(status.getMessageCode());
+    }
+
+    public static String i8nConvert(Sex sex) {
+        String messageCode = StringUtil.joinWith(".", commonPrefix, sex.toString());
+        return getMessage(messageCode);
     }
 
 }

@@ -5,10 +5,13 @@ import cn.ximuli.jframex.model.Department;
 import cn.ximuli.jframex.model.Page;
 import cn.ximuli.jframex.model.User;
 import cn.ximuli.jframex.model.UserType;
+import cn.ximuli.jframex.model.constants.Sex;
 import cn.ximuli.jframex.model.constants.Status;
 import cn.ximuli.jframex.service.DepartmentService;
 import cn.ximuli.jframex.service.UserService;
 import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.event.CreateFrameEvent;
+import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -30,7 +33,7 @@ import java.util.Map;
 @Slf4j
 @Lazy
 public class UserInternalFrame extends JCommonInternalFrame {
-    private static final String LEFT_ARROW_ICON_PATH = "icon/left_arrow";
+    private static final String LEFT_ARROW_ICON_PATH = "icons/left_arrow";
     private static final String USER_INTERNAL_FRAME_TITLE_KEY = "app.menu.user.internal.userService.title";
 
     private JSplitPane splitPane;
@@ -52,7 +55,7 @@ public class UserInternalFrame extends JCommonInternalFrame {
     }
 
     @Override
-    void initUI() {
+    protected void initUI() {
         setTitle(I18nHelper.getMessage(USER_INTERNAL_FRAME_TITLE_KEY));
         setFrameIcon(resources.getIcon(LEFT_ARROW_ICON_PATH));
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -108,11 +111,29 @@ public class UserInternalFrame extends JCommonInternalFrame {
                     String dpPath = selectedDepartment == null ? null : selectedDepartment.getPath();
                     return userService.searchUserByPage(dpPath, input, page.getPage(), page.getPageSize());
                 })
+                .doubleClick((tp, user) -> log.info("double click"))
+                .editClick((tp, user) -> FrameManager.publishEvent(new CreateFrameEvent<>(UserDetailJFrame.class, user)))
+                .delClick((tp, user) -> log.info("user del：" + user))
                 .converter(UserType.class, this::convertUserType)
                 .converter(Department.class, this::convertDepartment)
                 .converter(Status.class, this::convertStatus)
+                .converter(Sex.class, this::convertSex)
                 .converter(LocalDateTime.class, (user, value) -> DateUtil.formatTime((LocalDateTime) value, DateUtil.DEFAULT_PATTERN))
                 .build();
+    }
+
+    private void edit(TablePanel<User> tp, User user) {
+
+
+
+    }
+
+    private String convertSex(User user, Object value) {
+        if (value instanceof Sex sex) {
+            return I18nHelper.i8nConvert(sex);
+        } else {
+            return value.toString();
+        }
     }
 
     private String convertUserType(User user, Object value) {
