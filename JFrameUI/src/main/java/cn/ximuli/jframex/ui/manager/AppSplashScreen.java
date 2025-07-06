@@ -2,6 +2,7 @@ package cn.ximuli.jframex.ui.manager;
 
 import cn.ximuli.jframex.common.utils.Formatter;
 import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.component.DesktopPanel;
 import cn.ximuli.jframex.ui.event.ProgressEvent;
 import cn.ximuli.jframex.ui.event.ResourceReadyEvent;
@@ -25,6 +26,7 @@ public class AppSplashScreen extends JWindow {
         splashLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
         progressBar = new JProgressBar(0, 100);
         progressBar.setValue(0);
+        setSize(MainFrame.getScreenRatioSize());
         progressBar.setIndeterminate(true);
         progressBar.setStringPainted(true);
         progressBar.setString("Loading...");
@@ -47,13 +49,15 @@ public class AppSplashScreen extends JWindow {
     }
 
     private ImageIcon loadSplashImage() {
-        URL url = DesktopPanel.class.getResource("/splash.jpg");
+        URL url = DesktopPanel.class.getResource("/style/splash.png");
         return new ImageIcon(url);
     }
 
     private void centerOnScreen() {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
+        //setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
+        setLocationRelativeTo(null);
+        //setSize(MainFrame.getScreenRatioSize());
     }
 
     public static void setProgressBarValue(ProgressEvent event) {

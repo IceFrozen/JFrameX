@@ -19,7 +19,7 @@ import javax.swing.*;
 @Component
 public class MainFrame extends JFrame {
     private static final double SCREEN_RATIO_WIDTH = 0.75;  // 宽度占屏幕75%
-    private static final double SCREEN_RATIO_HEIGHT = 0.65; // 高度占屏幕65%
+    private static final double SCREEN_RATIO_HEIGHT = 0.90; // 高度占屏幕65%
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -44,12 +44,9 @@ public class MainFrame extends JFrame {
         this.menuBar = menuBar;
 
         setTitle(I18nHelper.getMessage("app.mainframe.title"));
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int adaptedWidth = (int)(screenSize.width  * SCREEN_RATIO_WIDTH);
-        int adaptedHeight = (int)(screenSize.height  * SCREEN_RATIO_HEIGHT);
-        desktopPanel.setSize(adaptedWidth,adaptedHeight);
+        desktopPanel.setSize(getScreenRatioSize());
         setJMenuBar(menuBar);
-        setSize(adaptedWidth, adaptedHeight);
+        setSize(getScreenRatioSize());
         setLocationRelativeTo(null);
         setMinimumSize(new Dimension(800, 600));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,6 +80,13 @@ public class MainFrame extends JFrame {
                 rootPane.putClientProperty("apple.awt.fullscreenable", ConvertUtil.toBool(System.getProperty("apple.awt.fullscreenable", "false")));
             }
         }
+    }
+
+    public static Dimension getScreenRatioSize() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int adaptedWidth = (int)(screenSize.width  * SCREEN_RATIO_WIDTH);
+        int adaptedHeight = (int)(screenSize.height  * SCREEN_RATIO_HEIGHT);
+        return new Dimension(adaptedWidth, adaptedHeight);
     }
 
     public StatePanel getStatePanel() {

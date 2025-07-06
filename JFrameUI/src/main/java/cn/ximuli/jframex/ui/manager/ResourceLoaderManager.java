@@ -91,10 +91,12 @@ public class ResourceLoaderManager implements InitializingBean {
                     ImageIcon imageIcon = loadIcon(resource);
                     AppSplashScreen.setProgressBarValue(new ProgressEvent(1, I18nHelper.getMessage("app.resource.scan.loading", i, resources.length)));
                     total.getAndDecrement();
+                    //TODO mock loading
+                    Thread.sleep(10);
                     imageCache.put(pathStr, imageIcon);
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -109,4 +111,5 @@ public class ResourceLoaderManager implements InitializingBean {
             throw new RuntimeException("resource not exist!");
         }
     }
+
 }

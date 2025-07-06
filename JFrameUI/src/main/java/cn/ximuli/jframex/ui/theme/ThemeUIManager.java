@@ -73,12 +73,10 @@ public class ThemeUIManager {
     }
 
     private static void restoreLaf() throws Exception {
-        String lafClassName = JFramePref.state.get(KEY_LAF_CLASS_NAME, FlatIntelliJLaf.class.getName());
+        String lafClassName = JFramePref.state.get(KEY_LAF_CLASS_NAME, FlatLightLaf.class.getName());
         if (FlatPropertiesLaf.class.getName().equals(lafClassName) ||
                 IntelliJTheme.ThemeLaf.class.getName().equals(lafClassName)) {
             String themeFileName = JFramePref.state.get(KEY_LAF_THEME_FILE, "");
-            File file = ResourceUtils.getFile("FlatLightLaf.properties");
-
             if (!themeFileName.isEmpty()) {
                 File themeFile = new File(themeFileName);
                 if (themeFileName.endsWith(".properties")) {
@@ -91,8 +89,7 @@ public class ThemeUIManager {
                 FlatLightLaf.setup();
             }
         } else {
-            //UIManager.setLookAndFeel(lafClassName);
-            UIManager.setLookAndFeel(new FlatLightLaf());
+            UIManager.setLookAndFeel(lafClassName);
         }
     }
 
@@ -137,5 +134,13 @@ public class ThemeUIManager {
         FlatInspector.install("ctrl shift alt X");
         FlatUIDefaultsInspector.install("ctrl shift alt Y");
 
+    }
+
+    public static boolean isDarkMode() {
+        LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+        if (lookAndFeel instanceof FlatLaf f) {
+            return f.isDark();
+        }
+        return false;
     }
 }
