@@ -3,6 +3,7 @@ package cn.ximuli.jframex.ui;
 import cn.ximuli.jframex.common.utils.ConvertUtil;
 import cn.ximuli.jframex.ui.component.DesktopPanel;
 import cn.ximuli.jframex.ui.component.StatePanel;
+import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.menu.MenuBar;
 import cn.ximuli.jframex.ui.menu.ToolBar;
 import cn.ximuli.jframex.ui.menu.ToolBar2;
@@ -35,14 +36,16 @@ public class MainFrame extends JFrame {
 
     private final MenuBar menuBar;
 
+    private final ResourceLoaderManager resources;
+
     @Autowired
-    public MainFrame(DesktopPanel desktopPanel, ToolBar toolBar, ToolBar2 toolBar2, StatePanel statePanel, MenuBar menuBar) throws HeadlessException {
+    public MainFrame(ResourceLoaderManager resources, DesktopPanel desktopPanel, ToolBar toolBar, ToolBar2 toolBar2, StatePanel statePanel, MenuBar menuBar) throws HeadlessException {
         this.desktopPanel = desktopPanel;
         this.toolBar = toolBar;
         this.toolBar2 = toolBar2;
         this.statePanel = statePanel;
         this.menuBar = menuBar;
-
+        this.resources = resources;
         setTitle(I18nHelper.getMessage("app.mainframe.title"));
         desktopPanel.setSize(getScreenRatioSize());
         setJMenuBar(menuBar);
@@ -57,6 +60,7 @@ public class MainFrame extends JFrame {
         frameContentPane.add(desktopPanel, CENTER);
         frameContentPane.add(statePanel, SOUTH);
         this.setContentPane(frameContentPane);
+        setIconImage(resources.getImage("jframex_icon.png"));
         platformInit();
     }
 
@@ -64,6 +68,7 @@ public class MainFrame extends JFrame {
         // macOS  (see https://www.formdev.com/flatlaf/macos/)
         if (SystemInfo.isMacOS) {
             JRootPane rootPane = getRootPane();
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", I18nHelper.getMessage("app.mainframe.title"));
             if (SystemInfo.isMacFullWindowContentSupported) {
                 rootPane.putClientProperty("apple.awt.fullWindowContent", ConvertUtil.toBool(System.getProperty("apple.awt.fullWindowContent", "false")));
                 rootPane.putClientProperty("apple.awt.transparentTitleBar",     ConvertUtil.toBool(System.getProperty("apple.awt.transparentTitleBar", "false")));

@@ -8,11 +8,12 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.core.env.Environment;
 
 import javax.swing.*;
+import java.io.IOException;
 
 @SpringBootApplication(scanBasePackages = {"cn.ximuli.jframex"})
 @Slf4j
 public class Application implements CommandLineRunner {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         ApplicationInitializer.init(args);
 

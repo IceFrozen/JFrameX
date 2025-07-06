@@ -44,11 +44,8 @@ public class FrameManager {
         this.desktopPanel = desktopPanel;
     }
 
-
-
     @EventListener(ContextRefreshedEvent.class)
     public void initMainUI() {
-        // TODO
     }
 
     @EventListener(ApplicationReadyEvent.class)

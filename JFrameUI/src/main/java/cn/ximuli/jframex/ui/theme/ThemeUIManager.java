@@ -8,18 +8,22 @@ import cn.ximuli.jframex.ui.manager.AppSplashScreen;
 import cn.ximuli.jframex.ui.storage.JFramePref;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.extras.FlatInspector;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
 import org.springframework.util.ResourceUtils;
 
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 @Slf4j
 public class ThemeUIManager {
@@ -29,13 +33,13 @@ public class ThemeUIManager {
     public static final String KEY_LAF_SYNC = "lafSync";
     static boolean screenshotsMode = Boolean.parseBoolean(System.getProperty("jframex.screenshotsMode"));
 
-    public static void setUp(String... args) {
+    public static void setUp(String... args) throws Exception {
         init();
         setupLaf(args);
     }
 
 
-    private static void init() {
+    private static void init() throws Exception {
         // Linux
         if (SystemInfo.isLinux) {
             // enable custom window decorations
@@ -48,6 +52,9 @@ public class ThemeUIManager {
         initSystemScale();
         initFont();
     }
+
+
+
 
     public static void setupLaf(String[] args) {
         //IJThemesDump.install();
