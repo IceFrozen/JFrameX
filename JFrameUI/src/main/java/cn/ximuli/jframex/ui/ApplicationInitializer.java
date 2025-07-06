@@ -15,7 +15,6 @@ import java.net.URL;
 @Slf4j
 public class ApplicationInitializer {
 
-
     public static void init(String... args) throws Exception {
         iconLoad();
         initJFramePref(args);
@@ -28,14 +27,14 @@ public class ApplicationInitializer {
         JFramePref.init(args);
     }
 
-    public static void initAppSplashScreen (String... args) {
+    public static void initAppSplashScreen(String... args) {
         AppSplashScreen appSplashScreen = AppSplashScreen.getInstance();
         appSplashScreen.setVisible(true);
     }
 
     public static void initI18n(String... args) {
-        System.setProperty("app.style.name", "default");
-        System.setProperty("user.language","en");
+        System.setProperty(Application.APP_STYLE_NAME, Application.APP_STYLE_NAME_DEFAULT);
+        System.setProperty(Application.APP_LANGUAGE, Application.APP_LANGUAGE_EN);
     }
 
     public static void initTheme(String... args) throws Exception {
@@ -44,12 +43,12 @@ public class ApplicationInitializer {
 
     public static void iconLoad() {
         try {
-            URL url = ApplicationInitializer.class.getResource("/style/icon.png");
+            URL url = ApplicationInitializer.class.getResource(Application.APP_ICON);
             ImageIcon icon = new ImageIcon(ImageIO.read(url));
             if (SystemInfo.isWindows) {
                 UIManager.put("Window.iconImage", icon);
             } else if (SystemInfo.isMacOS) {
-                Class<?> applicationClass = Class.forName("com.apple.eawt.Application");
+                Class<?> applicationClass = Class.forName(Application.MAC.COM_APPLE_EAWT_APPLICATION);
                 Object application = applicationClass.getMethod("getApplication").invoke(null);
                 applicationClass.getMethod("setDockIconImage", Image.class)
                         .invoke(application, icon.getImage());

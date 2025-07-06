@@ -6,6 +6,9 @@ import cn.ximuli.jframex.model.constants.Sex;
 import cn.ximuli.jframex.model.constants.Status;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
+
+
+
 import java.util.Locale;
 
 public class I18nHelper {
@@ -25,7 +28,7 @@ public class I18nHelper {
     }
 
     public static String getMessage(String code) {
-        return getMessage(code, defaultLocale, new Object[]{});
+        return getMessage(code, defaultLocale);
     }
 
     public static String getMessage(String code, Object... args) {
@@ -58,5 +61,4 @@ public class I18nHelper {
         String messageCode = StringUtil.joinWith(".", commonPrefix, sex.toString());
         return getMessage(messageCode);
     }
-
 }

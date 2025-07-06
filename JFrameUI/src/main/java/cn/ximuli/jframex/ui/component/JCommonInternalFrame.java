@@ -20,8 +20,8 @@ import java.awt.event.ComponentListener;
 @Slf4j
 @Lazy
 abstract public class JCommonInternalFrame extends JInternalFrame implements ComponentListener, InternalFrameListener, InitializingBean {
-    ResourceLoaderManager resources;
-    JDesktopPane desktopPane;
+    protected ResourceLoaderManager resources;
+    protected JDesktopPane desktopPane;
 
     public JCommonInternalFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
         super();

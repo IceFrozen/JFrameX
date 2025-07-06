@@ -49,7 +49,6 @@ public class ResourceLoaderManager implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        UIManager.getLookAndFeelDefaults();
         loadAllImages(defaultStyle);
     }
 
@@ -78,11 +77,12 @@ public class ResourceLoaderManager implements InitializingBean {
     public void loadAllImages(String styleName) {
         try {
             String scanRoot = StringUtil.joinWith(CharConstants.STR_SLASH, "classpath*:style", styleName, "**", "*");
-            AppSplashScreen.setProgressBarValue(new ProgressEvent(10, I18nHelper.getMessage("app.resource.scan.start")));
-            total.addAndGet(-10);
+            AppSplashScreen.setProgressBarValue(new ProgressEvent(5, I18nHelper.getMessage("app.resource.scan.start")));
+            total.addAndGet(-5);
             Resource[] resources = resourcePatternResolver.getResources(scanRoot);
-            AppSplashScreen.setProgressBarValue(new ProgressEvent(10, I18nHelper.getMessage("app.resource.scan.end", resources.length)));
-            total.addAndGet(-10);
+            AppSplashScreen.setProgressBarValue(new ProgressEvent(5, I18nHelper.getMessage("app.resource.scan.end", resources.length)));
+            total.addAndGet(-5);
+            log.info("total: {}. size: {}", total, resources.length);
             for (int i = 0; i < resources.length; i++) {
                 Resource resource = resources[i];
                 String pathStr = StringUtil.substringAfter(resource.getURL().getPath(), styleName).substring(1);

@@ -1010,7 +1010,7 @@ public class DemoFrame extends JFrame {
         lc.setInsets(new UnitValue[]{
                 insets[0],
                 insets[1],
-                new UnitValue(0, UnitValue.PIXEL, null),
+                new UnitValue(0, UnitValue.MAX_SIZE, null),
                 insets[3]
         });
         layout.setLayoutConstraints(lc);

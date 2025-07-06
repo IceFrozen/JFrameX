@@ -60,7 +60,6 @@ public class MainFrame extends JFrame {
         frameContentPane.add(desktopPanel, CENTER);
         frameContentPane.add(statePanel, SOUTH);
         this.setContentPane(frameContentPane);
-        setIconImage(resources.getImage("jframex_icon.png"));
         platformInit();
     }
 
@@ -68,21 +67,21 @@ public class MainFrame extends JFrame {
         // macOS  (see https://www.formdev.com/flatlaf/macos/)
         if (SystemInfo.isMacOS) {
             JRootPane rootPane = getRootPane();
-            System.setProperty("com.apple.mrj.application.apple.menu.about.name", I18nHelper.getMessage("app.mainframe.title"));
+            System.setProperty(Application.MAC.COM_APPLE_MRJ_APPLICATION_APPLE_MENU_ABOUT_NAME, I18nHelper.getMessage("app.mainframe.title"));
             if (SystemInfo.isMacFullWindowContentSupported) {
-                rootPane.putClientProperty("apple.awt.fullWindowContent", ConvertUtil.toBool(System.getProperty("apple.awt.fullWindowContent", "false")));
-                rootPane.putClientProperty("apple.awt.transparentTitleBar",     ConvertUtil.toBool(System.getProperty("apple.awt.transparentTitleBar", "false")));
+                rootPane.putClientProperty(Application.MAC.APPLE_AWT_FULL_WINDOW_CONTENT, ConvertUtil.toBool(System.getProperty(Application.MAC.APPLE_AWT_FULL_WINDOW_CONTENT, "false")));
+                rootPane.putClientProperty(Application.MAC.APPLE_AWT_TRANSPARENT_TITLE_BAR,     ConvertUtil.toBool(System.getProperty(Application.MAC.APPLE_AWT_TRANSPARENT_TITLE_BAR, "false")));
                 rootPane.putClientProperty(FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING, FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_LARGE);
                 // hide window title
                 if (SystemInfo.isJava_17_orLater){
-                    rootPane.putClientProperty("apple.awt.windowTitleVisible", ConvertUtil.toBool(System.getProperty("apple.awt.windowTitleVisible", "false")));
+                    rootPane.putClientProperty(Application.MAC.APPLE_AWT_WINDOW_TITLE_VISIBLE, ConvertUtil.toBool(System.getProperty(Application.MAC.APPLE_AWT_WINDOW_TITLE_VISIBLE, "false")));
                 } else {
                     setTitle(null);
                 }
             }
             // enable full screen mode for this window (for Java 8 - 10; not necessary for Java 11+)
             if (!SystemInfo.isJava_11_orLater) {
-                rootPane.putClientProperty("apple.awt.fullscreenable", ConvertUtil.toBool(System.getProperty("apple.awt.fullscreenable", "false")));
+                rootPane.putClientProperty(Application.MAC.APPLE_AWT_FULL_FULL_SCREENABLE, ConvertUtil.toBool(System.getProperty(Application.MAC.APPLE_AWT_FULL_FULL_SCREENABLE, "false")));
             }
         }
     }

@@ -189,12 +189,12 @@ class MoreComponentsPanel
 
         //---- progressBar3 ----
         progressBar3.setOrientation(SwingConstants.VERTICAL);
-        progressBar3.setValue(60);
+        progressBar3.setValue(10);
         add(progressBar3, "cell 2 0 1 6,growy");
 
         //---- progressBar4 ----
         progressBar4.setOrientation(SwingConstants.VERTICAL);
-        progressBar4.setValue(60);
+        progressBar4.setValue(80);
         progressBar4.setStringPainted(true);
         add(progressBar4, "cell 2 0 1 6,growy");
 
@@ -336,12 +336,12 @@ class MoreComponentsPanel
         add(progressBarLabel, "cell 0 8");
 
         //---- progressBar1 ----
-        progressBar1.setValue(60);
+        progressBar1.setValue(10);
         add(progressBar1, "cell 1 8 3 1,growx");
 
         //---- progressBar2 ----
         progressBar2.setStringPainted(true);
-        progressBar2.setValue(60);
+        progressBar2.setValue(20);
         add(progressBar2, "cell 1 8 3 1,growx");
 
         //---- indeterminateCheckBox ----

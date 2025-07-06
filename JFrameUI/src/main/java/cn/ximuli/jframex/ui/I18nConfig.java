@@ -28,6 +28,6 @@ public class I18nConfig {
 
     @Bean
     public Locale defaultLocal(Environment environment) {
-        return Locale.forLanguageTag(environment.getProperty("user.language", Locale.getDefault().getLanguage()));
+        return Locale.forLanguageTag(environment.getProperty(Application.APP_LANGUAGE, Locale.getDefault().getLanguage()));
     }
 }
