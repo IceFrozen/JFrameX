@@ -21,6 +21,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 @Component
@@ -33,6 +34,13 @@ public class BasicInternalFrame extends JCommonInternalFrame {
         super(resources, desktopPane);
         setTitle(I18nHelper.getMessage("app.menu.view.components.basic"));
         setFrameIcon(super.resources.getIcon("icons/basic_component"));
+        // Add component listener to adjust size when shown
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                adjustFrameSize();
+            }
+        });
     }
 
     @Override
@@ -43,19 +51,30 @@ public class BasicInternalFrame extends JCommonInternalFrame {
         add(jPanel, BorderLayout.CENTER);
     }
 
-//    @Override
-//    public void componentShown(ComponentEvent e) {
-//        Dimension parentSize = desktopPane.getSize();
-//        int width = parentSize.width / 3;
-//        int height = parentSize.height / 2;
-//        setSize(width, height);
-//        int x = (parentSize.width - width) / 2;
-//        int y = (parentSize.height - height) / 2;
-//        setLocation(x, y);
-//    }
+    private void adjustFrameSize() {
+        // Get the preferred size of the jPanel
+        Dimension panelSize = jPanel.getPreferredSize();
+        // Add some padding for the frame's borders and title bar
+        int padding = 20;
+        int width = panelSize.width + padding;
+        int height = panelSize.height + padding;
 
+        // Ensure the size doesn't exceed the desktop pane's dimensions
+        Dimension desktopSize = desktopPane.getSize();
+        width = Math.min(width, desktopSize.width - 20);
+        height = Math.min(height, desktopSize.height - 20);
+
+        // Set the frame size
+        setSize(width, height);
+
+        // Center the frame within the desktop pane
+        int x = (desktopSize.width - width) / 2;
+        int y = (desktopSize.height - height) / 2;
+        setLocation(x, y);
+    }
 }
 
+// BasicComponentsPanel remains unchanged
 class BasicComponentsPanel extends JPanel {
     private JPasswordField passwordField1;
     private JTextField leadingIconTextField;
@@ -68,8 +87,6 @@ class BasicComponentsPanel extends JPanel {
         initComponents();
 
         // show reveal button for password field
-        //   to enable this for all password fields use:
-        //   UIManager.put( "PasswordField.showRevealButton", true );
         passwordField1.putClientProperty(FlatClientProperties.STYLE, "showRevealButton: true");
 
         // add leading/trailing icons to text fields
@@ -542,7 +559,7 @@ class BasicComponentsPanel extends JPanel {
         passwordField4.setText("Not editable disabled");
         passwordField4.setEnabled(false);
         passwordField4.setEditable(false);
-        add(passwordField4, "cell 4 8,growx");
+        add(passwordField4, "cell 5 8,growx");
 
         //---- passwordField5 ----
         passwordField5.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Placeholder");
@@ -863,57 +880,55 @@ class BasicComponentsPanel extends JPanel {
         pasteMenuItem.addActionListener(new DefaultEditorKit.PasteAction());
         boolean screenshotsMode = Boolean.parseBoolean(System.getProperty("jframex.screenshotsMode"));
         if (screenshotsMode) {
-                // hide some components
-                java.awt.Component[] hiddenComponents = {
-                        labelLabel, label1, label2,
-                        button13, button14, button15, button16, comboBox5, comboBox6,
+            // hide some components
+            java.awt.Component[] hiddenComponents = {
+                    labelLabel, label1, label2,
+                    button13, button14, button15, button16, comboBox5, comboBox6,
 
-                        textFieldLabel, textField2, textField4, textField6,
-                        formattedTextFieldLabel, formattedTextField1, formattedTextField2, formattedTextField3, formattedTextField4, formattedTextField5,
-                        passwordFieldLabel, passwordField1, passwordField2, passwordField3, passwordField4, passwordField5,
-                        textAreaLabel, scrollPane1, scrollPane2, scrollPane3, scrollPane4, textArea5,
-                        editorPaneLabel, scrollPane5, scrollPane6, scrollPane7, scrollPane8, editorPane5,
-                        textPaneLabel, scrollPane9, scrollPane10, scrollPane11, scrollPane12, textPane5,
+                    textFieldLabel, textField2, textField4, textField6,
+                    formattedTextFieldLabel, formattedTextField1, formattedTextField2, formattedTextField3, formattedTextField4, formattedTextField5,
+                    passwordFieldLabel, passwordField1, passwordField2, passwordField3, passwordField4, passwordField5,
+                    textAreaLabel, scrollPane1, scrollPane2, scrollPane3, scrollPane4, textArea5,
+                    editorPaneLabel, scrollPane5, scrollPane6, scrollPane7, scrollPane8, editorPane5,
+                    textPaneLabel, scrollPane9, scrollPane10, scrollPane11, scrollPane12, textPane5,
 
-                        hintsLabel, errorHintsTextField, warningHintsTextField, successHintsTextField,
+                    hintsLabel, errorHintsTextField, warningHintsTextField, successHintsTextField,
 
-                        fontZoomLabel,
-                };
-                for (java.awt.Component c : hiddenComponents)
-                    c.setVisible(false);
+                    fontZoomLabel,
+            };
+            for (java.awt.Component c : hiddenComponents)
+                c.setVisible(false);
 
-                // update layout (change row gaps to zero)
-                MigLayout layout = (MigLayout) getLayout();
-                Object rowCons = layout.getRowConstraints();
-                AC ac = (rowCons instanceof String)
-                        ? ConstraintParser.parseColumnConstraints((String) rowCons)
-                        : (AC) rowCons;
-                BoundSize zeroGap = ConstraintParser.parseBoundSize("0", true, true);
-                DimConstraint[] rows = ac.getConstaints();
-                rows[6].setGapBefore(zeroGap);
-                rows[7].setGapBefore(zeroGap);
-                rows[8].setGapBefore(zeroGap);
-                rows[9].setGapBefore(zeroGap);
-                rows[10].setGapBefore(zeroGap);
-                rows[11].setGapBefore(zeroGap);
-                rows[11].setGapAfter(zeroGap);
-                rows[12].setGapBefore(zeroGap);
-                rows[15].setGapBefore(zeroGap);
-                layout.setRowConstraints(ac);
+            // update layout (change row gaps to zero)
+            MigLayout layout = (MigLayout) getLayout();
+            Object rowCons = layout.getRowConstraints();
+            AC ac = (rowCons instanceof String)
+                    ? ConstraintParser.parseColumnConstraints((String) rowCons)
+                    : (AC) rowCons;
+            BoundSize zeroGap = ConstraintParser.parseBoundSize("0", true, true);
+            DimConstraint[] rows = ac.getConstaints();
+            rows[6].setGapBefore(zeroGap);
+            rows[7].setGapBefore(zeroGap);
+            rows[8].setGapBefore(zeroGap);
+            rows[9].setGapBefore(zeroGap);
+            rows[10].setGapBefore(zeroGap);
+            rows[11].setGapBefore(zeroGap);
+            rows[11].setGapAfter(zeroGap);
+            rows[12].setGapBefore(zeroGap);
+            rows[15].setGapBefore(zeroGap);
+            layout.setRowConstraints(ac);
 
-                // move two text field into same row as spinners
-                spinnerLabel.setText("JSpinner / JTextField:");
-                layout.setComponentConstraints(textField1, "cell 3 5,growx");
-                layout.setComponentConstraints(textField3, "cell 4 5,growx");
+            // move two text field into same row as spinners
+            spinnerLabel.setText("JSpinner / JTextField:");
+            layout.setComponentConstraints(textField1, "cell 3 5,growx");
+            layout.setComponentConstraints(textField3, "cell 4 5,growx");
 
-                // make "Not editable disabled" combobox smaller
-                Object cons = layout.getComponentConstraints(comboBox4);
-                layout.setComponentConstraints(comboBox4, cons + ",width 50:50");
+            // make "Not editable disabled" combobox smaller
+            Object cons = layout.getComponentConstraints(comboBox4);
+            layout.setComponentConstraints(comboBox4, cons + ",width 50:50");
 
-                revalidate();
-                repaint();
+            revalidate();
+            repaint();
         }
     }
 }
-
-
