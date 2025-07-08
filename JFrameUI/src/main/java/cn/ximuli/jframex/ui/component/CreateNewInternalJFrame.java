@@ -15,7 +15,7 @@ import java.util.concurrent.Callable;
 
 @Component
 @Slf4j
-public class CreateNewJInternalFrame extends JCommonInternalFrame {
+public class CreateNewInternalJFrame extends CommonInternalJFrame {
     private Pair<JLabel, JTextField> nameLine;
     private JPanel dialogPane;
     private JPanel contentPanel;
@@ -27,7 +27,7 @@ public class CreateNewJInternalFrame extends JCommonInternalFrame {
     private JButton cancelButton;
     private JPopupMenu popupMenu;
 
-    public CreateNewJInternalFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
+    public CreateNewInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
         super(resources, desktopPane);
         this.setSize(600, 320);
     }

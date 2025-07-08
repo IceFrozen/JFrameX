@@ -32,7 +32,7 @@ import java.util.Map;
 @Component
 @Slf4j
 @Lazy
-public class UserInternalFrame extends JCommonInternalFrame {
+public class UserInternalJFrame extends CommonInternalJFrame {
     private static final String LEFT_ARROW_ICON_PATH = "icons/left_arrow";
     private static final String USER_INTERNAL_FRAME_TITLE_KEY = "app.menu.user.internal.userService.title";
 
@@ -45,10 +45,10 @@ public class UserInternalFrame extends JCommonInternalFrame {
     private TablePanel<User> tablePanel;
     private transient Department selectedDepartment;
 
-    public UserInternalFrame(ResourceLoaderManager resources,
-                             JDesktopPane desktopPane,
-                             DepartmentService departmentService,
-                             UserService userService) {
+    public UserInternalJFrame(ResourceLoaderManager resources,
+                              JDesktopPane desktopPane,
+                              DepartmentService departmentService,
+                              UserService userService) {
         super(resources, desktopPane);
         this.departmentService = departmentService;
         this.userService = userService;

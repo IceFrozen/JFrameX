@@ -38,52 +38,54 @@ public class ViewMenu extends JMenu {
         JMenuItem dataComponents = new JMenuItem(I18nHelper.getMessage("app.menu.view.components.data"));
         JMenuItem tabComponents = new JMenuItem(I18nHelper.getMessage("app.menu.view.components.tab"));
         JMenuItem optionComponents = new JMenuItem(I18nHelper.getMessage("app.menu.view.components.option"));
+        JMenuItem extrasComponents = new JMenuItem(I18nHelper.getMessage("app.menu.view.components.extras"));
 
 
-        BasicInternalFrame basicInternalFrame = SpringUtils.getBean(BasicInternalFrame.class);
-        basicComponents.setText(basicInternalFrame.getTitle());
-        basicComponents.setIcon(basicInternalFrame.getFrameIcon());
-        basicComponents.putClientProperty("class", basicInternalFrame.getClass());
+        BasicInternalJFrame basicInternalJFrame = SpringUtils.getBean(BasicInternalJFrame.class);
+        basicComponents.setText(basicInternalJFrame.getTitle());
+        basicComponents.setIcon(basicInternalJFrame.getFrameIcon());
+        basicComponents.putClientProperty("class", basicInternalJFrame.getClass());
         basicComponents.addActionListener(e -> FrameManager.publishEvent(new MenuButtonClickEvent(basicComponents)));
 
-        ContainerInternalFrame containerInternalFrame = SpringUtils.getBean(ContainerInternalFrame.class);
-        containerComponents.setText(containerInternalFrame.getTitle());
-        containerComponents.setIcon(containerInternalFrame.getFrameIcon());
-        containerComponents.putClientProperty("class", containerInternalFrame.getClass());
+        ContainerInternalJFrame containerInternalJFrame = SpringUtils.getBean(ContainerInternalJFrame.class);
+        containerComponents.setText(containerInternalJFrame.getTitle());
+        containerComponents.setIcon(containerInternalJFrame.getFrameIcon());
+        containerComponents.putClientProperty("class", containerInternalJFrame.getClass());
         containerComponents.addActionListener(e -> FrameManager.publishEvent(new MenuButtonClickEvent(containerComponents)));
 
-        DataInternalFrame dataInternalFrame = SpringUtils.getBean(DataInternalFrame.class);
-        dataComponents.setText(dataInternalFrame.getTitle());
-        dataComponents.setIcon(dataInternalFrame.getFrameIcon());
-        dataComponents.putClientProperty("class", dataInternalFrame.getClass());
+        DataInternalJFrame dataInternalJFrame = SpringUtils.getBean(DataInternalJFrame.class);
+        dataComponents.setText(dataInternalJFrame.getTitle());
+        dataComponents.setIcon(dataInternalJFrame.getFrameIcon());
+        dataComponents.putClientProperty("class", dataInternalJFrame.getClass());
         dataComponents.addActionListener(e -> FrameManager.publishEvent(new MenuButtonClickEvent(dataComponents)));
 
-
-        TabInternalFrame tabInternalFrame = SpringUtils.getBean(TabInternalFrame.class);
+        TabInternalJFrame tabInternalFrame = SpringUtils.getBean(TabInternalJFrame.class);
         tabComponents.setText(tabInternalFrame.getTitle());
         tabComponents.setIcon(tabInternalFrame.getFrameIcon());
         tabComponents.putClientProperty("class", tabInternalFrame.getClass());
         tabComponents.addActionListener(e -> FrameManager.publishEvent(new MenuButtonClickEvent(tabComponents)));
 
-        OptionInternalFrame optionInternalFrame = SpringUtils.getBean(OptionInternalFrame.class);
+        OptionInternalJFrame optionInternalFrame = SpringUtils.getBean(OptionInternalJFrame.class);
         optionComponents.setText(optionInternalFrame.getTitle());
         optionComponents.setIcon(optionInternalFrame.getFrameIcon());
         optionComponents.putClientProperty("class", optionInternalFrame.getClass());
         optionComponents.addActionListener(e -> FrameManager.publishEvent(new MenuButtonClickEvent(optionComponents)));
+
+
+        ExtrasInternalJFrame extrasInternalFrame = SpringUtils.getBean(ExtrasInternalJFrame.class);
+        extrasComponents.setText(extrasInternalFrame.getTitle());
+        extrasComponents.setIcon(extrasInternalFrame.getFrameIcon());
+        extrasComponents.putClientProperty("class", extrasInternalFrame.getClass());
+        extrasComponents.addActionListener(e -> FrameManager.publishEvent(new MenuButtonClickEvent(extrasComponents)));
 
         components.add(basicComponents);
         components.add(containerComponents);
         components.add(dataComponents);
         components.add(tabComponents);
         components.add(optionComponents);
-
-
+        components.add(extrasComponents);
         //basicComponents.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         add(components);
-
-
         return items;
-
     }
-
 }

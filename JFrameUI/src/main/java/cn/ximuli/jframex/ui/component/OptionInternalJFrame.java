@@ -17,10 +17,10 @@ import java.awt.event.MouseEvent;
 
 @Component
 @Slf4j
-public class OptionInternalFrame extends JCommonInternalFrame {
+public class OptionInternalJFrame extends CommonInternalJFrame {
     private JPanel jPanel;
 
-    public OptionInternalFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
+    public OptionInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
         super(resources, desktopPane);
         setTitle(I18nHelper.getMessage("app.menu.view.components.option"));
         setFrameIcon(super.resources.getIcon("icons/infoOutline"));
@@ -63,8 +63,7 @@ public class OptionInternalFrame extends JCommonInternalFrame {
         setLocation(x, y);
     }
 
-    class OptionPanePanel
-            extends JPanel {
+    public static class OptionPanePanel extends JPanel {
         OptionPanePanel(ResourceLoaderManager resources) {
             initComponents(resources);
 

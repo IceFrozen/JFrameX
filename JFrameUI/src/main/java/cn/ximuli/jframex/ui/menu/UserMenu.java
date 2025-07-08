@@ -2,7 +2,7 @@ package cn.ximuli.jframex.ui.menu;
 
 
 import cn.ximuli.jframex.ui.test.Jinhuo_Tuihuo_IFram;
-import cn.ximuli.jframex.ui.component.UserInternalFrame;
+import cn.ximuli.jframex.ui.component.UserInternalJFrame;
 import cn.ximuli.jframex.ui.event.MenuButtonClickEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 @Slf4j
@@ -34,7 +33,7 @@ public class UserMenu extends JMenu {
         List<JMenuItem> result = new ArrayList<>();
         JMenuItem item = new JMenuItem();
 
-        UserInternalFrame jInternalFrame = SpringUtils.getBean(UserInternalFrame.class);
+        UserInternalJFrame jInternalFrame = SpringUtils.getBean(UserInternalJFrame.class);
         item.setText(jInternalFrame.getTitle());
         item.setIcon(jInternalFrame.getFrameIcon());
         item.putClientProperty("class", jInternalFrame.getClass());

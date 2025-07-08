@@ -16,31 +16,25 @@ import java.net.URL;
 @Slf4j
 public class AppSplashScreen extends JWindow {
     private static AppSplashScreen INSTANCE = new AppSplashScreen();
-    private JProgressBar progressBar;
-    private JLabel splashLabel;
+    private final JProgressBar progressBar;
+    private final JLabel splashLabel;
 
     public AppSplashScreen() {
-        // 初始化窗口
         setSize(MainFrame.getScreenRatioSize());
         setAlwaysOnTop(true);
         setLayout(new MigLayout("fill, insets 0", "[grow]", "[grow][]")); // MigLayout: 填充窗口，垂直布局
 
-        // 加载并缩放图片
         ImageIcon icon = loadSplashImage();
         splashLabel = new JLabel(icon);
         splashLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 
-        // 初始化进度条
         progressBar = new JProgressBar(0, 100);
         progressBar.setValue(0);
         progressBar.setIndeterminate(true);
         progressBar.setStringPainted(true);
         progressBar.setString("Loading...");
-
-        // 添加组件到窗口
-        add(splashLabel, "grow, center"); // 图片标签填充窗口并居中
-        add(progressBar, "growx, dock south"); // 进度条填充宽度，固定在底部
-
+        add(splashLabel, "grow, center");       // 图片标签填充窗口并居中
+        add(progressBar, "growx, dock south");  // 进度条填充宽度，固定在底部
         pack();
         centerOnScreen();
     }
@@ -59,13 +53,12 @@ public class AppSplashScreen extends JWindow {
         URL url = DesktopPanel.class.getResource("/style/splash.png");
         if (url == null) {
             log.error("Splash image not found at /style/splash.png");
-            return new ImageIcon(); // 返回空图标以避免空指针
+            return new ImageIcon();
         }
 
         ImageIcon icon = new ImageIcon(url);
         Image image = icon.getImage();
 
-        // 获取窗口的尺寸
         Dimension windowSize = MainFrame.getScreenRatioSize();
         int windowWidth = windowSize.width;
         int windowHeight = windowSize.height - 30; // 留出进度条空间

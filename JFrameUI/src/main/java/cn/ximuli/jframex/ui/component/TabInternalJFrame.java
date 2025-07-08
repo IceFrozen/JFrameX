@@ -1,14 +1,11 @@
 package cn.ximuli.jframex.ui.component;
 
 import cn.ximuli.jframex.ui.I18nHelper;
-import cn.ximuli.jframex.ui.demo.FlatLafDemo;
 import cn.ximuli.jframex.ui.demo.ScrollablePanel;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.icons.FlatTabbedPaneCloseIcon;
-import com.formdev.flatlaf.util.ColorFunctions;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.layout.AC;
 import net.miginfocom.layout.ConstraintParser;
@@ -17,14 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
@@ -35,10 +25,10 @@ import static com.formdev.flatlaf.FlatClientProperties.*;
 
 @Component
 @Slf4j
-public class TabInternalFrame extends JCommonInternalFrame {
+public class TabInternalJFrame extends CommonInternalJFrame {
     private JPanel jPanel;
 
-    public TabInternalFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
+    public TabInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
         super(resources, desktopPane);
         setTitle(I18nHelper.getMessage("app.menu.view.components.tab"));
         setFrameIcon(super.resources.getIcon("icons/tab_component"));
@@ -81,7 +71,7 @@ public class TabInternalFrame extends JCommonInternalFrame {
         setLocation(x, y);
     }
 
-    class TabsPanel extends JPanel {
+    public static class TabsPanel extends JPanel {
         // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
         private JToolBar tabPlacementToolBar;
         private JToggleButton topPlacementButton;

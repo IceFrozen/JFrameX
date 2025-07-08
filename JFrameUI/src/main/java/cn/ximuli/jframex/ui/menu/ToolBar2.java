@@ -1,6 +1,10 @@
 package cn.ximuli.jframex.ui.menu;
 
+import cn.ximuli.jframex.ui.component.SettingInternalJFrame;
+import cn.ximuli.jframex.ui.event.CreateFrameEvent;
+import cn.ximuli.jframex.ui.manager.FrameManager;
 import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.extras.FlatDesktop;
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
@@ -73,6 +77,12 @@ public class ToolBar2 extends JPanel {
         // uncomment this line to see title bar buttons placeholders in fullWindowContent mode
         //UIManager.put("FlatLaf.debug.panel.showPlaceholders", true);
         initAccentColors();
+        FlatDesktop.setPreferencesHandler(() -> {
+
+            FrameManager.publishEvent(new CreateFrameEvent<>(SettingInternalJFrame.class));
+
+
+        });
     }
 
     private void initAccentColors() {

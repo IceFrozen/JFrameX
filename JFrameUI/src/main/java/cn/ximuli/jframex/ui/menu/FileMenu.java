@@ -3,8 +3,7 @@ package cn.ximuli.jframex.ui.menu;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
-import cn.ximuli.jframex.ui.component.CreateNewJInternalFrame;
-import cn.ximuli.jframex.ui.component.UserInternalFrame;
+import cn.ximuli.jframex.ui.component.CreateNewInternalJFrame;
 import cn.ximuli.jframex.ui.demo.NewDialog;
 import cn.ximuli.jframex.ui.event.MenuButtonClickEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
@@ -89,7 +88,7 @@ public class FileMenu extends JMenu {
         add(exitMenuItem);
 
 
-        CreateNewJInternalFrame jInternalFrame = SpringUtils.getBean(CreateNewJInternalFrame.class);
+        CreateNewInternalJFrame jInternalFrame = SpringUtils.getBean(CreateNewInternalJFrame.class);
         JMenuItem  createNewItem = new JMenuItem();
         createNewItem.setText(jInternalFrame.getTitle() + "Internal");
         createNewItem.setIcon(jInternalFrame.getFrameIcon());

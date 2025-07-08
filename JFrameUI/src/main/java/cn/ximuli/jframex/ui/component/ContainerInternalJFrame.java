@@ -16,10 +16,10 @@ import java.awt.event.ComponentEvent;
 
 @Component
 @Slf4j
-public class ContainerInternalFrame extends JCommonInternalFrame {
+public class ContainerInternalJFrame extends CommonInternalJFrame {
     private JPanel jPanel;
 
-    public ContainerInternalFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
+    public ContainerInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
         super(resources, desktopPane);
         setTitle(I18nHelper.getMessage("app.menu.view.components.container"));
         setFrameIcon(super.resources.getIcon("icons/basic_component"));
@@ -34,7 +34,7 @@ public class ContainerInternalFrame extends JCommonInternalFrame {
 
     @Override
     protected void initUI() {
-        jPanel = new MoreComponentsPanel(super.resources);
+        jPanel = new ContainerComponentsPanel(super.resources);
         jPanel.setBorder(LineBorder.createGrayLineBorder());
         setLayout(new BorderLayout());
         add(jPanel, BorderLayout.CENTER);
@@ -62,7 +62,7 @@ public class ContainerInternalFrame extends JCommonInternalFrame {
         setLocation(x, y);
     }
 
-    class MoreComponentsPanel extends JPanel {
+    public static class ContainerComponentsPanel extends JPanel {
         // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
         private JProgressBar progressBar3;
         private JProgressBar progressBar4;
@@ -71,7 +71,7 @@ public class ContainerInternalFrame extends JCommonInternalFrame {
         private JProgressBar progressBar2;
         private JCheckBox indeterminateCheckBox;
         // JFormDesigner - End of variables declaration  //GEN-END:variables
-        MoreComponentsPanel(ResourceLoaderManager resources) {
+        ContainerComponentsPanel(ResourceLoaderManager resources) {
             initComponents(resources);
         }
 

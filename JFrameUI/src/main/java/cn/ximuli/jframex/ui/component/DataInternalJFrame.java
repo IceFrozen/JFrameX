@@ -24,10 +24,10 @@ import java.awt.event.ComponentEvent;
 
 @Component
 @Slf4j
-public class DataInternalFrame extends JCommonInternalFrame {
+public class DataInternalJFrame extends CommonInternalJFrame {
     private JPanel jPanel;
 
-    public DataInternalFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
+    public DataInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
         super(resources, desktopPane);
         setTitle(I18nHelper.getMessage("app.menu.view.components.data"));
         setFrameIcon(super.resources.getIcon("icons/data_component"));
@@ -70,8 +70,8 @@ public class DataInternalFrame extends JCommonInternalFrame {
         setLocation(x, y);
     }
 
-    class DataComponentsPanel
-            extends JPanel {
+    public static class DataComponentsPanel extends JPanel {
+
         DataComponentsPanel(ResourceLoaderManager resourceLoader) {
             initComponents(resourceLoader);
 

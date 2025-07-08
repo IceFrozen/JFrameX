@@ -19,11 +19,11 @@ import java.awt.event.ComponentListener;
 @Component
 @Slf4j
 @Lazy
-abstract public class JCommonInternalFrame extends JInternalFrame implements ComponentListener, InternalFrameListener, InitializingBean {
-    protected ResourceLoaderManager resources;
-    protected JDesktopPane desktopPane;
+abstract public class CommonInternalJFrame extends JInternalFrame implements ComponentListener, InternalFrameListener, InitializingBean {
+    protected final ResourceLoaderManager resources;
+    protected final JDesktopPane desktopPane;
 
-    public JCommonInternalFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
+    protected CommonInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
         super();
         this.resources = resources;
         this.desktopPane = desktopPane;
@@ -47,8 +47,6 @@ abstract public class JCommonInternalFrame extends JInternalFrame implements Com
         // 计算居中位置
         int x = (parentSize.width - width) / 2;
         int y = (parentSize.height - height) / 2;
-
-
         setLocation(x, y);
     }
 
