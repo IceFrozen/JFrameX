@@ -13,7 +13,6 @@ import static javax.swing.border.EtchedBorder.RAISED;
 
 @Component
 public class StatePanel extends JPanel {
-
     JLabel stateLabel = null;
     private JLabel nameLabel = null;
     private JLabel nowDateLabel = null;
@@ -49,7 +48,6 @@ public class StatePanel extends JPanel {
         gridBagConstraints11.insets = new Insets(0, 5, 0, 5);
         gridBagConstraints11.gridy = 0;
         nowDateLabel = new JLabel();
-        Date now = new Date();
         nowDateLabel.setText(DateUtil.formatTime(LocalDateTime.now(), "YYYY-MM-DD"));
         GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
         gridBagConstraints2.gridx = 7;
@@ -78,7 +76,6 @@ public class StatePanel extends JPanel {
         add(nowDateLabel, gridBagConstraints11);
         add(getCzyStateLabel(), gridBagConstraints4);
         add(getJSeparator2(), gridBagConstraints6);
-
         statusPanelDefaultContext = I18nHelper.getMessage("app.mainframe.state.selected");
 
     }

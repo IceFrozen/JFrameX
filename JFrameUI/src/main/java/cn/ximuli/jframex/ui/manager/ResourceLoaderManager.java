@@ -3,6 +3,7 @@ package cn.ximuli.jframex.ui.manager;
 import cn.ximuli.jframex.common.constants.CharConstants;
 import cn.ximuli.jframex.common.utils.FileUtil;
 import cn.ximuli.jframex.common.utils.StringUtil;
+import cn.ximuli.jframex.ui.Application;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.event.ProgressEvent;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -37,9 +38,6 @@ public class ResourceLoaderManager implements InitializingBean {
     private final ResourcePatternResolver resourcePatternResolver;
     private final Map<String, ImageIcon> imageCache = new HashMap<>();
 
-    @Value("${app.style.name:default}")
-    private String defaultStyle;
-
     @Autowired
     public ResourceLoaderManager(ApplicationEventPublisher publisher, ResourceLoader resourceLoader, ResourcePatternResolver resourcePatternResolver) {
         this.publisher = publisher;
@@ -49,13 +47,13 @@ public class ResourceLoaderManager implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        loadAllImages(defaultStyle);
+        String style = System.getProperty(Application.APP_STYLE_NAME, Application.APP_STYLE_NAME_DEFAULT);
+        loadAllImages(style);
     }
 
     public void loading() {
         new SwingWorker<Void, Void>() {
             protected Void doInBackground() {
-                //Do other resource loading
                 AppSplashScreen.setProgressBarValue(new ProgressEvent(total.get(), "finish"));
                 return null;
             }
@@ -82,7 +80,7 @@ public class ResourceLoaderManager implements InitializingBean {
             Resource[] resources = resourcePatternResolver.getResources(scanRoot);
             AppSplashScreen.setProgressBarValue(new ProgressEvent(5, I18nHelper.getMessage("app.resource.scan.end", resources.length)));
             total.addAndGet(-5);
-            log.info("total: {}. size: {}", total, resources.length);
+            log.debug("total: {}. size: {}", total, resources.length);
             for (int i = 0; i < resources.length; i++) {
                 Resource resource = resources[i];
                 String pathStr = StringUtil.substringAfter(resource.getURL().getPath(), styleName).substring(1);
@@ -108,8 +106,8 @@ public class ResourceLoaderManager implements InitializingBean {
             }
             return new ImageIcon(ImageIO.read(is));
         } catch (IOException e) {
+            log.error("load icon error", e);
             throw new RuntimeException("resource not exist!");
         }
     }
-
 }

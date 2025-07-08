@@ -140,8 +140,10 @@ public class TabInternalJFrame extends CommonInternalJFrame {
         private JToggleButton rotationAutoButton;
         private JToggleButton rotationLeftButton;
         private JToggleButton rotationRightButton;
+        private ResourceLoaderManager resources;
         // JFormDesigner - End of variables declaration  //GEN-END:variables
-        TabsPanel(ResourceLoaderManager resources) {
+        public TabsPanel(ResourceLoaderManager resources) {
+            this.resources = resources;
             initComponents(resources);
 
             initTabPlacementTabs( tabPlacementTabbedPane );

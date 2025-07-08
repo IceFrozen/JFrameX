@@ -30,7 +30,7 @@ public class ControlBar extends JPanel {
     private DemoFrame frame;
     private JTabbedPane tabbedPane;
 
-    ControlBar() {
+    public ControlBar() {
         initComponents();
 
         // remove top insets

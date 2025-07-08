@@ -80,7 +80,7 @@ public class ThemeUIManager {
     }
 
     private static void restoreLaf() throws Exception {
-        String lafClassName = JFramePref.state.get(KEY_LAF_CLASS_NAME, FlatLightLaf.class.getName());
+        String lafClassName = JFramePref.state.get(KEY_LAF_CLASS_NAME, FlatDarkLaf.class.getName());
         if (FlatPropertiesLaf.class.getName().equals(lafClassName) ||
                 IntelliJTheme.ThemeLaf.class.getName().equals(lafClassName)) {
             String themeFileName = JFramePref.state.get(KEY_LAF_THEME_FILE, "");

@@ -6,23 +6,32 @@ import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.component.DesktopPanel;
 import cn.ximuli.jframex.ui.event.ProgressEvent;
 import cn.ximuli.jframex.ui.event.ResourceReadyEvent;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.util.Objects;
 
+/**
+ * A splash screen window displaying a scaled image and a progress bar.
+ * This class is a singleton and manages the application's loading progress.
+ */
 @Slf4j
 public class AppSplashScreen extends JWindow {
-    private static AppSplashScreen INSTANCE = new AppSplashScreen();
+    @Getter
     private final JProgressBar progressBar;
     private final JLabel splashLabel;
 
-    public AppSplashScreen() {
+    /**
+     * Private constructor to enforce singleton pattern.
+     */
+    private AppSplashScreen() {
         setSize(MainFrame.getScreenRatioSize());
         setAlwaysOnTop(true);
-        setLayout(new MigLayout("fill, insets 0", "[grow]", "[grow][]")); // MigLayout: 填充窗口，垂直布局
+        setLayout(new MigLayout("fill, insets 0", "[grow]", "[grow][]"));
 
         ImageIcon icon = loadSplashImage();
         splashLabel = new JLabel(icon);
@@ -33,22 +42,29 @@ public class AppSplashScreen extends JWindow {
         progressBar.setIndeterminate(true);
         progressBar.setStringPainted(true);
         progressBar.setString("Loading...");
-        add(splashLabel, "grow, center");       // 图片标签填充窗口并居中
-        add(progressBar, "growx, dock south");  // 进度条填充宽度，固定在底部
+        add(splashLabel, "grow, center"); // Center the image label
+        add(progressBar, "growx, dock south"); // Dock progress bar at the bottom
         pack();
         centerOnScreen();
     }
 
+    /**
+     * Closes and disposes of the splash screen.
+     *
+     * @return true if the splash screen was closed, false otherwise
+     */
     public static boolean close() {
-        if (INSTANCE != null) {
-            INSTANCE.setVisible(false);
-            INSTANCE.dispose();
-            INSTANCE = null;
-            return true;
-        }
-        return false;
+        AppSplashScreen instance = SingletonHolder.INSTANCE;
+        instance.setVisible(false);
+        instance.dispose();
+        return true;
     }
 
+    /**
+     * Loads and scales the splash image based on the window size.
+     *
+     * @return the scaled ImageIcon, or an empty ImageIcon if loading fails
+     */
     private ImageIcon loadSplashImage() {
         URL url = DesktopPanel.class.getResource("/style/splash.png");
         if (url == null) {
@@ -56,52 +72,92 @@ public class AppSplashScreen extends JWindow {
             return new ImageIcon();
         }
 
-        ImageIcon icon = new ImageIcon(url);
-        Image image = icon.getImage();
+        try {
+            ImageIcon icon = new ImageIcon(url);
+            Image image = icon.getImage();
+            if (image == null) {
+                log.error("Failed to load splash image: null image");
+                return new ImageIcon();
+            }
 
-        Dimension windowSize = MainFrame.getScreenRatioSize();
-        int windowWidth = windowSize.width;
-        int windowHeight = windowSize.height - 30; // 留出进度条空间
+            Dimension windowSize = MainFrame.getScreenRatioSize();
+            int windowWidth = windowSize.width;
+            int windowHeight = windowSize.height - 30; // Reserve space for progress bar
 
-        // 计算图片的缩放比例，保持纵横比
-        int imgWidth = icon.getIconWidth();
-        int imgHeight = icon.getIconHeight();
-        double scale = Math.min((double) windowWidth / imgWidth, (double) windowHeight / imgHeight);
-        int scaledWidth = (int) (imgWidth * scale);
-        int scaledHeight = (int) (imgHeight * scale);
+            // Calculate scaling factor to maintain aspect ratio
+            int imgWidth = icon.getIconWidth();
+            int imgHeight = icon.getIconHeight();
+            if (imgWidth <= 0 || imgHeight <= 0) {
+                log.error("Invalid image dimensions: width={} height={}", imgWidth, imgHeight);
+                return new ImageIcon();
+            }
 
-        // 缩放图片
-        Image scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
-        return new ImageIcon(scaledImage);
-    }
+            double scale = Math.min((double) windowWidth / imgWidth, (double) windowHeight / imgHeight);
+            int scaledWidth = (int) (imgWidth * scale);
+            int scaledHeight = (int) (imgHeight * scale);
 
-    private void centerOnScreen() {
-        setLocationRelativeTo(null); // 居中窗口
-    }
-
-    public static void setProgressBarValue(ProgressEvent event) {
-        if (INSTANCE != null) {
-            INSTANCE.updateProgress(event);
+            // Scale the image smoothly
+            Image scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
+            return new ImageIcon(scaledImage);
+        } catch (Exception e) {
+            log.error("Failed to load or scale splash image: {}", e.getMessage());
+            return new ImageIcon();
         }
     }
 
+    /**
+     * Centers the splash screen on the screen.
+     */
+    private void centerOnScreen() {
+        setLocationRelativeTo(null);
+    }
+
+    /**
+     * Updates the progress bar based on the provided event.
+     *
+     * @param event the progress event containing the value and message
+     */
     public void updateProgress(ProgressEvent event) {
-        log.debug("Update progress ... {}", event.getValue());
+        Objects.requireNonNull(event, "ProgressEvent cannot be null");
+        log.debug("Updating progress: value={}", event.getValue());
         int addedValue = event.getValue();
         SwingUtilities.invokeLater(() -> {
             progressBar.setIndeterminate(false);
             int currentValue = progressBar.getValue();
-            int finalValue = currentValue + addedValue;
+            int finalValue = Math.min(currentValue + addedValue, progressBar.getMaximum());
             if (finalValue >= progressBar.getMaximum()) {
                 FrameManager.publishEvent(new ResourceReadyEvent(""));
             }
             progressBar.setValue(finalValue);
-            String totalMessage = Formatter.format("{}({}) ... {} %", I18nHelper.getMessage("app.resource.scan.load.prefix"), event.getMessage(), finalValue);
-            progressBar.setString(totalMessage);
+            String message = Formatter.format("{} ({}) ... {}%",
+                    I18nHelper.getMessage("app.resource.scan.load.prefix"),
+                    event.getMessage(),
+                    finalValue);
+            progressBar.setString(message);
         });
     }
 
-    public static AppSplashScreen getInstance() {
-        return INSTANCE;
+    /**
+     * Updates the progress bar value based on the provided event.
+     *
+     * @param event the progress event
+     */
+    public static void setProgressBarValue(ProgressEvent event) {
+        AppSplashScreen instance = SingletonHolder.INSTANCE;
+        instance.updateProgress(event);
     }
+
+    private static class SingletonHolder {
+        private static final AppSplashScreen INSTANCE = new AppSplashScreen();
+    }
+
+    /**
+     * Gets the singleton instance of AppSplashScreen.
+     *
+     * @return the singleton instance
+     */
+    public static AppSplashScreen getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
 }

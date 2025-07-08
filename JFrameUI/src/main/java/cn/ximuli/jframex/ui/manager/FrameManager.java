@@ -26,8 +26,6 @@ import java.util.Arrays;
 @Slf4j
 @Component
 public class FrameManager {
-    private static ApplicationContext context;
-
     private volatile Status status = Status.NONE;
     private final MainFrame mainFrame;
     private final LoginDialog loginDialog;

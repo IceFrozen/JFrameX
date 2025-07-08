@@ -178,10 +178,6 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
     }
 
 
-    // the real colors are defined in
-    // flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatLightLaf.properties and
-    // flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatDarkLaf.properties
-
     private void initFullWindowContent() {
         if (!supportsFlatLafWindowDecorations())
             return;
