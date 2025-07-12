@@ -58,11 +58,10 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.*;
 import com.formdev.flatlaf.ui.FlatListUI;
 import com.formdev.flatlaf.util.LoggingFacade;
+import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.*;
 
-/**
- * @author Karl Tauber
- */
+@Slf4j
 public class IJThemesPanel
 	extends JPanel
 {
@@ -294,6 +293,7 @@ public class IJThemesPanel
 				FlatAnimatedLafChange.showSnapshot();
 
 			try {
+				log.info("change theme: {}", themeInfo);
 				UIManager.setLookAndFeel( themeInfo.lafClassName );
 			} catch( Exception ex ) {
 				LoggingFacade.INSTANCE.logSevere( null, ex );

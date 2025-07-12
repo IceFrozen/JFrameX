@@ -65,7 +65,7 @@ public class ExtrasInternalJFrame extends CommonInternalJFrame {
         setLocation(x, y);
     }
 
-    public class ExtrasPanel extends JPanel {
+    public static class ExtrasPanel extends JPanel {
         private Timer rainbowIconTimer;
         private int rainbowCounter = 0;
         private ResourceLoaderManager resources;
@@ -90,26 +90,26 @@ public class ExtrasInternalJFrame extends CommonInternalJFrame {
             this.resources = resources;
             initComponents(resources);
 
-            triStateLabel1.setText( triStateCheckBox1.getState().toString() );
+            triStateLabel1.setText(triStateCheckBox1.getState().toString());
 
-            addSVGIcon( "actions/copy" );
-            addSVGIcon( "actions/colors" );
-            addSVGIcon( "actions/execute" );
-            addSVGIcon( "actions/suspend" );
-            addSVGIcon( "actions/intentionBulb" );
-            addSVGIcon( "actions/quickfixOffBulb" );
+            addSVGIcon("actions/copy");
+            addSVGIcon("actions/colors");
+            addSVGIcon("actions/execute");
+            addSVGIcon("actions/suspend");
+            addSVGIcon("actions/intentionBulb");
+            addSVGIcon("actions/quickfixOffBulb");
 
-            addSVGIcon( "objects/abstractClass" );
-            addSVGIcon( "objects/abstractMethod" );
-            addSVGIcon( "objects/annotationtype" );
-            addSVGIcon( "objects/annotationtype" );
-            addSVGIcon( "objects/css" );
-            addSVGIcon( "objects/javaScript" );
-            addSVGIcon( "objects/xhtml" );
+            addSVGIcon("objects/abstractClass");
+            addSVGIcon("objects/abstractMethod");
+            addSVGIcon("objects/annotationtype");
+            addSVGIcon("objects/annotationtype");
+            addSVGIcon("objects/css");
+            addSVGIcon("objects/javaScript");
+            addSVGIcon("objects/xhtml");
 
-            addSVGIcon( "errorDialog" );
-            addSVGIcon( "informationDialog" );
-            addSVGIcon( "warningDialog" );
+            addSVGIcon("errorDialog");
+            addSVGIcon("informationDialog");
+            addSVGIcon("warningDialog");
 
             initRainbowIcon();
         }
@@ -117,66 +117,65 @@ public class ExtrasInternalJFrame extends CommonInternalJFrame {
         private void initRainbowIcon() {
 
             FlatSVGIcon icon = (FlatSVGIcon) resources.getIcon("extras/svg/informationDialog");
-            icon.setColorFilter( new FlatSVGIcon.ColorFilter(color -> {
+            icon.setColorFilter(new FlatSVGIcon.ColorFilter(color -> {
                 rainbowCounter += 1;
                 rainbowCounter %= 255;
-                return Color.getHSBColor( rainbowCounter / 255f, 1, 1 );
-            } ) );
-            rainbowIcon.setIcon( icon );
+                return Color.getHSBColor(rainbowCounter / 255f, 1, 1);
+            }));
+            rainbowIcon.setIcon(icon);
 
-            rainbowIconTimer = new Timer( 30, e -> {
+            rainbowIconTimer = new Timer(30, e -> {
                 rainbowIcon.repaint();
-            } );
+            });
 
             // start rainbow timer only if panel is shown ("Extras" tab is active)
-            addHierarchyListener( e -> {
-                if( e.getID() == HierarchyEvent.HIERARCHY_CHANGED &&
-                        (e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 )
-                {
-                    if( isShowing() )
+            addHierarchyListener(e -> {
+                if (e.getID() == HierarchyEvent.HIERARCHY_CHANGED &&
+                        (e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0) {
+                    if (isShowing())
                         rainbowIconTimer.start();
                     else
                         rainbowIconTimer.stop();
                 }
-            } );
+            });
         }
 
-        private void addSVGIcon( String name ) {
-            svgIconsPanel.add( new JLabel( resources.getIcon("extras/svg/" + name)));
+        private void addSVGIcon(String name) {
+            svgIconsPanel.add(new JLabel(resources.getIcon("extras/svg/" + name)));
         }
 
         private void triStateCheckBox1Changed() {
-            triStateLabel1.setText( triStateCheckBox1.getState().toString() );
+            triStateLabel1.setText(triStateCheckBox1.getState().toString());
         }
 
         private void redChanged() {
-            brighterToggleButton.setSelected( false );
+            brighterToggleButton.setSelected(false);
 
             Function<Color, Color> mapper = null;
-            if( redToggleButton.isSelected() ) {
-                float[] redHSL = HSLColor.fromRGB( Color.red );
+            if (redToggleButton.isSelected()) {
+                float[] redHSL = HSLColor.fromRGB(Color.red);
                 mapper = color -> {
-                    float[] hsl = HSLColor.fromRGB( color );
-                    return HSLColor.toRGB( redHSL[0], 70, hsl[2] );
+                    float[] hsl = HSLColor.fromRGB(color);
+                    return HSLColor.toRGB(redHSL[0], 70, hsl[2]);
                 };
             }
-            FlatSVGIcon.ColorFilter.getInstance().setMapper( mapper );
+            FlatSVGIcon.ColorFilter.getInstance().setMapper(mapper);
 
             // repaint whole application window because global color filter also affects
             // icons in menubar, toolbar, etc.
-            SwingUtilities.windowForComponent( this ).repaint();
+            SwingUtilities.windowForComponent(this).repaint();
         }
 
         private void brighterChanged() {
-            redToggleButton.setSelected( false );
+            redToggleButton.setSelected(false);
 
-            FlatSVGIcon.ColorFilter.getInstance().setMapper( brighterToggleButton.isSelected()
+            FlatSVGIcon.ColorFilter.getInstance().setMapper(brighterToggleButton.isSelected()
                     ? color -> color.brighter().brighter()
-                    : null );
+                    : null);
 
             // repaint whole application window because global color filter also affects
             // icons in menubar, toolbar, etc.
-            SwingUtilities.windowForComponent( this ).repaint();
+            SwingUtilities.windowForComponent(this).repaint();
         }
 
         private void initComponents(ResourceLoaderManager resources) {

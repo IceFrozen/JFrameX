@@ -21,6 +21,7 @@ public class DesktopPanel extends JDesktopPane {
         this.resources = resources;
         updateBackImag(false);
         loadIcons();
+        ThemeUIManager.themeChangeListener(() -> updateBackImag(true));
     }
 
     private void loadIcons() {

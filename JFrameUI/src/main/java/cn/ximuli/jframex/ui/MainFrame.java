@@ -2,7 +2,10 @@ package cn.ximuli.jframex.ui;
 
 import cn.ximuli.jframex.common.utils.ConvertUtil;
 import cn.ximuli.jframex.ui.component.DesktopPanel;
+import cn.ximuli.jframex.ui.component.SettingInternalJFrame;
 import cn.ximuli.jframex.ui.component.StatePanel;
+import cn.ximuli.jframex.ui.event.CreateFrameEvent;
+import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.menu.MenuBar;
 import cn.ximuli.jframex.ui.menu.ToolBar;
@@ -70,7 +73,7 @@ public class MainFrame extends JFrame {
             System.setProperty(Application.MAC.COM_APPLE_MRJ_APPLICATION_APPLE_MENU_ABOUT_NAME, I18nHelper.getMessage("app.mainframe.title"));
             if (SystemInfo.isMacFullWindowContentSupported) {
                 rootPane.putClientProperty(Application.MAC.APPLE_AWT_FULL_WINDOW_CONTENT, ConvertUtil.toBool(System.getProperty(Application.MAC.APPLE_AWT_FULL_WINDOW_CONTENT, "false")));
-                rootPane.putClientProperty(Application.MAC.APPLE_AWT_TRANSPARENT_TITLE_BAR,     ConvertUtil.toBool(System.getProperty(Application.MAC.APPLE_AWT_TRANSPARENT_TITLE_BAR, "false")));
+                rootPane.putClientProperty(Application.MAC.APPLE_AWT_TRANSPARENT_TITLE_BAR, ConvertUtil.toBool(System.getProperty(Application.MAC.APPLE_AWT_TRANSPARENT_TITLE_BAR, "false")));
                 rootPane.putClientProperty(FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING, FlatClientProperties.MACOS_WINDOW_BUTTONS_SPACING_LARGE);
                 // hide window title
                 if (SystemInfo.isJava_17_orLater){
@@ -92,6 +95,8 @@ public class MainFrame extends JFrame {
         int adaptedHeight = (int)(screenSize.height  * SCREEN_RATIO_HEIGHT);
         return new Dimension(adaptedWidth, adaptedHeight);
     }
+
+
 
     public StatePanel getStatePanel() {
         return this.statePanel;

@@ -1,6 +1,9 @@
 package cn.ximuli.jframex.ui;
 
 import cn.ximuli.jframex.service.util.SpringUtils;
+import cn.ximuli.jframex.ui.component.SettingInternalJFrame;
+import cn.ximuli.jframex.ui.event.CreateFrameEvent;
+import cn.ximuli.jframex.ui.manager.FrameManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,7 +29,8 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Environment env = SpringUtils.getEnv();
+        FrameManager.publishEvent(new CreateFrameEvent<>(SettingInternalJFrame.class));
+
     }
 
 

@@ -7,6 +7,7 @@ import cn.ximuli.jframex.ui.demo.FlatLafDemo;
 import cn.ximuli.jframex.ui.manager.AppSplashScreen;
 import cn.ximuli.jframex.ui.storage.JFramePref;
 import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
@@ -29,7 +30,7 @@ import java.io.IOException;
 public class ThemeUIManager {
     public static final String KEY_LAF_CLASS_NAME = "lafClassName";
     public static final String KEY_LAF_THEME_FILE = "lafThemeFile";
-    public static final String KEY_SYSTEM_SCALE_FACTOR = "systemScaleFactor";
+
     public static final String KEY_LAF_SYNC = "lafSync";
     static boolean screenshotsMode = Boolean.parseBoolean(System.getProperty("jframex.screenshotsMode"));
 
@@ -49,7 +50,6 @@ public class ThemeUIManager {
         if (screenshotsMode && !SystemInfo.isJava_9_orLater && System.getProperty("flatlaf.uiScale") == null) {
             System.setProperty("flatlaf.uiScale", "2x");
         }
-        initSystemScale();
         initFont();
     }
 
@@ -100,16 +100,7 @@ public class ThemeUIManager {
         }
     }
 
-    public static void initSystemScale() {
-        if (System.getProperty("sun.java2d.uiScale") == null) {
-            String scaleFactor = JFramePref.state.get(KEY_SYSTEM_SCALE_FACTOR, null);
-            if (scaleFactor != null) {
-                System.setProperty("sun.java2d.uiScale", scaleFactor);
-                log.info("JFrameX: setting 'sun.java2d.uiScale' to {}", scaleFactor);
-                log.info("use 'Alt+Shift+F1...12' to change it to 1x...4x");
-            }
-        }
-    }
+
 
     private static void initFont() {
 
@@ -149,5 +140,38 @@ public class ThemeUIManager {
             return f.isDark();
         }
         return false;
+    }
+
+    public static void themeChangeListener(Runnable runnable) {
+        UIManager.addPropertyChangeListener(e -> {
+            if ("lookAndFeel".equals(e.getPropertyName())) {
+                EventQueue.invokeLater(runnable);
+            }
+        });
+    }
+
+    public static void lookAndFeelChanged(String lafClassName){
+        EventQueue.invokeLater(() -> {
+            FlatAnimatedLafChange.showSnapshot();
+            // change look and feel
+            try {
+                UIManager.setLookAndFeel(lafClassName);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            // clear custom default font when switching to non-FlatLaf LaF
+            if (!(UIManager.getLookAndFeel() instanceof FlatLaf))
+                UIManager.put("defaultFont", null);
+            // update all components
+            FlatLaf.updateUI();
+            FlatAnimatedLafChange.hideSnapshotWithAnimation();
+
+        });
+
+    }
+
+
+    public static void UIScaleChangeListener(Runnable runnable) {
+        UIManager.addPropertyChangeListener(e -> EventQueue.invokeLater(runnable));
     }
 }

@@ -10,22 +10,31 @@ import cn.ximuli.jframex.ui.event.*;
 import cn.ximuli.jframex.ui.login.LoginDialog;
 import cn.ximuli.jframex.ui.storage.FrameStore;
 import cn.ximuli.jframex.service.util.SpringUtils;
+import cn.ximuli.jframex.ui.storage.JFramePref;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.SystemInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.util.Arrays;
+import java.util.concurrent.Callable;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 @Slf4j
 @Component
 public class FrameManager {
+    public static final String KEY_SYSTEM_SCALE_FACTOR = "systemScaleFactor";
     private volatile Status status = Status.NONE;
     private final MainFrame mainFrame;
     private final LoginDialog loginDialog;
@@ -49,13 +58,15 @@ public class FrameManager {
     @EventListener(ApplicationReadyEvent.class)
     public void handleApplication(ApplicationReadyEvent event) {
         log.info("springboot ready and begin loading resources");
-        loaderManager.loading();
+        registerSystemScaleFactors(event.getApplicationContext().getBean(MainFrame.class));
+        loaderManager.completeLoading();
     }
 
     @EventListener(ApplicationStartedEvent.class)
     public void handleApplication(ApplicationStartedEvent event) {
         log.info("springboot starting: {}", event.getClass().getSimpleName());
         updateStatus(Status.LOADING);
+        initSystemScale();
         AppSplashScreen.setProgressBarValue(new ProgressEvent(10, "app starting..."));
     }
 
@@ -95,6 +106,31 @@ public class FrameManager {
         Class<?> clazz = (Class<?>) event.getSource();
         createIFrame(clazz, event.getArgs());
     }
+
+    @EventListener(WindowsEvent.class)
+    public void handleWindowEvent(WindowsEvent event) {
+        log.info("event: {}", event);
+        int type = event.getType();
+        if (type == WindowsEvent.WINDOW_DECORATIONS_CHANGED) {
+            boolean windowDecorations = (boolean) event.getSource();
+            if (SystemInfo.isLinux) {
+                // enable/disable custom window decorations
+                JFrame.setDefaultLookAndFeelDecorated(windowDecorations);
+                JDialog.setDefaultLookAndFeelDecorated(windowDecorations);
+
+                // dispose frame, update decoration and re-show frame
+                mainFrame.dispose();
+                mainFrame.setUndecorated(windowDecorations);
+                mainFrame.getRootPane().setWindowDecorationStyle(windowDecorations ? JRootPane.FRAME : JRootPane.NONE);
+                mainFrame.setVisible(true);
+            } else {
+                // change window decoration of all frames and dialogs
+                FlatLaf.setUseNativeWindowDecorations(windowDecorations);
+            }
+        }
+    }
+
+
 
     public JInternalFrame createIFrame(Class<?> clazz, Object... args) {
         JInternalFrame iFrame = (JInternalFrame) SpringUtils.getBean(clazz, args);
@@ -139,6 +175,89 @@ public class FrameManager {
     public static void publishEvent(ApplicationEvent event) {
         SpringUtils.applicationContext.publishEvent(event);
     }
+
+
+    public static void showMessageJOptionPane(java.awt.Component parentComponent, String message, ActionEvent e) {
+       showJOptionPane(parentComponent, message, JOptionPane.PLAIN_MESSAGE, e);
+    }
+
+
+    public static void showJOptionPane(java.awt.Component parentComponent, String message, int type, ActionEvent e) {
+        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(parentComponent, e.getActionCommand(), message, type));
+    }
+
+
+    public static void registerKeyAction(int key, BiConsumer<MainFrame, ActionEvent> keyAction) {
+        MainFrame main = SpringUtils.getBean(MainFrame.class);
+        ((JComponent) main.getContentPane()).registerKeyboardAction(
+                e -> keyAction.accept(main, e),
+                KeyStroke.getKeyStroke(key, 0, false),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+    }
+
+    public static void initSystemScale() {
+        if (System.getProperty("sun.java2d.uiScale") == null) {
+            String scaleFactor = JFramePref.state.get(KEY_SYSTEM_SCALE_FACTOR, null);
+            if (scaleFactor != null) {
+                System.setProperty("sun.java2d.uiScale", scaleFactor);
+                log.info("JFrameX: setting 'sun.java2d.uiScale' to {}", scaleFactor);
+                log.info("use 'Alt+Shift+F1...12' to change it to 1x...4x");
+            }
+        }
+    }
+
+    public static void registerSystemScaleFactors(JFrame frame) {
+        registerSystemScaleFactor(frame, "alt shift F1", null);
+        registerSystemScaleFactor(frame, "alt shift F2", "1");
+
+        if (SystemInfo.isWindows) {
+            registerSystemScaleFactor(frame, "alt shift F3", "1.25");
+            registerSystemScaleFactor(frame, "alt shift F4", "1.5");
+            registerSystemScaleFactor(frame, "alt shift F5", "1.75");
+            registerSystemScaleFactor(frame, "alt shift F6", "2");
+            registerSystemScaleFactor(frame, "alt shift F7", "2.25");
+            registerSystemScaleFactor(frame, "alt shift F8", "2.5");
+            registerSystemScaleFactor(frame, "alt shift F9", "2.75");
+            registerSystemScaleFactor(frame, "alt shift F10", "3");
+            registerSystemScaleFactor(frame, "alt shift F11", "3.5");
+            registerSystemScaleFactor(frame, "alt shift F12", "4");
+        } else {
+            // Java on macOS and Linux supports only integer scale factors
+            registerSystemScaleFactor(frame, "alt shift F3", "2");
+            registerSystemScaleFactor(frame, "alt shift F4", "3");
+            registerSystemScaleFactor(frame, "alt shift F5", "4");
+        }
+    }
+
+    private static void registerSystemScaleFactor(JFrame frame, String keyStrokeStr, String scaleFactor) {
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStrokeStr);
+        if (keyStroke == null)
+            throw new IllegalArgumentException("Invalid key stroke '" + keyStrokeStr + "'");
+
+        ((JComponent) frame.getContentPane()).registerKeyboardAction(
+                e -> applySystemScaleFactor(frame, scaleFactor),
+                keyStroke,
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+    }
+
+    private static void applySystemScaleFactor(JFrame frame, String scaleFactor) {
+        //TODO i8
+        if (JOptionPane.showConfirmDialog(frame,
+                "Change system scale factor to "
+                        + (scaleFactor != null ? scaleFactor : "default")
+                        + " and exit?",
+                frame.getTitle(), JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
+            return;
+
+        if (scaleFactor != null)
+            JFramePref.state.put(KEY_SYSTEM_SCALE_FACTOR, scaleFactor);
+        else
+            JFramePref.state.remove(KEY_SYSTEM_SCALE_FACTOR);
+
+        System.exit(0);
+    }
+
 
     public synchronized void updateStatus(Status status) {
         this.status = status;

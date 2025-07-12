@@ -1,15 +1,16 @@
 package cn.ximuli.jframex.ui.component;
 
-import cn.ximuli.jframex.ui.demo.*;
-import cn.ximuli.jframex.ui.demo.intellijthemes.IJThemesPanel;
+import cn.ximuli.jframex.service.util.SpringUtils;
+import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.component.intellijthemes.IJThemesPanel;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
+import cn.ximuli.jframex.ui.menu.MenuBar;
+import cn.ximuli.jframex.ui.menu.ToolBar2;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.extras.*;
-import com.formdev.flatlaf.extras.components.FlatButton;
-import com.formdev.flatlaf.icons.FlatAbstractIcon;
-import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.SystemInfo;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.LC;
@@ -17,172 +18,37 @@ import net.miginfocom.layout.UnitValue;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.Arrays;
-import java.util.prefs.Preferences;
+
 
 @org.springframework.stereotype.Component
 @Slf4j
 public class SettingInternalJFrame extends CommonInternalJFrame {
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    private JMenuBar menuBar;
-    private JMenuItem exitMenuItem;
-    private JMenu scrollingPopupMenu;
-    private JMenuItem htmlMenuItem;
-    private JMenu fontMenu;
-    private JMenu optionsMenu;
-    private JCheckBoxMenuItem windowDecorationsCheckBoxMenuItem;
-    private JCheckBoxMenuItem menuBarEmbeddedCheckBoxMenuItem;
-    private JCheckBoxMenuItem unifiedTitleBarMenuItem;
-    private JCheckBoxMenuItem showTitleBarIconMenuItem;
-    private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
-    private JCheckBoxMenuItem alwaysShowMnemonicsMenuItem;
-    private JCheckBoxMenuItem animatedLafChangeMenuItem;
-    private JMenuItem aboutMenuItem;
-    private JToolBar toolBar;
     private JTabbedPane tabbedPane;
     private ControlBar controlBar;
+    @Getter
     IJThemesPanel themesPanel;
     private final String[] availableFontFamilyNames;
-    private int initialFontMenuItemCount = -1;
 
-    SettingInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
+    public SettingInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
         super(resources, desktopPane);
+        setFrameIcon(resources.getIcon("settings"));
+        setTitle(I18nHelper.getMessage("app.setting.title"));
         availableFontFamilyNames = FontUtils.getAvailableFontFamilyNames().clone();
         Arrays.sort(availableFontFamilyNames);
         initComponents();
         initFullWindowContent();
-        //controlBar.initialize(null, tabbedPane);
 
     }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        FlatUIDefaultsInspector.hide();
-    }
-
-    private void showHints() {
-        HintManager.Hint fontMenuHint = new HintManager.Hint(
-                "Use 'Font' menu to increase/decrease font size or try different fonts.",
-                fontMenu, SwingConstants.BOTTOM, "hint.fontMenu", null);
-
-        HintManager.Hint optionsMenuHint = new HintManager.Hint(
-                "Use 'Options' menu to try out various FlatLaf options.",
-                optionsMenu, SwingConstants.BOTTOM, "hint.optionsMenu", fontMenuHint);
-
-        HintManager.Hint themesHint = new HintManager.Hint(
-                "Use 'Themes' list to try out various themes.",
-                themesPanel, SwingConstants.LEFT, "hint.themesPanel", optionsMenuHint);
-
-        HintManager.showHint(themesHint);
-    }
-
-    private void clearHints() {
-        HintManager.hideAllHints();
-
-        Preferences state = DemoPrefs.getState();
-        state.remove("hint.fontMenu");
-        state.remove("hint.optionsMenu");
-        state.remove("hint.themesPanel");
-    }
-
-    private void showUIDefaultsInspector() {
-        FlatUIDefaultsInspector.show();
-    }
-
-
-    private void windowDecorationsChanged() {
-        boolean windowDecorations = windowDecorationsCheckBoxMenuItem.isSelected();
-
-        if (SystemInfo.isLinux) {
-            // enable/disable custom window decorations
-            JFrame.setDefaultLookAndFeelDecorated(windowDecorations);
-            JDialog.setDefaultLookAndFeelDecorated(windowDecorations);
-
-            // dispose frame, update decoration and re-show frame
-            dispose();
-            getRootPane().setWindowDecorationStyle(windowDecorations ? JRootPane.FRAME : JRootPane.NONE);
-            setVisible(true);
-        } else {
-            // change window decoration of all frames and dialogs
-            FlatLaf.setUseNativeWindowDecorations(windowDecorations);
-        }
-
-        menuBarEmbeddedCheckBoxMenuItem.setEnabled(windowDecorations);
-        unifiedTitleBarMenuItem.setEnabled(windowDecorations);
-        showTitleBarIconMenuItem.setEnabled(windowDecorations);
-    }
-
-    private void menuBarEmbeddedChanged() {
-        UIManager.put("TitlePane.menuBarEmbedded", menuBarEmbeddedCheckBoxMenuItem.isSelected());
-        FlatLaf.revalidateAndRepaintAllFramesAndDialogs();
-    }
-
-    private void unifiedTitleBar() {
-        UIManager.put("TitlePane.unifiedBackground", unifiedTitleBarMenuItem.isSelected());
-        FlatLaf.repaintAllFramesAndDialogs();
-    }
-
-    private void showTitleBarIcon() {
-        boolean showIcon = showTitleBarIconMenuItem.isSelected();
-
-        // for main frame (because already created)
-        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, showIcon);
-
-        // for other not yet created frames/dialogs
-        UIManager.put("TitlePane.showIcon", showIcon);
-    }
-
-    private void underlineMenuSelection() {
-        UIManager.put("MenuItem.selectionType", underlineMenuSelectionMenuItem.isSelected() ? "underline" : null);
-    }
-
-    private void alwaysShowMnemonics() {
-        UIManager.put("Component.hideMnemonics", !alwaysShowMnemonicsMenuItem.isSelected());
-        repaint();
-    }
-
-    private void animatedLafChangeChanged() {
-        System.setProperty("flatlaf.animatedLafChange", String.valueOf(animatedLafChangeMenuItem.isSelected()));
-    }
-
-    private void showHintsChanged() {
-        clearHints();
-        showHints();
-    }
-
-    private void fontFamilyChanged(ActionEvent e) {
-        String fontFamily = e.getActionCommand();
-
-        FlatAnimatedLafChange.showSnapshot();
-
-        Font font = UIManager.getFont("defaultFont");
-        Font newFont = FontUtils.getCompositeFont(fontFamily, font.getStyle(), font.getSize());
-        UIManager.put("defaultFont", newFont);
-
-        FlatLaf.updateUI();
-        FlatAnimatedLafChange.hideSnapshotWithAnimation();
-    }
-
-    private void fontSizeChanged(ActionEvent e) {
-        String fontSizeStr = e.getActionCommand();
-
-        Font font = UIManager.getFont("defaultFont");
-        Font newFont = font.deriveFont((float) Integer.parseInt(fontSizeStr));
-        UIManager.put("defaultFont", newFont);
-
-        FlatLaf.updateUI();
-    }
-
 
     private void initFullWindowContent() {
         if (!supportsFlatLafWindowDecorations())
             return;
 
         // create fullWindowContent mode toggle button
+        MenuBar menuBar = SpringUtils.getBean(MenuBar.class);
+        ToolBar2 toolBar = SpringUtils.getBean(ToolBar2.class);
         Icon expandIcon = new FlatSVGIcon("com/formdev/flatlaf/demo/icons/expand.svg");
         Icon collapseIcon = new FlatSVGIcon("com/formdev/flatlaf/demo/icons/collapse.svg");
         JToggleButton fullWindowContentButton = new JToggleButton(expandIcon);
@@ -207,59 +73,6 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
     }
 
     private void initComponents() {
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        menuBar = new JMenuBar();
-
-        exitMenuItem = new JMenuItem();
-        JMenu editMenu = new JMenu();
-        JMenuItem undoMenuItem = new JMenuItem();
-        JMenuItem redoMenuItem = new JMenuItem();
-        JMenuItem cutMenuItem = new JMenuItem();
-        JMenuItem copyMenuItem = new JMenuItem();
-        JMenuItem pasteMenuItem = new JMenuItem();
-        JMenuItem deleteMenuItem = new JMenuItem();
-        JMenu viewMenu = new JMenu();
-        JCheckBoxMenuItem checkBoxMenuItem1 = new JCheckBoxMenuItem();
-        JMenu menu1 = new JMenu();
-        JMenu subViewsMenu = new JMenu();
-        JMenu subSubViewsMenu = new JMenu();
-        JMenuItem errorLogViewMenuItem = new JMenuItem();
-        JMenuItem searchViewMenuItem = new JMenuItem();
-        JMenuItem projectViewMenuItem = new JMenuItem();
-        JMenuItem structureViewMenuItem = new JMenuItem();
-        JMenuItem propertiesViewMenuItem = new JMenuItem();
-        scrollingPopupMenu = new JMenu();
-        JMenuItem menuItem2 = new JMenuItem();
-        htmlMenuItem = new JMenuItem();
-        JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
-        JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
-        JRadioButtonMenuItem radioButtonMenuItem3 = new JRadioButtonMenuItem();
-        fontMenu = new JMenu();
-        JMenuItem restoreFontMenuItem = new JMenuItem();
-        JMenuItem incrFontMenuItem = new JMenuItem();
-        JMenuItem decrFontMenuItem = new JMenuItem();
-        optionsMenu = new JMenu();
-        windowDecorationsCheckBoxMenuItem = new JCheckBoxMenuItem();
-        menuBarEmbeddedCheckBoxMenuItem = new JCheckBoxMenuItem();
-        unifiedTitleBarMenuItem = new JCheckBoxMenuItem();
-        showTitleBarIconMenuItem = new JCheckBoxMenuItem();
-        underlineMenuSelectionMenuItem = new JCheckBoxMenuItem();
-        alwaysShowMnemonicsMenuItem = new JCheckBoxMenuItem();
-        animatedLafChangeMenuItem = new JCheckBoxMenuItem();
-        JMenuItem showHintsMenuItem = new JMenuItem();
-        JMenuItem showUIDefaultsInspectorMenuItem = new JMenuItem();
-        JMenu helpMenu = new JMenu();
-        aboutMenuItem = new JMenuItem();
-        JPanel toolBarPanel = new JPanel();
-        JPanel macFullWindowContentButtonsPlaceholder = new JPanel();
-        toolBar = new JToolBar();
-        JButton backButton = new JButton();
-        JButton forwardButton = new JButton();
-        JButton cutButton = new JButton();
-        JButton copyButton = new JButton();
-        JButton pasteButton = new JButton();
-        JButton refreshButton = new JButton();
-        JToggleButton showToggleButton = new JToggleButton();
         JPanel contentPanel = new JPanel();
         tabbedPane = new JTabbedPane();
         BasicInternalJFrame.BasicComponentsPanel basicComponentsPanel = new BasicInternalJFrame.BasicComponentsPanel(resources);
@@ -267,111 +80,40 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
         DataInternalJFrame.DataComponentsPanel dataComponentsPanel = new DataInternalJFrame.DataComponentsPanel(resources);
         TabInternalJFrame.TabsPanel tabsPanel = new TabInternalJFrame.TabsPanel(resources);
         OptionInternalJFrame.OptionPanePanel optionPanePanel = new OptionInternalJFrame.OptionPanePanel(resources);
-        ExtrasPanel extrasPanel = new ExtrasPanel();
-        controlBar = new ControlBar();
+        ExtrasInternalJFrame.ExtrasPanel extrasPanel = new ExtrasInternalJFrame.ExtrasPanel(resources);
+        controlBar = new ControlBar(this,tabbedPane);
         JPanel themesPanelPanel = new JPanel();
         JPanel winFullWindowContentButtonsPlaceholder = new JPanel();
-        themesPanel = new IJThemesPanel();
-
-        //======== this ========
-        setTitle("FlatLaf Demo");
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        themesPanel = new IJThemesPanel(resources);
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
+        contentPanel.setLayout(new MigLayout(
+                "insets dialog,hidemode 3",
+                // columns
+                "[grow,fill]",
+                // rows
+                "[grow,fill]"));
 
 
-        {
-            contentPanel.setLayout(new MigLayout(
-                    "insets dialog,hidemode 3",
-                    // columns
-                    "[grow,fill]",
-                    // rows
-                    "[grow,fill]"));
+        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabbedPane.addTab("Basic Components", basicComponentsPanel);
+        tabbedPane.addTab("Container Components", containerComponentsPanel);
+        tabbedPane.addTab("Data Components", dataComponentsPanel);
+        tabbedPane.addTab("Tabs", tabsPanel);
+        tabbedPane.addTab("Option Pane", optionPanePanel);
+        tabbedPane.addTab("Extras", extrasPanel);
 
-            //======== tabbedPane ========
-            {
-                tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-                tabbedPane.addTab("Basic Components", basicComponentsPanel);
-                tabbedPane.addTab("More Components", containerComponentsPanel);
-                tabbedPane.addTab("Data Components", dataComponentsPanel);
-                tabbedPane.addTab("Tabs", tabsPanel);
-                tabbedPane.addTab("Option Pane", optionPanePanel);
-                tabbedPane.addTab("Extras", extrasPanel);
-            }
-            contentPanel.add(tabbedPane, "cell 0 0");
-        }
+        contentPanel.add(tabbedPane, "cell 0 0");
+
         contentPane.add(contentPanel, BorderLayout.CENTER);
         contentPane.add(controlBar, BorderLayout.PAGE_END);
 
-        //======== themesPanelPanel ========
-        {
-            themesPanelPanel.setLayout(new BorderLayout());
 
-            //======== winFullWindowContentButtonsPlaceholder ========
-            {
-                winFullWindowContentButtonsPlaceholder.setLayout(new FlowLayout());
-            }
-            themesPanelPanel.add(winFullWindowContentButtonsPlaceholder, BorderLayout.NORTH);
-            themesPanelPanel.add(themesPanel, BorderLayout.CENTER);
-        }
+        themesPanelPanel.setLayout(new BorderLayout());
+        winFullWindowContentButtonsPlaceholder.setLayout(new FlowLayout());
+        themesPanelPanel.add(winFullWindowContentButtonsPlaceholder, BorderLayout.NORTH);
+        themesPanelPanel.add(themesPanel, BorderLayout.CENTER);
         contentPane.add(themesPanelPanel, BorderLayout.LINE_END);
-
-        //---- buttonGroup1 ----
-        ButtonGroup buttonGroup1 = new ButtonGroup();
-        buttonGroup1.add(radioButtonMenuItem1);
-        buttonGroup1.add(radioButtonMenuItem2);
-        buttonGroup1.add(radioButtonMenuItem3);
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
-
-        // add "Users" button to menubar
-        FlatButton usersButton = new FlatButton();
-        usersButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/users.svg"));
-        usersButton.setButtonType(FlatButton.ButtonType.toolBarButton);
-        usersButton.setFocusable(false);
-        usersButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "Hello User! How are you?", "User", JOptionPane.INFORMATION_MESSAGE));
-        menuBar.add(Box.createGlue());
-        menuBar.add(usersButton);
-
-        cutMenuItem.addActionListener(new DefaultEditorKit.CutAction());
-        copyMenuItem.addActionListener(new DefaultEditorKit.CopyAction());
-        pasteMenuItem.addActionListener(new DefaultEditorKit.PasteAction());
-
-        scrollingPopupMenu.add("Large menus are scrollable");
-        scrollingPopupMenu.add("Use mouse wheel to scroll");
-        scrollingPopupMenu.add("Or use up/down arrows at top/bottom");
-        for (int i = 1; i <= 100; i++)
-            scrollingPopupMenu.add("Item " + i);
-
-        if (supportsFlatLafWindowDecorations()) {
-            windowDecorationsCheckBoxMenuItem.setSelected(SystemInfo.isLinux
-                    ? JFrame.isDefaultLookAndFeelDecorated()
-                    : FlatLaf.isUseNativeWindowDecorations());
-            menuBarEmbeddedCheckBoxMenuItem.setSelected(UIManager.getBoolean("TitlePane.menuBarEmbedded"));
-            unifiedTitleBarMenuItem.setSelected(UIManager.getBoolean("TitlePane.unifiedBackground"));
-            showTitleBarIconMenuItem.setSelected(UIManager.getBoolean("TitlePane.showIcon"));
-        } else {
-            unsupported(windowDecorationsCheckBoxMenuItem);
-            unsupported(menuBarEmbeddedCheckBoxMenuItem);
-            unsupported(unifiedTitleBarMenuItem);
-            unsupported(showTitleBarIconMenuItem);
-        }
-
-        if (SystemInfo.isMacOS)
-            unsupported(underlineMenuSelectionMenuItem);
-
-        if ("false".equals(System.getProperty("flatlaf.animatedLafChange")))
-            animatedLafChangeMenuItem.setSelected(false);
-
-
-        // on macOS, panel left to toolBar is a placeholder for title bar buttons in fullWindowContent mode
-        macFullWindowContentButtonsPlaceholder.putClientProperty(FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "mac zeroInFullScreen");
-
-        // on Windows/Linux, panel above themesPanel is a placeholder for title bar buttons in fullWindowContent mode
-        winFullWindowContentButtonsPlaceholder.putClientProperty(FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "win");
-
-        // uncomment this line to see title bar buttons placeholders in fullWindowContent mode
-        //UIManager.put( "FlatLaf.debug.panel.showPlaceholders", true );
-
 
         // remove contentPanel bottom insets
         MigLayout layout = (MigLayout) contentPanel.getLayout();
@@ -386,44 +128,8 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
         layout.setLayoutConstraints(lc);
     }
 
-    private void unsupported(JCheckBoxMenuItem menuItem) {
-        menuItem.setEnabled(false);
-        menuItem.setSelected(false);
-        menuItem.setToolTipText("Not supported on this platform.");
-    }
-
     @Override
     protected void initUI() {
 
-    }
-
-
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
-
-    //---- class AccentColorIcon ----------------------------------------------
-
-    private static class AccentColorIcon
-            extends FlatAbstractIcon {
-        private final String colorKey;
-
-        AccentColorIcon(String colorKey) {
-            super(16, 16, null);
-            this.colorKey = colorKey;
-        }
-
-        @Override
-        protected void paintIcon(Component c, Graphics2D g) {
-            Color color = UIManager.getColor(colorKey);
-            if (color == null)
-                color = Color.lightGray;
-            else if (!c.isEnabled()) {
-                color = FlatLaf.isLafDark()
-                        ? ColorFunctions.shade(color, 0.5f)
-                        : ColorFunctions.tint(color, 0.6f);
-            }
-
-            g.setColor(color);
-            g.fillRoundRect(1, 1, width - 2, height - 2, 5, 5);
-        }
     }
 }

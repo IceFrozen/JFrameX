@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
+import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -53,15 +54,16 @@ public class EditMenu extends JMenu {
 
         //---- cutMenuItem ----
         JMenuItem cutMenuItem = new JMenuItem();
-        cutMenuItem.setText(I18nHelper.getMessage("app.menu.edit.cut"));
+        cutMenuItem.setAction(new DefaultEditorKit.CutAction());
         cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         cutMenuItem.setMnemonic('C');
         cutMenuItem.setIcon(resources.getIcon(("icons/menu-cut")));
+        cutMenuItem.setText(I18nHelper.getMessage("app.menu.edit.cut"));
         cutMenuItem.putClientProperty(MenuBar.MENU_SYNC_TOOL_BAR_KEY, MenuBar.MENU_SYNC_TOOL_BAR_TYPE_SIMPLE);
         add(cutMenuItem);
-
         //---- copyMenuItem ----
         JMenuItem copyMenuItem = new JMenuItem();
+        copyMenuItem.setAction(new DefaultEditorKit.CopyAction());
         copyMenuItem.setText(I18nHelper.getMessage("app.menu.edit.copy"));
         copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         copyMenuItem.setMnemonic('O');
@@ -71,6 +73,7 @@ public class EditMenu extends JMenu {
 
         //---- pasteMenuItem ----
         JMenuItem pasteMenuItem = new JMenuItem();
+        pasteMenuItem.setAction(new DefaultEditorKit.PasteAction());
         pasteMenuItem.setText(I18nHelper.getMessage("app.menu.edit.paste"));
         pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         pasteMenuItem.setMnemonic('P');

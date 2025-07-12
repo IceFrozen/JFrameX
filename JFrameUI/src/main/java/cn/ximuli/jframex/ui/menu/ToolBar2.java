@@ -1,15 +1,21 @@
 package cn.ximuli.jframex.ui.menu;
 
+import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.component.SettingInternalJFrame;
 import cn.ximuli.jframex.ui.event.CreateFrameEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
+import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.extras.FlatDesktop;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.extras.components.FlatButton;
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.LoggingFacade;
+import com.formdev.flatlaf.util.SystemInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,13 +27,10 @@ import java.awt.event.ActionListener;
 import java.util.Objects;
 
 @Component
+@Slf4j
 public class ToolBar2 extends JPanel {
-    @Value("${jframex.menu.sync.tool.bar.type: simple}")
-    private String menuSyncToolBarTypeSimple;
-
-
-
     private MenuBar menuBar;
+    private ResourceLoaderManager resources;
     private final JToolBar toolBar = new JToolBar();
     JPanel macFullWindowContentButtonsPlaceholder = new JPanel();
     Color accentColor;
@@ -46,19 +49,23 @@ public class ToolBar2 extends JPanel {
     }
 
     @Autowired
-    public ToolBar2(MenuBar frameMenuBar) {
+    public ToolBar2(MenuBar frameMenuBar, ResourceLoaderManager resources) {
         super();
         this.menuBar = frameMenuBar;
+        this.resources = resources;
         initialize();
     }
 
     private void initialize() {
-        setLayout(new BorderLayout());
-        //======== macFullWindowContentButtonsPlaceholder ========
-        macFullWindowContentButtonsPlaceholder.setLayout(new FlowLayout());
-        add(macFullWindowContentButtonsPlaceholder, BorderLayout.WEST);
-        //======== toolBar ========
-        toolBar.setMargin(new Insets(1, 3, 1, 3));
+        if (SystemInfo.isMacOS) {
+            initializeMac();
+        } else if (SystemInfo.isWindows) {
+            initializeWins();
+        } else {
+            initializeLinux();
+        }
+        //UIManager.put("FlatLaf.debug.panel.showPlaceholders", true);
+
         for (JMenu jMenu : menuBar.getMenuList()) {
             java.awt.Component[] menuComponents = jMenu.getMenuComponents();
             for (java.awt.Component menuComponent : menuComponents) {
@@ -71,21 +78,13 @@ public class ToolBar2 extends JPanel {
             }
         }
 
-        add(toolBar, BorderLayout.CENTER);
-        // on macOS, panel left to toolBar is a placeholder for title bar buttons in fullWindowContent mode
-        macFullWindowContentButtonsPlaceholder.putClientProperty(FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "mac zeroInFullScreen");
-        // uncomment this line to see title bar buttons placeholders in fullWindowContent mode
-        //UIManager.put("FlatLaf.debug.panel.showPlaceholders", true);
+        addSettingButton();
         initAccentColors();
-        FlatDesktop.setPreferencesHandler(() -> {
-
-            FrameManager.publishEvent(new CreateFrameEvent<>(SettingInternalJFrame.class));
-
-
-        });
+        FlatDesktop.setPreferencesHandler(() -> FrameManager.publishEvent(new CreateFrameEvent<>(SettingInternalJFrame.class)));
     }
 
     private void initAccentColors() {
+        log.info("initAccentColors");
         accentColorLabel = new JLabel("Accent color: ");
         toolBar.add(Box.createHorizontalGlue());
         toolBar.add(accentColorLabel);
@@ -143,8 +142,9 @@ public class ToolBar2 extends JPanel {
                         lafClass == FlatMacDarkLaf.class;
 
         accentColorLabel.setVisible(isAccentColorSupported);
-        for (int i = 0; i < accentColorButtons.length; i++)
-            accentColorButtons[i].setVisible(isAccentColorSupported);
+        for (JToggleButton accentColorButton : accentColorButtons) {
+            accentColorButton.setVisible(isAccentColorSupported);
+        }
     }
 
     private static class AccentColorIcon extends FlatAbstractIcon {
@@ -171,7 +171,6 @@ public class ToolBar2 extends JPanel {
         }
     }
 
-
     private JButton createToolButton(final JMenuItem item) {
         JButton button = null;
         Object syncType = item.getClientProperty(MenuBar.MENU_SYNC_TOOL_BAR_KEY);
@@ -186,5 +185,31 @@ public class ToolBar2 extends JPanel {
             }
         }
         return button;
+    }
+
+
+    public void addSettingButton() {
+        JButton button = new JButton();
+        button.setIcon(resources.getIcon("settings"));
+        button.addActionListener(e -> FrameManager.publishEvent(new CreateFrameEvent<>(SettingInternalJFrame.class)));
+        toolBar.add(button);
+    }
+
+    public void initializeMac() {
+        setLayout(new BorderLayout());
+        //======== macFullWindowContentButtonsPlaceholder ========
+        macFullWindowContentButtonsPlaceholder.setLayout(new FlowLayout());
+        add(macFullWindowContentButtonsPlaceholder, BorderLayout.WEST);
+        //======== toolBar ========
+        toolBar.setMargin(new Insets(1, 3, 1, 3));
+        add(toolBar, BorderLayout.CENTER);
+        // on macOS, panel left to toolBar is a placeholder for title bar buttons in fullWindowContent mode
+        macFullWindowContentButtonsPlaceholder.putClientProperty(FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "mac zeroInFullScreen");
+    }
+    public void initializeLinux() {
+
+    }
+    public void initializeWins() {
+
     }
 }
