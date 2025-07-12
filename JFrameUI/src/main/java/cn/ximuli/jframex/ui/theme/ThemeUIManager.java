@@ -1,15 +1,11 @@
 package cn.ximuli.jframex.ui.theme;
 
 import cn.ximuli.jframex.ui.Application;
-import cn.ximuli.jframex.ui.demo.DemoFrame;
-import cn.ximuli.jframex.ui.demo.DemoPrefs;
-import cn.ximuli.jframex.ui.demo.FlatLafDemo;
-import cn.ximuli.jframex.ui.manager.AppSplashScreen;
+import cn.ximuli.jframex.ui.component.intellijthemes.IJThemeInfo;
 import cn.ximuli.jframex.ui.storage.JFramePref;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatInspector;
-import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.fonts.inter.FlatInterFont;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -52,8 +48,6 @@ public class ThemeUIManager {
         }
         initFont();
     }
-
-
 
 
     public static void setupLaf(String[] args) {
@@ -99,7 +93,6 @@ public class ThemeUIManager {
             UIManager.setLookAndFeel(lafClassName);
         }
     }
-
 
 
     private static void initFont() {
@@ -150,7 +143,7 @@ public class ThemeUIManager {
         });
     }
 
-    public static void lookAndFeelChanged(String lafClassName){
+    public static void lookAndFeelChanged(String lafClassName) {
         EventQueue.invokeLater(() -> {
             FlatAnimatedLafChange.showSnapshot();
             // change look and feel
@@ -167,6 +160,52 @@ public class ThemeUIManager {
             FlatAnimatedLafChange.hideSnapshotWithAnimation();
 
         });
+
+    }
+
+    public static void setTheme(IJThemeInfo themeInfo, boolean reload) {
+        if (themeInfo == null) {
+            return;
+        }
+        // change look and feel
+        if (themeInfo.getLafClassName() != null) {
+            if (!reload && themeInfo.getLafClassName().equals(UIManager.getLookAndFeel().getClass().getName())) {
+                return;
+            }
+            if (!reload) {
+                FlatAnimatedLafChange.showSnapshot();
+            }
+            try {
+                log.info("change theme: {}", themeInfo);
+                UIManager.setLookAndFeel(themeInfo.getLafClassName());
+            } catch (Exception ex) {
+                throw new RuntimeException("Failed to create '" + themeInfo.getThemeFile() + "'.", ex);
+
+            }
+        } else if (themeInfo.getThemeFile() != null) {
+            if (!reload)
+                FlatAnimatedLafChange.showSnapshot();
+            try {
+                if (themeInfo.getThemeFile().getName().endsWith(".properties")) {
+                    FlatLaf.setup(new FlatPropertiesLaf(themeInfo.getName(), themeInfo.getThemeFile()));
+                } else {
+                    FlatLaf.setup(IntelliJTheme.createLaf(new FileInputStream(themeInfo.getThemeFile())));
+                }
+
+                JFramePref.state.put(ThemeUIManager.KEY_LAF_THEME_FILE, themeInfo.getThemeFile().getAbsolutePath());
+            } catch (Exception ex) {
+                LoggingFacade.INSTANCE.logSevere(null, ex);
+                throw new RuntimeException("Failed to load '" + themeInfo.getThemeFile() + "'.", ex);
+            }
+        } else {
+            throw new RuntimeException("Missing lafClassName for '" + themeInfo.getThemeFile() + "'.");
+        }
+
+        // update all components
+        FlatLaf.updateUI();
+        if (!reload) {
+            FlatAnimatedLafChange.hideSnapshotWithAnimation();
+        }
 
     }
 

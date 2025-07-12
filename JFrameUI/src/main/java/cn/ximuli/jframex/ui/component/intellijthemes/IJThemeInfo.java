@@ -16,12 +16,15 @@
 
 package cn.ximuli.jframex.ui.component.intellijthemes;
 
+import lombok.Getter;
+
 import java.io.File;
 
 /**
  * @author Karl Tauber
  */
-class IJThemeInfo
+@Getter
+public class IJThemeInfo
 {
 	final String name;
 	final String resourceName;
@@ -35,11 +38,11 @@ class IJThemeInfo
 	final File themeFile;
 	final String lafClassName;
 
-	IJThemeInfo( String name, boolean dark, String lafClassName ) {
+	public IJThemeInfo( String name, boolean dark, String lafClassName ) {
 		this( name, null, false, dark, null, null, null, null, null, null, lafClassName );
 	}
 
-	IJThemeInfo( String name, String resourceName, boolean discontinued, boolean dark,
+	public IJThemeInfo( String name, String resourceName, boolean discontinued, boolean dark,
 		String license, String licenseFile,
 		String pluginUrl, String sourceCodeUrl, String sourceCodePath,
 		File themeFile, String lafClassName )

@@ -1,26 +1,10 @@
-/*
- * Copyright 2019 FormDev Software GmbH
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package cn.ximuli.jframex.ui.component.intellijthemes;
 
-import cn.ximuli.jframex.ui.demo.DemoPrefs;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
+import cn.ximuli.jframex.ui.storage.JFramePref;
+import cn.ximuli.jframex.ui.theme.ThemeUIManager;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
-import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.ui.FlatListUI;
@@ -55,7 +39,6 @@ public class IJThemesPanel extends JPanel {
     private final IJThemesManager themesManager = new IJThemesManager();
     private final List<IJThemeInfo> themes = new ArrayList<>();
     private final HashMap<Integer, String> categories = new HashMap<>();
-    private final PropertyChangeListener lafListener = this::lafChanged;
     private final WindowListener windowListener = new WindowAdapter() {
         @Override
         public void windowActivated(WindowEvent e) {
@@ -68,12 +51,12 @@ public class IJThemesPanel extends JPanel {
     private long lastLafChangeTime = System.currentTimeMillis();
 
     private ResourceLoaderManager resources;
-	private JToolBar toolBar;
-	private JButton pluginButton;
-	private JButton sourceCodeButton;
-	private JComboBox<String> filterComboBox;
-	private JScrollPane themesScrollPane;
-	private JList<IJThemeInfo> themesList;
+    private JToolBar toolBar;
+    private JButton pluginButton;
+    private JButton sourceCodeButton;
+    private JComboBox<String> filterComboBox;
+    private JScrollPane themesScrollPane;
+    private JList<IJThemeInfo> themesList;
 
     public IJThemesPanel(ResourceLoaderManager resources) {
         this.resources = resources;
@@ -271,51 +254,12 @@ public class IJThemesPanel extends JPanel {
     }
 
     private void setTheme(IJThemeInfo themeInfo, boolean reload) {
-        if (themeInfo == null)
-            return;
-
-        // change look and feel
-        if (themeInfo.lafClassName != null) {
-            if (!reload && themeInfo.lafClassName.equals(UIManager.getLookAndFeel().getClass().getName()))
-                return;
-
-            if (!reload)
-                FlatAnimatedLafChange.showSnapshot();
-
-            try {
-                log.info("change theme: {}", themeInfo);
-                UIManager.setLookAndFeel(themeInfo.lafClassName);
-            } catch (Exception ex) {
-                LoggingFacade.INSTANCE.logSevere(null, ex);
-                showInformationDialog("Failed to create '" + themeInfo.lafClassName + "'.", ex);
-            }
-        } else if (themeInfo.themeFile != null) {
-            if (!reload)
-                FlatAnimatedLafChange.showSnapshot();
-
-            try {
-                if (themeInfo.themeFile.getName().endsWith(".properties"))
-                    FlatLaf.setup(new FlatPropertiesLaf(themeInfo.name, themeInfo.themeFile));
-                else
-                    FlatLaf.setup(IntelliJTheme.createLaf(new FileInputStream(themeInfo.themeFile)));
-
-                DemoPrefs.getState().put(DemoPrefs.KEY_LAF_THEME_FILE, themeInfo.themeFile.getAbsolutePath());
-            } catch (Exception ex) {
-                LoggingFacade.INSTANCE.logSevere(null, ex);
-                showInformationDialog("Failed to load '" + themeInfo.themeFile + "'.", ex);
-            }
-        } else {
-            JOptionPane.showMessageDialog(SwingUtilities.windowForComponent(this),
-                    "Missing lafClassName for '" + themeInfo.name + "'",
-                    "FlatLaf", JOptionPane.INFORMATION_MESSAGE);
-            return;
+        try {
+            ThemeUIManager.setTheme(themeInfo, reload);
+        } catch (Exception e) {
+            log.error("Set Theme error", e);
+            showInformationDialog(e.getMessage());
         }
-
-        // update all components
-        FlatLaf.updateUI();
-
-        if (!reload)
-            FlatAnimatedLafChange.hideSnapshotWithAnimation();
     }
 
     private void browsePlugin() {
@@ -342,14 +286,14 @@ public class IJThemesPanel extends JPanel {
         try {
             Desktop.getDesktop().browse(new URI(url));
         } catch (IOException | URISyntaxException ex) {
-            showInformationDialog("Failed to browse '" + url + "'.", ex);
+            showInformationDialog("Failed to browse '" + url + "'. \r\n" + ex.getMessage());
         }
     }
 
-    private void showInformationDialog(String message, Exception ex) {
+    private void showInformationDialog(String message) {
         JOptionPane.showMessageDialog(SwingUtilities.windowForComponent(this),
-                message + "\n\n" + ex.getMessage(),
-                "FlatLaf", JOptionPane.INFORMATION_MESSAGE);
+                message + "\n\n",
+                "Theme", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
@@ -357,7 +301,10 @@ public class IJThemesPanel extends JPanel {
         super.addNotify();
 
         selectedCurrentLookAndFeel();
-        UIManager.addPropertyChangeListener(lafListener);
+        ThemeUIManager.themeChangeListener(() -> {
+            selectedCurrentLookAndFeel();
+            lastLafChangeTime = System.currentTimeMillis();
+        });
 
         window = SwingUtilities.windowForComponent(this);
         if (window != null)
@@ -367,24 +314,12 @@ public class IJThemesPanel extends JPanel {
     @Override
     public void removeNotify() {
         super.removeNotify();
-
-        UIManager.removePropertyChangeListener(lafListener);
-
         if (window != null) {
             window.removeWindowListener(windowListener);
             window = null;
         }
     }
 
-    private void lafChanged(PropertyChangeEvent e) {
-        if ("lookAndFeel".equals(e.getPropertyName())) {
-            // use invokeLater() because KEY_LAF_THEME_FILE is updated after this event
-            EventQueue.invokeLater(() -> {
-                selectedCurrentLookAndFeel();
-                lastLafChangeTime = System.currentTimeMillis();
-            });
-        }
-    }
 
     private void windowActivated() {
         // refresh themes list on window activation
@@ -439,7 +374,7 @@ public class IJThemesPanel extends JPanel {
         String lafClassName = UIManager.getLookAndFeel().getClass().getName();
         if (FlatPropertiesLaf.class.getName().equals(lafClassName) ||
                 IntelliJTheme.ThemeLaf.class.getName().equals(lafClassName)) {
-            String themeFileName = DemoPrefs.getState().get(DemoPrefs.KEY_LAF_THEME_FILE, "");
+            String themeFileName = JFramePref.state.get(ThemeUIManager.KEY_LAF_THEME_FILE, "");
             if (themeFileName == null)
                 return;
 
@@ -493,22 +428,22 @@ public class IJThemesPanel extends JPanel {
         add(themesLabel, "cell 0 0");
 
         //======== toolBar ========
-        {
-            toolBar.setFloatable(false);
 
-            //---- pluginButton ----
-            pluginButton.setToolTipText("Opens the IntelliJ plugin page of selected IntelliJ theme in the browser.");
+        toolBar.setFloatable(false);
 
-            pluginButton.setIcon(resources.getIcon("icons/plugin"));
-            pluginButton.addActionListener(e -> browsePlugin());
-            toolBar.add(pluginButton);
+        //---- pluginButton ----
+        pluginButton.setToolTipText("Opens the IntelliJ plugin page of selected IntelliJ theme in the browser.");
 
-            //---- sourceCodeButton ----
-            sourceCodeButton.setToolTipText("Opens the source code repository of selected IntelliJ theme in the browser.");
-            sourceCodeButton.setIcon(resources.getIcon("icons/github"));
-            sourceCodeButton.addActionListener(e -> browseSourceCode());
-            toolBar.add(sourceCodeButton);
-        }
+        pluginButton.setIcon(resources.getIcon("icons/plugin"));
+        pluginButton.addActionListener(e -> browsePlugin());
+        toolBar.add(pluginButton);
+
+        //---- sourceCodeButton ----
+        sourceCodeButton.setToolTipText("Opens the source code repository of selected IntelliJ theme in the browser.");
+        sourceCodeButton.setIcon(resources.getIcon("icons/github"));
+        sourceCodeButton.addActionListener(e -> browseSourceCode());
+        toolBar.add(sourceCodeButton);
+
         add(toolBar, "cell 0 0,alignx right,growx 0");
 
         //---- filterComboBox ----
@@ -522,19 +457,12 @@ public class IJThemesPanel extends JPanel {
         filterComboBox.addActionListener(e -> filterChanged());
         add(filterComboBox, "cell 0 0,alignx right,growx 0");
 
-        //======== themesScrollPane ========
-        {
+        themesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        themesList.addListSelectionListener(e -> themesListValueChanged(e));
+        themesScrollPane.setViewportView(themesList);
 
-            //---- themesList ----
-            themesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            themesList.addListSelectionListener(e -> themesListValueChanged(e));
-            themesScrollPane.setViewportView(themesList);
-        }
         add(themesScrollPane, "cell 0 1");
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
+
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
