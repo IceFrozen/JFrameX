@@ -1,4 +1,4 @@
-package cn.ximuli.jframex.ui.component;
+package cn.ximuli.jframex.ui.panels;
 
 import cn.ximuli.jframex.common.utils.DateUtil;
 import cn.ximuli.jframex.ui.I18nHelper;
@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import static javax.swing.border.EtchedBorder.RAISED;
 

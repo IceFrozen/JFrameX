@@ -1,4 +1,4 @@
-package cn.ximuli.jframex.ui.component;
+package cn.ximuli.jframex.ui.panels;
 
 import cn.ximuli.jframex.common.utils.StringUtil;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;

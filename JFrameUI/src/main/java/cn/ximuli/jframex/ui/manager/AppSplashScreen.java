@@ -3,7 +3,7 @@ package cn.ximuli.jframex.ui.manager;
 import cn.ximuli.jframex.common.utils.Formatter;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
-import cn.ximuli.jframex.ui.component.DesktopPanel;
+import cn.ximuli.jframex.ui.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.event.ProgressEvent;
 import cn.ximuli.jframex.ui.event.ResourceReadyEvent;
 import lombok.Getter;

@@ -13,6 +13,7 @@ import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.event.CreateFrameEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
+import cn.ximuli.jframex.ui.panels.TablePanel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;

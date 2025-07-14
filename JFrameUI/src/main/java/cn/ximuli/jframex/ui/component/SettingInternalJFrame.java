@@ -6,6 +6,7 @@ import cn.ximuli.jframex.ui.component.intellijthemes.IJThemesPanel;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.menu.MenuBar;
 import cn.ximuli.jframex.ui.menu.ToolBar2;
+import cn.ximuli.jframex.ui.panels.*;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.extras.*;
 import com.formdev.flatlaf.util.FontUtils;
@@ -75,12 +76,12 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
     private void initComponents() {
         JPanel contentPanel = new JPanel();
         tabbedPane = new JTabbedPane();
-        BasicInternalJFrame.BasicComponentsPanel basicComponentsPanel = new BasicInternalJFrame.BasicComponentsPanel(resources);
-        ContainerInternalJFrame.ContainerComponentsPanel containerComponentsPanel = new ContainerInternalJFrame.ContainerComponentsPanel(resources);
-        DataInternalJFrame.DataComponentsPanel dataComponentsPanel = new DataInternalJFrame.DataComponentsPanel(resources);
+        BasicComponentsPanel basicComponentsPanel = new BasicComponentsPanel(resources);
+        ContainerComponentsPanel containerComponentsPanel = new ContainerComponentsPanel(resources);
+        DataComponentsPanel dataComponentsPanel = new DataComponentsPanel(resources);
         TabInternalJFrame.TabsPanel tabsPanel = new TabInternalJFrame.TabsPanel(resources);
-        OptionInternalJFrame.OptionPanePanel optionPanePanel = new OptionInternalJFrame.OptionPanePanel(resources);
-        ExtrasInternalJFrame.ExtrasPanel extrasPanel = new ExtrasInternalJFrame.ExtrasPanel(resources);
+        OptionPanePanel optionPanePanel = new OptionPanePanel(resources);
+        ExtrasPanel extrasPanel = new ExtrasPanel(resources);
         controlBar = new ControlBar(this,tabbedPane);
         JPanel themesPanelPanel = new JPanel();
         JPanel winFullWindowContentButtonsPlaceholder = new JPanel();

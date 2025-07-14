@@ -1,11 +1,8 @@
 package cn.ximuli.jframex.ui;
 
 import cn.ximuli.jframex.common.utils.ConvertUtil;
-import cn.ximuli.jframex.ui.component.DesktopPanel;
-import cn.ximuli.jframex.ui.component.SettingInternalJFrame;
-import cn.ximuli.jframex.ui.component.StatePanel;
-import cn.ximuli.jframex.ui.event.CreateFrameEvent;
-import cn.ximuli.jframex.ui.manager.FrameManager;
+import cn.ximuli.jframex.ui.panels.DesktopPanel;
+import cn.ximuli.jframex.ui.panels.StatePanel;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.menu.MenuBar;
 import cn.ximuli.jframex.ui.menu.ToolBar;

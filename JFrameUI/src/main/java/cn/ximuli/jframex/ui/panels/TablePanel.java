@@ -1,4 +1,4 @@
-package cn.ximuli.jframex.ui.component;
+package cn.ximuli.jframex.ui.panels;
 
 import cn.ximuli.jframex.common.exception.CommonException;
 import cn.ximuli.jframex.common.utils.StringUtil;
@@ -17,7 +17,6 @@ import java.util.*;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 @Slf4j
 @Getter

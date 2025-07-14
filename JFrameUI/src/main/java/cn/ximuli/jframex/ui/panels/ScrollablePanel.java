@@ -1,4 +1,4 @@
-package cn.ximuli.jframex.ui.component;
+package cn.ximuli.jframex.ui.panels;
 
 import com.formdev.flatlaf.util.UIScale;
 

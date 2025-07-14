@@ -1,11 +1,11 @@
 package cn.ximuli.jframex.ui.manager;
 
 import cn.ximuli.jframex.model.LoggedInUser;
-import cn.ximuli.jframex.ui.component.DesktopPanel;
+import cn.ximuli.jframex.ui.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.common.constants.Status;
-import cn.ximuli.jframex.ui.component.StatePanel;
+import cn.ximuli.jframex.ui.panels.StatePanel;
 import cn.ximuli.jframex.ui.event.*;
 import cn.ximuli.jframex.ui.login.LoginDialog;
 import cn.ximuli.jframex.ui.storage.FrameStore;
@@ -25,11 +25,7 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 @Slf4j
 @Component

@@ -2,7 +2,7 @@ package cn.ximuli.jframex.ui.test;
 
 import cn.ximuli.jframex.common.utils.Formatter;
 import cn.ximuli.jframex.ui.I18nHelper;
-import cn.ximuli.jframex.ui.component.DesktopPanel;
+import cn.ximuli.jframex.ui.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.event.ProgressEvent;
 import cn.ximuli.jframex.ui.event.ResourceReadyEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
