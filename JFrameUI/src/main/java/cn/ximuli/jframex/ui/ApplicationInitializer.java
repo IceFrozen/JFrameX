@@ -23,25 +23,25 @@ public class ApplicationInitializer {
         initAppSplashScreen(args);
     }
 
-    public static void initJFramePref(String... args) {
+    private static void initJFramePref(String... args) {
         JFramePref.init(args);
     }
 
-    public static void initAppSplashScreen(String... args) {
+    private static void initAppSplashScreen(String... args) {
         AppSplashScreen appSplashScreen = AppSplashScreen.getInstance();
         appSplashScreen.setVisible(true);
     }
 
-    public static void initI18n(String... args) {
+    private static void initI18n(String... args) {
         System.setProperty(Application.APP_STYLE_NAME, Application.APP_STYLE_NAME_DEFAULT);
         System.setProperty(Application.APP_LANGUAGE, Application.APP_LANGUAGE_EN);
     }
 
-    public static void initTheme(String... args) throws Exception {
+    private static void initTheme(String... args) throws Exception {
         ThemeUIManager.setUp(args);
     }
 
-    public static void iconLoad() {
+    private static void iconLoad() {
         try {
             URL url = ApplicationInitializer.class.getResource(Application.APP_ICON);
             ImageIcon icon = new ImageIcon(ImageIO.read(url));

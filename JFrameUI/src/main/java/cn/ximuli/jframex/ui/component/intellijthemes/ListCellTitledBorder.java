@@ -27,13 +27,13 @@ import java.awt.geom.Rectangle2D;
 /**
  * @author Karl Tauber
  */
-class ListCellTitledBorder
+public class ListCellTitledBorder
 	implements Border
 {
 	private final JList<?> list;
 	private final String title;
 
-	ListCellTitledBorder( JList<?> list, String title ) {
+	public ListCellTitledBorder(JList<?> list, String title) {
 		this.list = list;
 		this.title = title;
 	}

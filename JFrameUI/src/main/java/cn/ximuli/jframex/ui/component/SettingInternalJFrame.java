@@ -30,6 +30,13 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
     private ControlBar controlBar;
     @Getter
     IJThemesPanel themesPanel;
+    @Getter
+    FontPanel fontPanel;
+
+    @Getter
+    SettingListPanel settingListPanel;
+
+
     private final String[] availableFontFamilyNames;
 
     public SettingInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
@@ -84,8 +91,10 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
         ExtrasPanel extrasPanel = new ExtrasPanel(resources);
         controlBar = new ControlBar(this,tabbedPane);
         JPanel themesPanelPanel = new JPanel();
+        JPanel fontPanelPanel = new JPanel();
         JPanel winFullWindowContentButtonsPlaceholder = new JPanel();
         themesPanel = new IJThemesPanel(resources);
+        fontPanel = new FontPanel(resources);
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
         contentPanel.setLayout(new MigLayout(
@@ -115,6 +124,12 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
         themesPanelPanel.add(winFullWindowContentButtonsPlaceholder, BorderLayout.NORTH);
         themesPanelPanel.add(themesPanel, BorderLayout.CENTER);
         contentPane.add(themesPanelPanel, BorderLayout.LINE_END);
+        contentPane.add(settingListPanel, BorderLayout.LINE_START);
+
+
+//        fontPanelPanel.setLayout(new BorderLayout());
+//        fontPanelPanel.add(fontPanel, BorderLayout.CENTER);
+//        contentPane.add(fontPanelPanel, BorderLayout.LINE_END);
 
         // remove contentPanel bottom insets
         MigLayout layout = (MigLayout) contentPanel.getLayout();

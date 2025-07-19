@@ -33,10 +33,10 @@ import java.util.Map;
 /**
  * @author Karl Tauber
  */
-class IJThemesManager
+public class IJThemesManager
 {
-	final List<IJThemeInfo> bundledThemes = new ArrayList<>();
-	final List<IJThemeInfo> moreThemes = new ArrayList<>();
+	public final List<IJThemeInfo> bundledThemes = new ArrayList<>();
+	public final List<IJThemeInfo> moreThemes = new ArrayList<>();
 	private final Map<File,Long> lastModifiedMap = new HashMap<>();
 
 	@SuppressWarnings( "unchecked" )
@@ -95,7 +95,7 @@ class IJThemesManager
 		}
 	}
 
-	boolean hasThemesFromDirectoryChanged() {
+	public boolean hasThemesFromDirectoryChanged() {
 		for( Map.Entry<File, Long> e : lastModifiedMap.entrySet() ) {
 			if( e.getKey().lastModified() != e.getValue().longValue() )
 				return true;
