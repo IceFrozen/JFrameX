@@ -6,6 +6,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.ColorFunctions;
 import net.miginfocom.swing.MigLayout;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -17,6 +18,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 
+@Component
 public class DataComponentsPanel extends JPanel {
 
     public DataComponentsPanel(ResourceLoaderManager resourceLoader) {

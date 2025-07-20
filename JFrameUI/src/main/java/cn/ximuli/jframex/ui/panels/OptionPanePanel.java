@@ -3,6 +3,7 @@ package cn.ximuli.jframex.ui.panels;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import com.formdev.flatlaf.FlatLaf;
 import net.miginfocom.swing.MigLayout;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -10,6 +11,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+@Component
 public class OptionPanePanel extends JPanel {
     public OptionPanePanel(ResourceLoaderManager resources) {
         initComponents(resources);

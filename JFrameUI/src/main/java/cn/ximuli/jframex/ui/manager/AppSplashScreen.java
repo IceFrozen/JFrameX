@@ -30,7 +30,7 @@ public class AppSplashScreen extends JWindow {
      */
     private AppSplashScreen() {
         setSize(MainFrame.getScreenRatioSize());
-        setAlwaysOnTop(true);
+        setAlwaysOnTop(false);
         setLayout(new MigLayout("fill, insets 0", "[grow]", "[grow][]"));
 
         ImageIcon icon = loadSplashImage();

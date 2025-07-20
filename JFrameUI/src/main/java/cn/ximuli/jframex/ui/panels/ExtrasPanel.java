@@ -5,12 +5,14 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import com.formdev.flatlaf.util.HSLColor;
 import net.miginfocom.swing.MigLayout;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.HierarchyEvent;
 import java.util.function.Function;
 
+@Component
 public class ExtrasPanel extends JPanel {
     private Timer rainbowIconTimer;
     private int rainbowCounter = 0;

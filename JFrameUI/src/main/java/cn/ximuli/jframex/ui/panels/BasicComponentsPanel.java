@@ -9,10 +9,12 @@ import net.miginfocom.layout.BoundSize;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.DimConstraint;
 import net.miginfocom.swing.MigLayout;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
 
+@Component
 public class BasicComponentsPanel extends JPanel {
     private JPasswordField passwordField1;
     private JTextField leadingIconTextField;

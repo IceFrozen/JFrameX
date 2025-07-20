@@ -36,11 +36,11 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
     @Getter
     SettingListPanel settingListPanel;
 
-
     private final String[] availableFontFamilyNames;
 
-    public SettingInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane) {
+    public SettingInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane, JTabbedPane tabbedPane) {
         super(resources, desktopPane);
+        this.tabbedPane = tabbedPane;
         setFrameIcon(resources.getIcon("settings"));
         setTitle(I18nHelper.getMessage("app.setting.title"));
         availableFontFamilyNames = FontUtils.getAvailableFontFamilyNames().clone();
@@ -82,19 +82,14 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
 
     private void initComponents() {
         JPanel contentPanel = new JPanel();
-        tabbedPane = new JTabbedPane();
-        BasicComponentsPanel basicComponentsPanel = new BasicComponentsPanel(resources);
-        ContainerComponentsPanel containerComponentsPanel = new ContainerComponentsPanel(resources);
-        DataComponentsPanel dataComponentsPanel = new DataComponentsPanel(resources);
-        TabInternalJFrame.TabsPanel tabsPanel = new TabInternalJFrame.TabsPanel(resources);
-        OptionPanePanel optionPanePanel = new OptionPanePanel(resources);
-        ExtrasPanel extrasPanel = new ExtrasPanel(resources);
+
+
         controlBar = new ControlBar(this,tabbedPane);
         JPanel themesPanelPanel = new JPanel();
-        JPanel fontPanelPanel = new JPanel();
         JPanel winFullWindowContentButtonsPlaceholder = new JPanel();
         themesPanel = new IJThemesPanel(resources);
         fontPanel = new FontPanel(resources);
+        settingListPanel = new SettingListPanel(resources);
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
         contentPanel.setLayout(new MigLayout(
@@ -104,17 +99,7 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
                 // rows
                 "[grow,fill]"));
 
-
-        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        tabbedPane.addTab("Basic Components", basicComponentsPanel);
-        tabbedPane.addTab("Container Components", containerComponentsPanel);
-        tabbedPane.addTab("Data Components", dataComponentsPanel);
-        tabbedPane.addTab("Tabs", tabsPanel);
-        tabbedPane.addTab("Option Pane", optionPanePanel);
-        tabbedPane.addTab("Extras", extrasPanel);
-
         contentPanel.add(tabbedPane, "cell 0 0");
-
         contentPane.add(contentPanel, BorderLayout.CENTER);
         contentPane.add(controlBar, BorderLayout.PAGE_END);
 
@@ -125,6 +110,12 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
         themesPanelPanel.add(themesPanel, BorderLayout.CENTER);
         contentPane.add(themesPanelPanel, BorderLayout.LINE_END);
         contentPane.add(settingListPanel, BorderLayout.LINE_START);
+
+
+
+        settingListPanel.addSelectedAction(info -> {
+            log.info("info: {}", info);
+        });
 
 
 //        fontPanelPanel.setLayout(new BorderLayout());
