@@ -335,7 +335,7 @@ public class DemoFrame extends JFrame {
                 "Arial", "Cantarell", "Comic Sans MS", "DejaVu Sans",
                 "Dialog", "Inter", "Liberation Sans", "Noto Sans", "Open Sans", "Roboto",
                 "SansSerif", "Segoe UI", "Serif", "Tahoma", "Ubuntu", "Verdana"));
-        if (!families.contains(currentFamily))
+//        if (!families.contains(currentFamily))
             families.add(currentFamily);
         families.sort(String.CASE_INSENSITIVE_ORDER);
 

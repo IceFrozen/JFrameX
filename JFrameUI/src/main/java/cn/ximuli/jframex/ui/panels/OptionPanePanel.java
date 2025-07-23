@@ -2,6 +2,7 @@ package cn.ximuli.jframex.ui.panels;
 
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import com.formdev.flatlaf.FlatLaf;
+import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 @Component
+@Slf4j
+@SettingMenu(value = "app.setting.item.components.option", category = "app.setting.item.category.components", toolTipText = "app.setting.item.components.option.toolTipText")
 public class OptionPanePanel extends JPanel {
     public OptionPanePanel(ResourceLoaderManager resources) {
         initComponents(resources);

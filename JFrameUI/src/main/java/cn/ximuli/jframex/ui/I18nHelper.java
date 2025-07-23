@@ -12,9 +12,10 @@ import org.springframework.context.NoSuchMessageException;
 import java.util.Locale;
 
 public class I18nHelper {
-
     private static final String commonPrefix = "app.message.table";
     private static MessageSource messageSource;
+
+    public static final Locale[] SUPPORT_LANGUAGES = new Locale[]{Locale.ENGLISH, Locale.CHINESE};
 
     private static Locale defaultLocale;
 
@@ -61,4 +62,5 @@ public class I18nHelper {
         String messageCode = StringUtil.joinWith(".", commonPrefix, sex.toString());
         return getMessage(messageCode);
     }
+
 }

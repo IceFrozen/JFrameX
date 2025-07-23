@@ -10,6 +10,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 @Component
+@SettingMenu(value = "app.setting.item.components.container", category = "app.setting.item.category.components", toolTipText = "app.setting.item.components.container.toolTipText")
 public class ContainerComponentsPanel extends JPanel {
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     private JProgressBar progressBar3;

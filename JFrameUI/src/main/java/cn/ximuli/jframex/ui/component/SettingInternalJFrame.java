@@ -17,6 +17,7 @@ import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.LC;
 import net.miginfocom.layout.UnitValue;
 import net.miginfocom.swing.MigLayout;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,26 +29,33 @@ import java.util.Arrays;
 public class SettingInternalJFrame extends CommonInternalJFrame {
     private JTabbedPane tabbedPane;
     private ControlBar controlBar;
+
     @Getter
-    IJThemesPanel themesPanel;
+    ThemesPanelPanel themesPanel;
+
     @Getter
-    FontPanel fontPanel;
+    Container settingContentPane;
+
+    JPanel controlPanel;
 
     @Getter
     SettingListPanel settingListPanel;
 
     private final String[] availableFontFamilyNames;
 
-    public SettingInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane, JTabbedPane tabbedPane) {
+    public SettingInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane, JTabbedPane tabbedPane, ThemesPanelPanel themesPanel, SettingListPanel settingListPanel) {
         super(resources, desktopPane);
         this.tabbedPane = tabbedPane;
+        this.themesPanel = themesPanel;
+        this.settingListPanel = settingListPanel;
+        this.settingContentPane = getContentPane();
+        this.controlPanel = new JPanel();
         setFrameIcon(resources.getIcon("settings"));
         setTitle(I18nHelper.getMessage("app.setting.title"));
         availableFontFamilyNames = FontUtils.getAvailableFontFamilyNames().clone();
         Arrays.sort(availableFontFamilyNames);
         initComponents();
         initFullWindowContent();
-
     }
 
     private void initFullWindowContent() {
@@ -57,8 +65,8 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
         // create fullWindowContent mode toggle button
         MenuBar menuBar = SpringUtils.getBean(MenuBar.class);
         ToolBar2 toolBar = SpringUtils.getBean(ToolBar2.class);
-        Icon expandIcon = new FlatSVGIcon("com/formdev/flatlaf/demo/icons/expand.svg");
-        Icon collapseIcon = new FlatSVGIcon("com/formdev/flatlaf/demo/icons/collapse.svg");
+        Icon expandIcon = resources.getIcon("icons/expand");
+        Icon collapseIcon = resources.getIcon("icons/collapse");
         JToggleButton fullWindowContentButton = new JToggleButton(expandIcon);
         fullWindowContentButton.setToolTipText("Toggle full window content");
         fullWindowContentButton.addActionListener(e -> {
@@ -81,49 +89,32 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
     }
 
     private void initComponents() {
-        JPanel contentPanel = new JPanel();
-
-
-        controlBar = new ControlBar(this,tabbedPane);
-        JPanel themesPanelPanel = new JPanel();
-        JPanel winFullWindowContentButtonsPlaceholder = new JPanel();
-        themesPanel = new IJThemesPanel(resources);
-        fontPanel = new FontPanel(resources);
-        settingListPanel = new SettingListPanel(resources);
-        Container contentPane = getContentPane();
-        contentPane.setLayout(new BorderLayout());
-        contentPanel.setLayout(new MigLayout(
+        controlBar = new ControlBar(this, tabbedPane);
+        settingContentPane.setLayout(new BorderLayout());
+        controlPanel.setLayout(new MigLayout(
                 "insets dialog,hidemode 3",
                 // columns
                 "[grow,fill]",
                 // rows
                 "[grow,fill]"));
 
-        contentPanel.add(tabbedPane, "cell 0 0");
-        contentPane.add(contentPanel, BorderLayout.CENTER);
-        contentPane.add(controlBar, BorderLayout.PAGE_END);
 
-
-        themesPanelPanel.setLayout(new BorderLayout());
-        winFullWindowContentButtonsPlaceholder.setLayout(new FlowLayout());
-        themesPanelPanel.add(winFullWindowContentButtonsPlaceholder, BorderLayout.NORTH);
-        themesPanelPanel.add(themesPanel, BorderLayout.CENTER);
-        contentPane.add(themesPanelPanel, BorderLayout.LINE_END);
-        contentPane.add(settingListPanel, BorderLayout.LINE_START);
-
-
+        settingContentPane.add(controlPanel, BorderLayout.CENTER);
+        settingContentPane.add(settingListPanel, BorderLayout.LINE_START);
+        settingContentPane.add(themesPanel, BorderLayout.LINE_END);
+        settingContentPane.add(controlBar, BorderLayout.PAGE_END);
 
         settingListPanel.addSelectedAction(info -> {
-            log.info("info: {}", info);
+            log.info("selected: {}", info.getClz());
+            JComponent bean = (JComponent) SpringUtils.getBean(info.getClz());
+            controlPanel.removeAll();
+            controlPanel.add(bean, BorderLayout.CENTER);
+            refreshUI();
         });
 
 
-//        fontPanelPanel.setLayout(new BorderLayout());
-//        fontPanelPanel.add(fontPanel, BorderLayout.CENTER);
-//        contentPane.add(fontPanelPanel, BorderLayout.LINE_END);
-
         // remove contentPanel bottom insets
-        MigLayout layout = (MigLayout) contentPanel.getLayout();
+        MigLayout layout = (MigLayout) controlPanel.getLayout();
         LC lc = ConstraintParser.parseLayoutConstraint((String) layout.getLayoutConstraints());
         UnitValue[] insets = lc.getInsets();
         lc.setInsets(new UnitValue[]{
@@ -133,10 +124,17 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
                 insets[3]
         });
         layout.setLayoutConstraints(lc);
+
+        settingListPanel.select(0);
+
     }
 
     @Override
     protected void initUI() {
+    }
 
+    protected void refreshUI(){
+        controlPanel.revalidate();
+        controlPanel.updateUI();
     }
 }

@@ -13,7 +13,11 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -49,6 +53,11 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
     public static <T> T getBean(Class<T> clz, Object... args) throws BeansException {
         T result = (T) beanFactory.getBean(clz, args);
         return result;
+    }
+
+    public static <T> List<T> getBean(Class<T> clz, Class<? extends Annotation> annotationType) throws BeansException {
+        String[] beanNamesForAnnotation = beanFactory.getBeanNamesForAnnotation(annotationType);
+        return Arrays.stream(beanNamesForAnnotation).map(name -> beanFactory.getBean(name, clz)).toList();
     }
 
 

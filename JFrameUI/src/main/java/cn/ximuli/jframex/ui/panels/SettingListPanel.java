@@ -1,6 +1,8 @@
 package cn.ximuli.jframex.ui.panels;
 
-import cn.ximuli.jframex.ui.component.intellijthemes.IJThemeInfo;
+import cn.ximuli.jframex.common.utils.StringUtil;
+import cn.ximuli.jframex.service.util.SpringUtils;
+import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.component.intellijthemes.ListCellTitledBorder;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import com.formdev.flatlaf.*;
@@ -9,30 +11,37 @@ import com.formdev.flatlaf.ui.FlatListUI;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.core.annotation.AnnotationUtils;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
+@org.springframework.stereotype.Component
 @Slf4j
 public class SettingListPanel extends JPanel {
+
     private Map<Integer, String> categories;
     private ResourceLoaderManager resources;
 
     private JScrollPane settingScrollPane;
-    private JList<SettingInfo> settingsList;
-    private List<SettingInfo> settingInfos;
-    private Consumer<SettingInfo> selectAction;
+    private JList<SettingInfo<JComponent>> settingsList;
+    private List<SettingInfo<JComponent>> settingInfos;
+    private Consumer<SettingInfo<JComponent>> selectAction;
 
-    private volatile SettingInfo currenSettings;
+    private List<JComponent> settingPanels;
+
+    @Getter
+    private volatile SettingInfo<JComponent> currenSettings;
 
     private volatile AtomicBoolean isChangeUI = new AtomicBoolean(false);
     @Getter
@@ -41,8 +50,27 @@ public class SettingListPanel extends JPanel {
 
     public SettingListPanel(ResourceLoaderManager resources) {
         this.resources = resources;
+        searchTextField = new JTextField();
         initSettingLists();
         initComponents();
+
+        searchTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updatePanels();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updatePanels();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updatePanels();
+            }
+        });
+
         // create renderer
         settingsList.setCellRenderer(new DefaultListCellRenderer() {
             private int index;
@@ -101,54 +129,10 @@ public class SettingListPanel extends JPanel {
         this.categories = new HashMap<>();
         this.settingInfos = new ArrayList<>();
         this.settingsList = new JList<>();
-
-        categories.put(settingInfos.size(), "Demo Setting");
-        SettingInfo demoSettingInfo = new SettingInfo();
-        demoSettingInfo.setName("Demo");
-        demoSettingInfo.setCategory("cate1");
-        SettingInfo otherSettingInfo = new SettingInfo();
-        otherSettingInfo.setName("Other");
-        otherSettingInfo.setCategory("cate2");
-
-        settingInfos.add(demoSettingInfo);
-        settingInfos.add(otherSettingInfo);
-
-        categories.put(settingInfos.size(), "Demo Setting2");
-
-        for (int i = 0; i < 100; i++) {
-            SettingInfo demoSettingInfoItem = new SettingInfo();
-            demoSettingInfoItem.setName("Demo" + i);
-            demoSettingInfoItem.setCategory("cate3");
-            settingInfos.add(demoSettingInfoItem);
-        }
-
-        settingsList.setModel(new AbstractListModel<SettingInfo>() {
-            @Override
-            public int getSize() {
-                return settingInfos.size();
-            }
-            @Override
-            public SettingInfo getElementAt(int index) {
-                return settingInfos.get(index);
-            }
-        });
-
-
-        int maxWidth = getMaxContentWidth();
-        settingsList.setFixedCellWidth(maxWidth * 3);
-
-        if (settingsList.getSelectedIndex() < 0) {
-            settingsList.setSelectedIndex(0);
-        }
-
-        // scroll selection into visible area
-        int sel = settingsList.getSelectedIndex();
-        if (sel >= 0) {
-            Rectangle bounds = settingsList.getCellBounds(sel, sel);
-            if (bounds != null) {
-                settingsList.scrollRectToVisible(bounds);
-            }
-        }
+        this.settingPanels = SpringUtils.getBean(JComponent.class, SettingMenu.class);
+        this.isChangeUI.set(true);
+        updatePanels();
+        this.isChangeUI.set(false);
     }
 
     private void listValueChanged(ListSelectionEvent e) {
@@ -157,15 +141,14 @@ public class SettingListPanel extends JPanel {
             return;
         }
 
-        if (this.selectAction != null) {
+        if (this.selectAction != null && settingInfo != null) {
             this.selectAction.accept(settingInfo);
             this.currenSettings = settingInfo;
         }
     }
 
-    public SettingListPanel addSelectedAction(Consumer<SettingInfo> action) {
+    public void addSelectedAction(Consumer<SettingInfo<JComponent>> action) {
         this.selectAction = action;
-        return this;
     }
 
     private void initComponents() {
@@ -192,14 +175,11 @@ public class SettingListPanel extends JPanel {
         add(searchTextField, "cell 0 0");
 
         settingsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        settingsList.addListSelectionListener(e -> listValueChanged(e));
+        settingsList.addListSelectionListener(this::listValueChanged);
         settingScrollPane.setViewportView(settingsList);
-
         add(settingScrollPane, "cell 0 1");
-
-
     }
-    // 计算最大字符串宽度
+
     private int getMaxContentWidth() {
         int maxWidth = 0;
         Font font = settingsList.getFont();
@@ -207,15 +187,91 @@ public class SettingListPanel extends JPanel {
             font = UIManager.getFont("List.font");
         }
         FontMetrics fm = settingsList.getFontMetrics(font);
-        for (SettingInfo item : settingInfos) {
+        for (SettingInfo<JComponent> item : settingInfos) {
             String name = item.getName();
             int sep = name.indexOf('/');
             if (sep >= 0) {
-                name = name.substring(sep + 1).trim(); // 与渲染器中处理一致
+                name = name.substring(sep + 1).trim();
             }
             int textWidth = fm.stringWidth(name);
             maxWidth = Math.max(maxWidth, textWidth);
         }
         return maxWidth;
+    }
+
+    public void select(int index) {
+        settingsList.setSelectedIndex(index);
+    }
+
+
+    public List<JComponent> filterSettingPanels() {
+        String searchKeyWorlds = searchTextField.getText();
+        if (StringUtil.isBlank(searchKeyWorlds)) {
+            return settingPanels;
+        }
+        return settingPanels.stream()
+                .filter(settingPanel -> {
+                    SettingMenu settingMenu = AnnotationUtils.getAnnotation(settingPanel.getClass(), SettingMenu.class);
+                    return StringUtil.containsIgnoreCase(I18nHelper.getMessage(settingMenu.value()), searchKeyWorlds);
+                }).toList();
+    }
+
+    private void updatePanels() {
+        this.categories.clear();
+        this.settingInfos.clear();
+
+        LinkedHashMap<String, List<Pair<SettingMenu, JComponent>>> settingCategory = new LinkedHashMap<>();
+        List<JComponent> jComponents = filterSettingPanels();
+        if (!jComponents.isEmpty()) {
+            for (JComponent settingPanel : jComponents) {
+                SettingMenu settingMenu = AnnotationUtils.getAnnotation(settingPanel.getClass(), SettingMenu.class);
+                List<Pair<SettingMenu, JComponent>> jPanels = settingCategory.getOrDefault(settingMenu.category(), new ArrayList<>());
+                jPanels.add(Pair.of(settingMenu, settingPanel));
+                settingCategory.put(settingMenu.category(), jPanels);
+            }
+
+            int index = 0;
+            for (Map.Entry<String, List<Pair<SettingMenu, JComponent>>> settings : settingCategory.entrySet()) {
+                String categoryName = I18nHelper.has(settings.getKey()) ? I18nHelper.getMessage(settings.getKey()) : settings.getKey();
+                categories.put(index, categoryName);
+                // 按 SettingMenu 的 order() 方法排序
+                settings.getValue().sort(Comparator.comparingInt(pair -> -pair.getLeft().order()));
+                for (Pair<SettingMenu, JComponent> pair : settings.getValue()) {
+                    SettingMenu settingMeta = pair.getKey();
+                    JComponent settingClass = pair.getValue();
+                    String settingName = I18nHelper.has(settingMeta.value()) ? I18nHelper.getMessage(settingMeta.value()) : settingMeta.value();
+                    String settingTooltipText = I18nHelper.has(settingMeta.toolTipText()) ? I18nHelper.getMessage(settingMeta.toolTipText()) : settingMeta.toolTipText();
+                    SettingInfo<JComponent> info = new SettingInfo(categoryName, settingName, settingTooltipText, settingClass.getClass());
+                    settingInfos.add(info);
+                }
+                index = index + settings.getValue().size();
+            }
+        }
+
+        settingsList.setModel(new AbstractListModel<>() {
+            @Override
+            public int getSize() {
+                return settingInfos.size();
+            }
+
+            @Override
+            public SettingInfo<JComponent> getElementAt(int index) {
+                return settingInfos.get(index);
+            }
+        });
+
+
+        int maxWidth = getMaxContentWidth();
+        settingsList.setFixedCellWidth(maxWidth * 3);
+
+
+        // scroll selection into visible area
+        int sel = settingsList.getSelectedIndex();
+        if (sel >= 0) {
+            Rectangle bounds = settingsList.getCellBounds(sel, sel);
+            if (bounds != null) {
+                settingsList.scrollRectToVisible(bounds);
+            }
+        }
     }
 }

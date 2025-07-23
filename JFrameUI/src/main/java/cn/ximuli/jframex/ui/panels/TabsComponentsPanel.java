@@ -22,6 +22,7 @@ import static com.formdev.flatlaf.FlatClientProperties.*;
 
 @Component
 @Slf4j
+@SettingMenu(value = "app.setting.item.components.tab", category = "app.setting.item.category.components", toolTipText = "app.setting.item.components.tab.toolTipText")
 public class TabsComponentsPanel extends JPanel {
     private JToolBar tabPlacementToolBar;
     private JToggleButton topPlacementButton;

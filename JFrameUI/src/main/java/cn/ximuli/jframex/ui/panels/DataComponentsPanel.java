@@ -19,6 +19,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 
 @Component
+@SettingMenu(value = "app.setting.item.components.data", category = "app.setting.item.category.components", toolTipText = "app.setting.item.components.data.toolTipText")
 public class DataComponentsPanel extends JPanel {
 
     public DataComponentsPanel(ResourceLoaderManager resourceLoader) {
