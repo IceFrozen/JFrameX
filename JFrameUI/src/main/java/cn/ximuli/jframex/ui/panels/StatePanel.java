@@ -121,7 +121,6 @@ public class StatePanel extends JPanel {
         this.stateLabel.setText(text);
     }
 
-
     public void frameSelected(JInternalFrame frame) {
         this.currentFrame = frame;
         String currentContext = "";

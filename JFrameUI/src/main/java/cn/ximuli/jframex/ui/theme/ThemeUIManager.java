@@ -1,7 +1,7 @@
 package cn.ximuli.jframex.ui.theme;
 
 import cn.ximuli.jframex.ui.Application;
-import cn.ximuli.jframex.ui.component.intellijthemes.IJThemeInfo;
+import cn.ximuli.jframex.ui.component.themes.IJThemeInfo;
 import cn.ximuli.jframex.ui.storage.JFramePref;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
@@ -13,16 +13,13 @@ import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ResourceUtils;
 
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 

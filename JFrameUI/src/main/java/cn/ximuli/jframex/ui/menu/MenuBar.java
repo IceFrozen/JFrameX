@@ -3,7 +3,6 @@ package cn.ximuli.jframex.ui.menu;
 import cn.ximuli.jframex.common.utils.StringUtil;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
-import com.formdev.flatlaf.extras.FlatDesktop;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.components.FlatButton;
 import lombok.Getter;
@@ -50,7 +49,7 @@ public class MenuBar extends JMenuBar {
 
         // add "Users" button to menubar
         FlatButton usersButton = new FlatButton();
-        usersButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/users.svg"));
+        usersButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/users.svg"));
         usersButton.setButtonType(FlatButton.ButtonType.toolBarButton);
         usersButton.setFocusable(false);
         usersButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "Hello User! How are you?", "User", JOptionPane.INFORMATION_MESSAGE));

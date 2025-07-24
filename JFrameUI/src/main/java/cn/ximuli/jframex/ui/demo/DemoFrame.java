@@ -62,7 +62,7 @@ public class DemoFrame extends JFrame {
         initFullWindowContent();
         controlBar.initialize(this, tabbedPane);
 
-        setIconImages(FlatSVGUtils.createWindowIconImages("/com/formdev/flatlaf/demo/FlatLaf.svg"));
+        setIconImages(FlatSVGUtils.createWindowIconImages("/com/formdev/flatlaf/demo1/FlatLaf.svg"));
 
         if (tabIndex >= 0 && tabIndex < tabbedPane.getTabCount() && tabIndex != tabbedPane.getSelectedIndex())
             tabbedPane.setSelectedIndex(tabIndex);
@@ -460,8 +460,8 @@ public class DemoFrame extends JFrame {
             return;
 
         // create fullWindowContent mode toggle button
-        Icon expandIcon = new FlatSVGIcon("com/formdev/flatlaf/demo/icons/expand.svg");
-        Icon collapseIcon = new FlatSVGIcon("com/formdev/flatlaf/demo/icons/collapse.svg");
+        Icon expandIcon = new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/expand.svg");
+        Icon collapseIcon = new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/collapse.svg");
         JToggleButton fullWindowContentButton = new JToggleButton(expandIcon);
         fullWindowContentButton.setToolTipText("Toggle full window content");
         fullWindowContentButton.addActionListener(e -> {
@@ -616,7 +616,7 @@ public class DemoFrame extends JFrame {
                 undoMenuItem.setText("Undo");
                 undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
                 undoMenuItem.setMnemonic('U');
-                undoMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/undo.svg"));
+                undoMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/undo.svg"));
                 undoMenuItem.addActionListener(e -> menuItemActionPerformed(e));
                 editMenu.add(undoMenuItem);
 
@@ -624,7 +624,7 @@ public class DemoFrame extends JFrame {
                 redoMenuItem.setText("Redo");
                 redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
                 redoMenuItem.setMnemonic('R');
-                redoMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/redo.svg"));
+                redoMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/redo.svg"));
                 redoMenuItem.addActionListener(e -> menuItemActionPerformed(e));
                 editMenu.add(redoMenuItem);
                 editMenu.addSeparator();
@@ -633,21 +633,21 @@ public class DemoFrame extends JFrame {
                 cutMenuItem.setText("Cut");
                 cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
                 cutMenuItem.setMnemonic('C');
-                cutMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/menu-cut.svg"));
+                cutMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/menu-cut.svg"));
                 editMenu.add(cutMenuItem);
 
                 //---- copyMenuItem ----
                 copyMenuItem.setText("Copy");
                 copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
                 copyMenuItem.setMnemonic('O');
-                copyMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/copy.svg"));
+                copyMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/copy.svg"));
                 editMenu.add(copyMenuItem);
 
                 //---- pasteMenuItem ----
                 pasteMenuItem.setText("Paste");
                 pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
                 pasteMenuItem.setMnemonic('P');
-                pasteMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/menu-paste.svg"));
+                pasteMenuItem.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/menu-paste.svg"));
                 editMenu.add(pasteMenuItem);
                 editMenu.addSeparator();
 
@@ -867,41 +867,41 @@ public class DemoFrame extends JFrame {
 
                 //---- backButton ----
                 backButton.setToolTipText("Back");
-                backButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/back.svg"));
+                backButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/back.svg"));
                 toolBar.add(backButton);
 
                 //---- forwardButton ----
                 forwardButton.setToolTipText("Forward");
-                forwardButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/forward.svg"));
+                forwardButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/forward.svg"));
                 toolBar.add(forwardButton);
                 toolBar.addSeparator();
 
                 //---- cutButton ----
                 cutButton.setToolTipText("Cut");
-                cutButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/menu-cut.svg"));
+                cutButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/menu-cut.svg"));
                 toolBar.add(cutButton);
 
                 //---- copyButton ----
                 copyButton.setToolTipText("Copy");
-                copyButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/copy.svg"));
+                copyButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/copy.svg"));
                 toolBar.add(copyButton);
 
                 //---- pasteButton ----
                 pasteButton.setToolTipText("Paste");
-                pasteButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/menu-paste.svg"));
+                pasteButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/menu-paste.svg"));
                 toolBar.add(pasteButton);
                 toolBar.addSeparator();
 
                 //---- refreshButton ----
                 refreshButton.setToolTipText("Refresh");
-                refreshButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/refresh.svg"));
+                refreshButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/refresh.svg"));
                 toolBar.add(refreshButton);
                 toolBar.addSeparator();
 
                 //---- showToggleButton ----
                 showToggleButton.setSelected(true);
                 showToggleButton.setToolTipText("Show Details");
-                showToggleButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/show.svg"));
+                showToggleButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/show.svg"));
                 toolBar.add(showToggleButton);
             }
             toolBarPanel.add(toolBar, BorderLayout.CENTER);
@@ -955,7 +955,7 @@ public class DemoFrame extends JFrame {
 
         // add "Users" button to menubar
         FlatButton usersButton = new FlatButton();
-        usersButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/users.svg"));
+        usersButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/users.svg"));
         usersButton.setButtonType(FlatButton.ButtonType.toolBarButton);
         usersButton.setFocusable(false);
         usersButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "Hello User! How are you?", "User", JOptionPane.INFORMATION_MESSAGE));

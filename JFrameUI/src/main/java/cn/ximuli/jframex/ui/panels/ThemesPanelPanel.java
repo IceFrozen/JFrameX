@@ -1,6 +1,6 @@
 package cn.ximuli.jframex.ui.panels;
 
-import cn.ximuli.jframex.ui.component.intellijthemes.IJThemesPanel;
+import cn.ximuli.jframex.ui.component.themes.IJThemesPanel;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

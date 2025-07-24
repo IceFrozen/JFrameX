@@ -1,4 +1,4 @@
-package cn.ximuli.jframex.ui.component.intellijthemes;
+package cn.ximuli.jframex.ui.component.themes;
 
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.storage.JFramePref;
@@ -29,8 +29,6 @@ import java.util.function.Predicate;
 
 @Slf4j
 public class IJThemesPanel extends JPanel {
-    public static final String THEMES_PACKAGE = "/style/intellijthemes/themes/";
-
     private final IJThemesManager themesManager = new IJThemesManager();
     private final List<IJThemeInfo> themes = new ArrayList<>();
     private final HashMap<Integer, String> categories = new HashMap<>();

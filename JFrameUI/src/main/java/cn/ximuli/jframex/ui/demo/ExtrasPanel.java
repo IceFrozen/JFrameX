@@ -2,7 +2,6 @@ package cn.ximuli.jframex.ui.demo;
 
 import javax.swing.*;
 
-import javax.swing.*;
 import com.formdev.flatlaf.extras.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon.ColorFilter;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
@@ -45,7 +44,7 @@ public class ExtrasPanel extends JPanel
     }
 
     private void initRainbowIcon() {
-        FlatSVGIcon icon = new FlatSVGIcon( "com/formdev/flatlaf/demo/extras/svg/informationDialog.svg" );
+        FlatSVGIcon icon = new FlatSVGIcon("com/formdev/flatlaf/demo1/extras/svg/informationDialog.svg");
         icon.setColorFilter( new ColorFilter( color -> {
             rainbowCounter += 1;
             rainbowCounter %= 255;
@@ -71,7 +70,7 @@ public class ExtrasPanel extends JPanel
     }
 
     private void addSVGIcon( String name ) {
-        svgIconsPanel.add( new JLabel( new FlatSVGIcon( "com/formdev/flatlaf/demo/extras/svg/" + name ) ) );
+        svgIconsPanel.add( new JLabel( new FlatSVGIcon( "com/formdev/flatlaf/demo1/extras/svg/" + name ) ) );
     }
 
     private void triStateCheckBox1Changed() {

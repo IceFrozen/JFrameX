@@ -400,7 +400,7 @@ public class ContainerComponentsPanel extends JPanel {
             toolBar1.add(toggleButton6);
             resources.getIcon("icons/intellij-showWriteAccess");
             //---- button1 ----
-            button1.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/demo/icons/intellij-showWriteAccess.png")));
+            button1.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/demo1/icons/intellij-showWriteAccess.png")));
             button1.setEnabled(false);
             toolBar1.add(button1);
             toolBar1.addSeparator();

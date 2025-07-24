@@ -19,6 +19,7 @@ public class Application implements CommandLineRunner {
     public static final String APP_LANGUAGE = "app.language";
     public static final String APP_LANGUAGE_EN = "en";
     public static final String APP_ICON = "/style/icon.png";
+    public static final String APP_THEMES_PACKAGE = "/style/intellijthemes/themes.json";
 
     public static void main(String[] args) throws Exception {
         ApplicationInitializer.init(args);
@@ -31,7 +32,6 @@ public class Application implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
     }
-
 
 
     public static class MAC {

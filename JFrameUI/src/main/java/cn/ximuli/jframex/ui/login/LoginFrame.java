@@ -16,6 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 @Component
 @Slf4j
@@ -170,6 +171,20 @@ public class LoginFrame extends JFrame {
 
         mainPanel.add(formPanel, "grow, align center"); // Center the form panel
         add(mainPanel);
+
+
+        // Add enter key to trigger login
+        getRootPane().registerKeyboardAction(
+                new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        loginButton.doClick();
+                    }
+                },
+                KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW
+        );
+
     }
 
     private void handleLogin() {
@@ -189,4 +204,6 @@ public class LoginFrame extends JFrame {
         }
         FrameManager.publishEvent(new UserLoginEvent(login));
     }
+
+
 }

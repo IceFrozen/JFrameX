@@ -394,7 +394,7 @@ class MoreComponentsPanel
             toolBar1.add(toggleButton6);
 
             //---- button1 ----
-            button1.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/demo/icons/intellij-showWriteAccess.png")));
+            button1.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/demo1/icons/intellij-showWriteAccess.png")));
             button1.setEnabled(false);
             toolBar1.add(button1);
             toolBar1.addSeparator();

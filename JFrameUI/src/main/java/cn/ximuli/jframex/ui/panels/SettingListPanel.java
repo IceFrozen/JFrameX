@@ -3,7 +3,7 @@ package cn.ximuli.jframex.ui.panels;
 import cn.ximuli.jframex.common.utils.StringUtil;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
-import cn.ximuli.jframex.ui.component.intellijthemes.ListCellTitledBorder;
+import cn.ximuli.jframex.ui.component.themes.ListCellTitledBorder;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon;

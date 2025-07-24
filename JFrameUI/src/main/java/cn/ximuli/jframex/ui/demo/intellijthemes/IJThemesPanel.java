@@ -510,13 +510,13 @@ public class IJThemesPanel
 
 			//---- pluginButton ----
 			pluginButton.setToolTipText("Opens the IntelliJ plugin page of selected IntelliJ theme in the browser.");
-			pluginButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/plugin.svg"));
+			pluginButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/plugin.svg"));
 			pluginButton.addActionListener(e -> browsePlugin());
 			toolBar.add(pluginButton);
 
 			//---- sourceCodeButton ----
 			sourceCodeButton.setToolTipText("Opens the source code repository of selected IntelliJ theme in the browser.");
-			sourceCodeButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo/icons/github.svg"));
+			sourceCodeButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/github.svg"));
 			sourceCodeButton.addActionListener(e -> browseSourceCode());
 			toolBar.add(sourceCodeButton);
 		}

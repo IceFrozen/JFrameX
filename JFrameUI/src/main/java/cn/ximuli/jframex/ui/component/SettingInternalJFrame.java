@@ -2,14 +2,11 @@ package cn.ximuli.jframex.ui.component;
 
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
-import cn.ximuli.jframex.ui.component.intellijthemes.IJThemesPanel;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.menu.MenuBar;
 import cn.ximuli.jframex.ui.menu.ToolBar2;
 import cn.ximuli.jframex.ui.panels.*;
 import com.formdev.flatlaf.*;
-import com.formdev.flatlaf.extras.*;
-import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +14,9 @@ import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.LC;
 import net.miginfocom.layout.UnitValue;
 import net.miginfocom.swing.MigLayout;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 
 @org.springframework.stereotype.Component
