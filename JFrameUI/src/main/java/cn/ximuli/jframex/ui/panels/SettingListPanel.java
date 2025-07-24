@@ -71,7 +71,6 @@ public class SettingListPanel extends JPanel {
             }
         });
 
-        // create renderer
         settingsList.setCellRenderer(new DefaultListCellRenderer() {
             private int index;
             private boolean isSelected;
@@ -85,13 +84,13 @@ public class SettingListPanel extends JPanel {
                 this.titleHeight = 0;
 
                 String title = categories.get(index);
-                String name = ((SettingInfo) value).getName();
+                String name = ((SettingInfo<?>) value).getName();
                 int sep = name.indexOf('/');
                 if (sep >= 0)
                     name = name.substring(sep + 1).trim();
 
                 JComponent c = (JComponent) super.getListCellRendererComponent(list, name, index, isSelected, cellHasFocus);
-                c.setToolTipText(buildToolTip((SettingInfo) value));
+                c.setToolTipText(buildToolTip((SettingInfo<?>) value));
                 if (title != null) {
                     Border titledBorder = new ListCellTitledBorder(settingsList, title);
                     c.setBorder(new CompoundBorder(titledBorder, c.getBorder()));
@@ -136,7 +135,7 @@ public class SettingListPanel extends JPanel {
     }
 
     private void listValueChanged(ListSelectionEvent e) {
-        SettingInfo settingInfo = settingsList.getSelectedValue();
+        SettingInfo<JComponent> settingInfo = settingsList.getSelectedValue();
         if (e.getValueIsAdjusting() || isChangeUI.get() || currenSettings == settingInfo) {
             return;
         }
@@ -153,7 +152,6 @@ public class SettingListPanel extends JPanel {
 
     private void initComponents() {
         settingScrollPane = new JScrollPane();
-        //======== this ========
         setLayout(new MigLayout(
                 "insets dialog,hidemode 3",
                 // columns
@@ -165,7 +163,7 @@ public class SettingListPanel extends JPanel {
         searchTextField = new JTextField();
         // search history button
         JButton searchHistoryButton = new JButton(new FlatSearchWithHistoryIcon(true));
-        searchHistoryButton.setToolTipText("Search History");
+        searchHistoryButton.setToolTipText(I18nHelper.getMessage("app.setting.search.history.toolTipText"));
         searchHistoryButton.addActionListener(e -> {
             JPopupMenu popupMenu = new JPopupMenu();
             popupMenu.add("(empty)");
@@ -234,7 +232,6 @@ public class SettingListPanel extends JPanel {
             for (Map.Entry<String, List<Pair<SettingMenu, JComponent>>> settings : settingCategory.entrySet()) {
                 String categoryName = I18nHelper.has(settings.getKey()) ? I18nHelper.getMessage(settings.getKey()) : settings.getKey();
                 categories.put(index, categoryName);
-                // 按 SettingMenu 的 order() 方法排序
                 settings.getValue().sort(Comparator.comparingInt(pair -> -pair.getLeft().order()));
                 for (Pair<SettingMenu, JComponent> pair : settings.getValue()) {
                     SettingMenu settingMeta = pair.getKey();

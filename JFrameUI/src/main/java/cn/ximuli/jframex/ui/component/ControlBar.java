@@ -24,6 +24,11 @@ import java.awt.event.*;
 public class ControlBar extends JPanel {
     private JInternalFrame parentFrame;
     private JTabbedPane tabbedPane;
+    private JSeparator separator1;
+    private LookAndFeelsComboBox lookAndFeelComboBox;
+    private JCheckBox rightToLeftCheckBox;
+    private JCheckBox enabledCheckBox;
+    private JLabel infoLabel;
 
     public ControlBar(JInternalFrame parentFrame, JTabbedPane tabbedPane) {
         this.parentFrame = parentFrame;
@@ -100,7 +105,7 @@ public class ControlBar extends JPanel {
             registerSwitchToLookAndFeelKey(KeyEvent.VK_F9, "com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
         registerSwitchToLookAndFeelKey(KeyEvent.VK_F11, NimbusLookAndFeel.class.getName());
         registerSwitchToLookAndFeelKey(KeyEvent.VK_F12, MetalLookAndFeel.class.getName());
-
+        updateUI();
     }
 
     private void updateInfoLabel() {
@@ -158,7 +163,6 @@ public class ControlBar extends JPanel {
 
     private void enabledChanged() {
         enabledDisable(tabbedPane, enabledCheckBox.isSelected());
-        // repainting whole tabbed pane is faster than repainting many individual components
         tabbedPane.repaint();
     }
 
@@ -185,8 +189,9 @@ public class ControlBar extends JPanel {
                 }
             }
 
-            if (c instanceof JToolBar)
+            if (c instanceof JToolBar) {
                 enabledDisable((JToolBar) c, enabled);
+            }
         }
     }
 
@@ -227,19 +232,9 @@ public class ControlBar extends JPanel {
         enabledCheckBox.addActionListener(e -> enabledChanged());
         add(enabledCheckBox, "cell 2 1");
 
-        //---- infoLabel ----
         infoLabel.setText("text");
         add(infoLabel, "cell 3 1,alignx center,growx 0");
 
-        //---- closeButton ----
-
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    private JSeparator separator1;
-    private LookAndFeelsComboBox lookAndFeelComboBox;
-    private JCheckBox rightToLeftCheckBox;
-    private JCheckBox enabledCheckBox;
-    private JLabel infoLabel;
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

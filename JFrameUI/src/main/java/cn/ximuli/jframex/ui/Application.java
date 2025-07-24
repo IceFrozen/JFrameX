@@ -29,7 +29,7 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        FrameManager.publishEvent(new CreateFrameEvent<>(SettingInternalJFrame.class));
+
     }
 
 

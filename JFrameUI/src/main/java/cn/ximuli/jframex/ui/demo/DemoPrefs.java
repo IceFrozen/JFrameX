@@ -44,7 +44,7 @@ public class DemoPrefs {
     @Deprecated
     public static void setupLaf(String[] args) {
         // TODO what's this meaning
-        //IJThemesDump.install();
+        IJThemesDump.install();
 
         // set look and feel
         try {

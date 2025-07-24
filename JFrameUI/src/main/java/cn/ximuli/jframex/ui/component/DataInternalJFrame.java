@@ -12,14 +12,8 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
+
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -43,7 +37,7 @@ public class DataInternalJFrame extends CommonInternalJFrame {
 
     @Override
     protected void initUI() {
-        jPanel = new DataComponentsPanel(super.resources);
+        jPanel = new DataComponentsPanel(resources);
         jPanel.setBorder(LineBorder.createGrayLineBorder());
         setLayout(new BorderLayout());
         add(jPanel, BorderLayout.CENTER);

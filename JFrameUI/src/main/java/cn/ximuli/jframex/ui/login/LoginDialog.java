@@ -9,6 +9,7 @@ import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -49,14 +50,14 @@ public class LoginDialog extends JFrame {
             loginPanel.setBackground(new Color(0xD8DDC7));
 
             JLabel passwordLabel = new JLabel();
-            passwordLabel.setBounds(new Rectangle(85*2, 155, 100, 36));
+            passwordLabel.setBounds(new Rectangle(85 * 2, 155, 100, 36));
             passwordLabel.setText(I18nHelper.getMessage("app.login.label.password"));
             loginPanel.add(passwordLabel, null);
             loginPanel.add(getUserField(), null);
 
             JLabel userNameLabel = new JLabel();
             userNameLabel.setText(I18nHelper.getMessage("app.login.label.username"));
-            userNameLabel.setBounds(new Rectangle(85*2, 113, 100, 36));
+            userNameLabel.setBounds(new Rectangle(85 * 2, 113, 100, 36));
             loginPanel.add(userNameLabel, null);
             loginPanel.add(getPasswordField(), null);
 
@@ -69,7 +70,7 @@ public class LoginDialog extends JFrame {
     private JTextField getUserField() {
         if (userField == null) {
             userField = new JTextField();
-            userField.setBounds(new Rectangle(130* 2 , 118, 167, 30));
+            userField.setBounds(new Rectangle(130 * 2, 118, 167, 30));
         }
         return userField;
     }
@@ -77,7 +78,7 @@ public class LoginDialog extends JFrame {
     private JPasswordField getPasswordField() {
         if (passwordField == null) {
             passwordField = new JPasswordField();
-            passwordField.setBounds(new Rectangle(130*2, 158, 167, 30));
+            passwordField.setBounds(new Rectangle(130 * 2, 158, 167, 30));
             passwordField.addKeyListener(new KeyAdapter() {
                 public void keyTyped(KeyEvent e) {
                     if (e.getKeyChar() == '\n')
@@ -91,7 +92,7 @@ public class LoginDialog extends JFrame {
     private JButton getLoginButton() {
         if (loginButton == null) {
             loginButton = new JButton();
-            loginButton.setBounds(new Rectangle(100*2, 230, 48, 20));
+            loginButton.setBounds(new Rectangle(100 * 2, 230, 48, 20));
             loginButton.setIcon(resource.getIcon("loginButton"));
             loginButton.addActionListener(e -> {
                 String username = userField.getText();
@@ -112,7 +113,7 @@ public class LoginDialog extends JFrame {
     private JButton getExitButton() {
         if (exitButton == null) {
             exitButton = new JButton();
-            exitButton.setBounds(new Rectangle(170*2, 230, 48, 20));
+            exitButton.setBounds(new Rectangle(170 * 2, 230, 48, 20));
             exitButton.setIcon(resource.getIcon("exitButton"));
             exitButton.addActionListener(e -> System.exit(0));
         }

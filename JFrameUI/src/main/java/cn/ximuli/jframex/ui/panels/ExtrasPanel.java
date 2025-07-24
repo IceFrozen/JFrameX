@@ -18,7 +18,6 @@ public class ExtrasPanel extends JPanel {
     private Timer rainbowIconTimer;
     private int rainbowCounter = 0;
     private ResourceLoaderManager resources;
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     private JLabel label4;
     private JLabel label1;
     private FlatTriStateCheckBox triStateCheckBox1;
@@ -33,24 +32,19 @@ public class ExtrasPanel extends JPanel {
     private JLabel label7;
     private JToggleButton redToggleButton;
     private JToggleButton brighterToggleButton;
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     public ExtrasPanel(ResourceLoaderManager resources) {
         this.resources = resources;
         initComponents(resources);
-
         triStateLabel1.setText(triStateCheckBox1.getState().toString());
-
         addSVGIcon("actions/copy");
         addSVGIcon("actions/colors");
         addSVGIcon("actions/execute");
         addSVGIcon("actions/suspend");
         addSVGIcon("actions/intentionBulb");
         addSVGIcon("actions/quickfixOffBulb");
-
         addSVGIcon("objects/abstractClass");
         addSVGIcon("objects/abstractMethod");
-        addSVGIcon("objects/annotationtype");
         addSVGIcon("objects/annotationtype");
         addSVGIcon("objects/css");
         addSVGIcon("objects/javaScript");
@@ -73,9 +67,7 @@ public class ExtrasPanel extends JPanel {
         }));
         rainbowIcon.setIcon(icon);
 
-        rainbowIconTimer = new Timer(30, e -> {
-            rainbowIcon.repaint();
-        });
+        rainbowIconTimer = new Timer(30, e -> rainbowIcon.repaint());
 
         // start rainbow timer only if panel is shown ("Extras" tab is active)
         addHierarchyListener(e -> {
@@ -128,7 +120,6 @@ public class ExtrasPanel extends JPanel {
     }
 
     private void initComponents(ResourceLoaderManager resources) {
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         label4 = new JLabel();
         label1 = new JLabel();
         triStateCheckBox1 = new FlatTriStateCheckBox();
@@ -221,7 +212,6 @@ public class ExtrasPanel extends JPanel {
         brighterToggleButton.setText("Toggle brighter");
         brighterToggleButton.addActionListener(e -> brighterChanged());
         add(brighterToggleButton, "cell 1 7 2 1");
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
 }

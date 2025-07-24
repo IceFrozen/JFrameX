@@ -4,11 +4,11 @@ import cn.ximuli.jframex.model.LoggedInUser;
 import cn.ximuli.jframex.ui.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
+import cn.ximuli.jframex.ui.login.LoginFrame2;
 import cn.ximuli.jframex.common.constants.Status;
 import cn.ximuli.jframex.ui.panels.StatePanel;
 import cn.ximuli.jframex.ui.event.*;
 import cn.ximuli.jframex.ui.login.LoginDialog;
-import cn.ximuli.jframex.ui.storage.FrameStore;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.storage.JFramePref;
 import com.formdev.flatlaf.FlatLaf;
@@ -34,17 +34,19 @@ public class FrameManager {
     private volatile Status status = Status.NONE;
     private final MainFrame mainFrame;
     private final LoginDialog loginDialog;
+    private final LoginFrame2 loginFrame2;
     private final ResourceLoaderManager loaderManager;
     private final StatePanel statePanel;
     private final DesktopPanel desktopPanel;
 
     @Autowired
-    public FrameManager(MainFrame mainFrame, LoginDialog loginDialog, ResourceLoaderManager loaderManager, StatePanel statePanel, DesktopPanel desktopPanel) {
+    public FrameManager(MainFrame mainFrame, LoginDialog loginDialog, LoginFrame2 loginFrame2, ResourceLoaderManager loaderManager, StatePanel statePanel, DesktopPanel desktopPanel) {
         this.mainFrame = mainFrame;
         this.loginDialog = loginDialog;
         this.loaderManager = loaderManager;
         this.statePanel = statePanel;
         this.desktopPanel = desktopPanel;
+        this.loginFrame2 = loginFrame2;
     }
 
     @EventListener(ContextRefreshedEvent.class)
@@ -69,20 +71,24 @@ public class FrameManager {
     @EventListener(ResourceReadyEvent.class)
     public void resourceLoadFinish(ResourceReadyEvent readyEvent) {
         if (this.status == Status.LOADING) {
-            boolean closeSuccess = AppSplashScreen.close();
-            userLogin(new UserLoginEvent(new LoggedInUser("username", "password")));
-            // TODO 这里判断直接登录
-            if (closeSuccess) {
-                // loginDialog.initialize();
-                // loginDialog.setVisible(true);
-                // updateStatus(Status.SIGN_UP);
+            AppSplashScreen.close();
+
+            LoggedInUser user = JFramePref.getUser();
+            if (user != null && !user.isExpired()) {
+                userLogin(new UserLoginEvent(user));
+            } else {
+                loginFrame2.setVisible(true);
+//                loginDialog.initialize();
+//                loginDialog.setVisible(true);
+                updateStatus(Status.SIGN_UP);
             }
+
         }
     }
 
     @EventListener(UserLoginEvent.class)
     public void userLogin(UserLoginEvent userLoginEvent) {
-        FrameStore.setUser(userLoginEvent.getLoggedInUser());
+        JFramePref.setUser(userLoginEvent.getLoggedInUser());
         loginDialog.setVisible(false);
         mainFrame.setVisible(true);
         updateStatus(Status.STARTED);

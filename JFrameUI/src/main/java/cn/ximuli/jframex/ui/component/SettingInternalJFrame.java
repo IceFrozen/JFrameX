@@ -41,7 +41,6 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
     @Getter
     SettingListPanel settingListPanel;
 
-    private final String[] availableFontFamilyNames;
 
     public SettingInternalJFrame(ResourceLoaderManager resources, JDesktopPane desktopPane, JTabbedPane tabbedPane, ThemesPanelPanel themesPanel, SettingListPanel settingListPanel) {
         super(resources, desktopPane);
@@ -52,8 +51,6 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
         this.controlPanel = new JPanel();
         setFrameIcon(resources.getIcon("settings"));
         setTitle(I18nHelper.getMessage("app.setting.title"));
-        availableFontFamilyNames = FontUtils.getAvailableFontFamilyNames().clone();
-        Arrays.sort(availableFontFamilyNames);
         initComponents();
         initFullWindowContent();
     }
@@ -105,8 +102,7 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
         settingContentPane.add(controlBar, BorderLayout.PAGE_END);
 
         settingListPanel.addSelectedAction(info -> {
-            log.info("selected: {}", info.getClz());
-            JComponent bean = (JComponent) SpringUtils.getBean(info.getClz());
+            JComponent bean = SpringUtils.getBean(info.getClz());
             controlPanel.removeAll();
             controlPanel.add(bean, BorderLayout.CENTER);
             refreshUI();
@@ -124,9 +120,7 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
                 insets[3]
         });
         layout.setLayoutConstraints(lc);
-
         settingListPanel.select(0);
-
     }
 
     @Override

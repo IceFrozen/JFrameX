@@ -93,8 +93,8 @@ public class AppSplashScreen extends JWindow {
             }
 
             double scale = Math.min((double) windowWidth / imgWidth, (double) windowHeight / imgHeight);
-            int scaledWidth = (int) (imgWidth * scale);
-            int scaledHeight = (int) (imgHeight * scale);
+            int scaledWidth = (int) (imgWidth * scale * 0.5);
+            int scaledHeight = (int) (imgHeight * scale * 0.5);
 
             // Scale the image smoothly
             Image scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);

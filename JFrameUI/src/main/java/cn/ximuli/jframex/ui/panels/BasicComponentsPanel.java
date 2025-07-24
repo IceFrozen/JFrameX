@@ -82,7 +82,6 @@ public class BasicComponentsPanel extends JPanel {
     }
 
     private void initComponents() {
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         JLabel labelLabel = new JLabel();
         JLabel label1 = new JLabel();
         JLabel label2 = new JLabel();

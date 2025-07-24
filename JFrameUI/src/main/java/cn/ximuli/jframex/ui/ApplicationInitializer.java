@@ -34,7 +34,12 @@ public class ApplicationInitializer {
 
     private static void initI18n(String... args) {
         System.setProperty(Application.APP_STYLE_NAME, Application.APP_STYLE_NAME_DEFAULT);
-        System.setProperty(Application.APP_LANGUAGE, Application.APP_LANGUAGE_EN);
+
+        String currentLanguage = JFramePref.state.get(Application.APP_LANGUAGE, null);
+        if (currentLanguage == null) {
+            JFramePref.state.put(Application.APP_LANGUAGE, Application.APP_LANGUAGE_EN);
+        }
+        System.setProperty(Application.APP_LANGUAGE, JFramePref.state.get(Application.APP_LANGUAGE, Application.APP_LANGUAGE_EN));
     }
 
     private static void initTheme(String... args) throws Exception {

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -95,6 +96,13 @@ public class ResourceLoaderManager implements InitializingBean {
         return imageCache.get(path);
     }
 
+    public ImageIcon getIcon(String iconPath, int width, int height) {
+        String styleName = System.getProperty(Application.APP_STYLE_NAME, Application.APP_STYLE_NAME_DEFAULT);
+        String resourcePath = StringUtil.joinWith(CharConstants.STR_SLASH, "style", styleName, iconPath);
+        return loadIcon(resourcePath, width, height);
+    }
+
+
     /**
      * Retrieves the image for the specified path.
      *
@@ -116,10 +124,10 @@ public class ResourceLoaderManager implements InitializingBean {
         try {
             String scanPattern = StringUtil.joinWith(CharConstants.STR_SLASH, "classpath*:style", styleName, "**", "*");
             AppSplashScreen.setProgressBarValue(new ProgressEvent(5, I18nHelper.getMessage("app.resource.scan.start")));
-            totalProgress.addAndGet(-5);
+            totalProgress.addAndGet(-1);
             Resource[] resources = resourcePatternResolver.getResources(scanPattern);
-            AppSplashScreen.setProgressBarValue(new ProgressEvent(5, I18nHelper.getMessage("app.resource.scan.end", resources.length)));
-            totalProgress.addAndGet(-5);
+            AppSplashScreen.setProgressBarValue(new ProgressEvent(1, I18nHelper.getMessage("app.resource.scan.end", resources.length)));
+            totalProgress.addAndGet(-1);
 
             log.debug("Total progress: {}, resource count: {}", totalProgress.get(), resources.length);
 
@@ -169,6 +177,19 @@ public class ResourceLoaderManager implements InitializingBean {
         } catch (IOException e) {
             log.error("Failed to load icon: {}", resource.getFilename(), e);
             throw new RuntimeException("Failed to load resource: " + resource.getFilename(), e);
+        }
+    }
+
+    private ImageIcon loadIcon(String path, int with, int height) {
+        try {
+            String extension = FileUtil.extName(path);
+            if ("svg".equalsIgnoreCase(extension)) {
+                return new FlatSVGIcon(path, with, height);
+            }
+            return new ImageIcon(ImageIO.read(new File(path)));
+        } catch (IOException e) {
+            log.error("Failed to load icon: {}", path, e);
+            throw new RuntimeException("Failed to load resource: " + path, e);
         }
     }
 }

@@ -2,6 +2,8 @@ package cn.ximuli.jframex.ui.panels;
 
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import com.formdev.flatlaf.FlatLaf;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import org.springframework.stereotype.Component;
@@ -37,10 +39,7 @@ public class OptionPanePanel extends JPanel {
 
             UIManager.getDefaults().addPropertyChangeListener(e -> {
                 switch (e.getPropertyName()) {
-                    case "TitlePane.showIcon":
-                    case "TitlePane.useWindowDecorations":
-                        updateShowTitleBarIcon();
-                        break;
+                    case "TitlePane.showIcon", "TitlePane.useWindowDecorations" -> updateShowTitleBarIcon();
                 }
             });
         } else
@@ -57,7 +56,6 @@ public class OptionPanePanel extends JPanel {
     }
 
     private void initComponents(ResourceLoaderManager resources) {
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         JScrollPane scrollPane1 = new JScrollPane();
         ScrollablePanel panel9 = new ScrollablePanel();
         JLabel plainLabel = new JLabel();
@@ -98,221 +96,221 @@ public class OptionPanePanel extends JPanel {
         setLayout(new BorderLayout());
 
         //======== scrollPane1 ========
-        {
-            scrollPane1.setBorder(BorderFactory.createEmptyBorder());
 
-            //======== panel9 ========
-            {
-                panel9.setLayout(new MigLayout(
-                        "insets dialog,hidemode 3",
-                        // columns
+        scrollPane1.setBorder(BorderFactory.createEmptyBorder());
+
+        //======== panel9 ========
+
+        panel9.setLayout(new MigLayout(
+                "insets dialog,hidemode 3",
+                // columns
+                "[]" +
                         "[]" +
-                                "[]" +
-                                "[fill]",
-                        // rows
+                        "[fill]",
+                // rows
+                "[top]" +
                         "[top]" +
-                                "[top]" +
-                                "[top]" +
-                                "[top]" +
-                                "[top]" +
-                                "[top]" +
-                                "[top]" +
-                                "[top]"));
+                        "[top]" +
+                        "[top]" +
+                        "[top]" +
+                        "[top]" +
+                        "[top]" +
+                        "[top]"));
 
-                //---- plainLabel ----
-                plainLabel.setText("Plain");
-                panel9.add(plainLabel, "cell 0 0");
+        //---- plainLabel ----
+        plainLabel.setText("Plain");
+        panel9.add(plainLabel, "cell 0 0");
 
-                //======== panel1 ========
-                {
-                    panel1.setBorder(LineBorder.createGrayLineBorder());
-                    panel1.setLayout(new BorderLayout());
+        //======== panel1 ========
 
-                    //---- plainOptionPane ----
-                    plainOptionPane.setMessage("Hello world.");
-                    panel1.add(plainOptionPane, BorderLayout.CENTER);
-                }
-                panel9.add(panel1, "cell 1 0");
+        panel1.setBorder(LineBorder.createGrayLineBorder());
+        panel1.setLayout(new BorderLayout());
 
-                //---- plainShowDialogLabel ----
-                plainShowDialogLabel.setOptionPane(plainOptionPane);
-                plainShowDialogLabel.setTitleLabel(plainLabel);
-                panel9.add(plainShowDialogLabel, "cell 1 0");
+        //---- plainOptionPane ----
+        plainOptionPane.setMessage("Hello world.");
+        panel1.add(plainOptionPane, BorderLayout.CENTER);
 
-                //---- showTitleBarIconCheckBox ----
-                showTitleBarIconCheckBox.setText("Show window title bar icon");
-                showTitleBarIconCheckBox.addActionListener(e -> showTitleBarIcon());
-                panel9.add(showTitleBarIconCheckBox, "cell 2 0");
+        panel9.add(panel1, "cell 1 0");
 
-                //---- errorLabel ----
-                errorLabel.setText("Error");
-                panel9.add(errorLabel, "cell 0 1");
+        //---- plainShowDialogLabel ----
+        plainShowDialogLabel.setOptionPane(plainOptionPane);
+        plainShowDialogLabel.setTitleLabel(plainLabel);
+        panel9.add(plainShowDialogLabel, "cell 1 0");
 
-                //======== panel2 ========
-                {
-                    panel2.setBorder(LineBorder.createGrayLineBorder());
-                    panel2.setLayout(new BorderLayout());
+        //---- showTitleBarIconCheckBox ----
+        showTitleBarIconCheckBox.setText("Show window title bar icon");
+        showTitleBarIconCheckBox.addActionListener(e -> showTitleBarIcon());
+        panel9.add(showTitleBarIconCheckBox, "cell 2 0");
 
-                    //---- errorOptionPane ----
-                    errorOptionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
-                    errorOptionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
-                    errorOptionPane.setMessage("Your PC ran into a problem. Buy a new one.");
-                    panel2.add(errorOptionPane, BorderLayout.CENTER);
-                }
-                panel9.add(panel2, "cell 1 1");
+        //---- errorLabel ----
+        errorLabel.setText("Error");
+        panel9.add(errorLabel, "cell 0 1");
 
-                //---- errorShowDialogLabel ----
-                errorShowDialogLabel.setTitleLabel(errorLabel);
-                errorShowDialogLabel.setOptionPane(errorOptionPane);
-                panel9.add(errorShowDialogLabel, "cell 1 1");
+        //======== panel2 ========
 
-                //---- informationLabel ----
-                informationLabel.setText("Information");
-                panel9.add(informationLabel, "cell 0 2");
+        panel2.setBorder(LineBorder.createGrayLineBorder());
+        panel2.setLayout(new BorderLayout());
 
-                //======== panel3 ========
-                {
-                    panel3.setBorder(LineBorder.createGrayLineBorder());
-                    panel3.setLayout(new BorderLayout());
+        //---- errorOptionPane ----
+        errorOptionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+        errorOptionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        errorOptionPane.setMessage("Your PC ran into a problem. Buy a new one.");
+        panel2.add(errorOptionPane, BorderLayout.CENTER);
 
-                    //---- informationOptionPane ----
-                    informationOptionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
-                    informationOptionPane.setOptionType(JOptionPane.YES_NO_OPTION);
-                    informationOptionPane.setMessage("Text with\nmultiple lines\n(use \\n to separate lines)");
-                    panel3.add(informationOptionPane, BorderLayout.CENTER);
-                }
-                panel9.add(panel3, "cell 1 2");
+        panel9.add(panel2, "cell 1 1");
 
-                //---- informationShowDialogLabel ----
-                informationShowDialogLabel.setOptionPane(informationOptionPane);
-                informationShowDialogLabel.setTitleLabel(informationLabel);
-                panel9.add(informationShowDialogLabel, "cell 1 2");
+        //---- errorShowDialogLabel ----
+        errorShowDialogLabel.setTitleLabel(errorLabel);
+        errorShowDialogLabel.setOptionPane(errorOptionPane);
+        panel9.add(errorShowDialogLabel, "cell 1 1");
 
-                //---- questionLabel ----
-                questionLabel.setText("Question");
-                panel9.add(questionLabel, "cell 0 3");
+        //---- informationLabel ----
+        informationLabel.setText("Information");
+        panel9.add(informationLabel, "cell 0 2");
 
-                //======== panel4 ========
-                {
-                    panel4.setBorder(LineBorder.createGrayLineBorder());
-                    panel4.setLayout(new BorderLayout());
+        //======== panel3 ========
 
-                    //---- questionOptionPane ----
-                    questionOptionPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
-                    questionOptionPane.setOptionType(JOptionPane.YES_NO_CANCEL_OPTION);
-                    questionOptionPane.setMessage("Answer the question. What question? Don't know. Just writing useless text to make this longer than 80 characters.");
-                    panel4.add(questionOptionPane, BorderLayout.CENTER);
-                }
-                panel9.add(panel4, "cell 1 3");
+        panel3.setBorder(LineBorder.createGrayLineBorder());
+        panel3.setLayout(new BorderLayout());
 
-                //---- questionShowDialogLabel ----
-                questionShowDialogLabel.setOptionPane(questionOptionPane);
-                questionShowDialogLabel.setTitleLabel(questionLabel);
-                panel9.add(questionShowDialogLabel, "cell 2 3");
+        //---- informationOptionPane ----
+        informationOptionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+        informationOptionPane.setOptionType(JOptionPane.YES_NO_OPTION);
+        informationOptionPane.setMessage("Text with\nmultiple lines\n(use \\n to separate lines)");
+        panel3.add(informationOptionPane, BorderLayout.CENTER);
 
-                //---- warningLabel ----
-                warningLabel.setText("Warning");
-                panel9.add(warningLabel, "cell 0 4");
+        panel9.add(panel3, "cell 1 2");
 
-                //======== panel5 ========
-                {
-                    panel5.setBorder(LineBorder.createGrayLineBorder());
-                    panel5.setLayout(new BorderLayout());
+        //---- informationShowDialogLabel ----
+        informationShowDialogLabel.setOptionPane(informationOptionPane);
+        informationShowDialogLabel.setTitleLabel(informationLabel);
+        panel9.add(informationShowDialogLabel, "cell 1 2");
 
-                    //---- warningOptionPane ----
-                    warningOptionPane.setMessageType(JOptionPane.WARNING_MESSAGE);
-                    warningOptionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
-                    warningOptionPane.setMessage("<html>I like <b>bold</b>,<br> and I like <i>italic</i>,<br> and I like to have<br> many lines.<br> Lots of lines.");
-                    panel5.add(warningOptionPane, BorderLayout.CENTER);
-                }
-                panel9.add(panel5, "cell 1 4");
+        //---- questionLabel ----
+        questionLabel.setText("Question");
+        panel9.add(questionLabel, "cell 0 3");
 
-                //---- warningShowDialogLabel ----
-                warningShowDialogLabel.setOptionPane(warningOptionPane);
-                warningShowDialogLabel.setTitleLabel(warningLabel);
-                panel9.add(warningShowDialogLabel, "cell 1 4");
+        //======== panel4 ========
 
-                //---- inputLabel ----
-                inputLabel.setText("Input");
-                panel9.add(inputLabel, "cell 0 5");
+        panel4.setBorder(LineBorder.createGrayLineBorder());
+        panel4.setLayout(new BorderLayout());
 
-                //======== panel7 ========
-                {
-                    panel7.setBorder(LineBorder.createGrayLineBorder());
-                    panel7.setLayout(new BorderLayout());
+        //---- questionOptionPane ----
+        questionOptionPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
+        questionOptionPane.setOptionType(JOptionPane.YES_NO_CANCEL_OPTION);
+        questionOptionPane.setMessage("Answer the question. What question? Don't know. Just writing useless text to make this longer than 80 characters.");
+        panel4.add(questionOptionPane, BorderLayout.CENTER);
 
-                    //---- inputOptionPane ----
-                    inputOptionPane.setWantsInput(true);
-                    inputOptionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
-                    inputOptionPane.setMessage("Enter whatever you want:");
-                    panel7.add(inputOptionPane, BorderLayout.CENTER);
-                }
-                panel9.add(panel7, "cell 1 5");
+        panel9.add(panel4, "cell 1 3");
 
-                //---- inputShowDialogLabel ----
-                inputShowDialogLabel.setOptionPane(inputOptionPane);
-                inputShowDialogLabel.setTitleLabel(inputLabel);
-                panel9.add(inputShowDialogLabel, "cell 1 5");
+        //---- questionShowDialogLabel ----
+        questionShowDialogLabel.setOptionPane(questionOptionPane);
+        questionShowDialogLabel.setTitleLabel(questionLabel);
+        panel9.add(questionShowDialogLabel, "cell 2 3");
 
-                //---- inputIconLabel ----
-                inputIconLabel.setText("Input + icon");
-                panel9.add(inputIconLabel, "cell 0 6");
+        //---- warningLabel ----
+        warningLabel.setText("Warning");
+        panel9.add(warningLabel, "cell 0 4");
 
-                //======== panel8 ========
-                {
-                    panel8.setBorder(LineBorder.createGrayLineBorder());
-                    panel8.setLayout(new BorderLayout());
+        //======== panel5 ========
 
-                    //---- inputIconOptionPane ----
-                    inputIconOptionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
-                    inputIconOptionPane.setWantsInput(true);
-                    inputIconOptionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
-                    inputIconOptionPane.setMessage("Enter something:");
-                    panel8.add(inputIconOptionPane, BorderLayout.CENTER);
-                }
-                panel9.add(panel8, "cell 1 6");
+        panel5.setBorder(LineBorder.createGrayLineBorder());
+        panel5.setLayout(new BorderLayout());
 
-                //---- inputIconShowDialogLabel ----
-                inputIconShowDialogLabel.setTitleLabel(inputIconLabel);
-                inputIconShowDialogLabel.setOptionPane(inputIconOptionPane);
-                panel9.add(inputIconShowDialogLabel, "cell 1 6");
+        //---- warningOptionPane ----
+        warningOptionPane.setMessageType(JOptionPane.WARNING_MESSAGE);
+        warningOptionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        warningOptionPane.setMessage("<html>I like <b>bold</b>,<br> and I like <i>italic</i>,<br> and I like to have<br> many lines.<br> Lots of lines.");
+        panel5.add(warningOptionPane, BorderLayout.CENTER);
 
-                //---- customLabel ----
-                customLabel.setText("Custom");
-                panel9.add(customLabel, "cell 0 7");
+        panel9.add(panel5, "cell 1 4");
 
-                //======== panel6 ========
-                {
-                    panel6.setBorder(LineBorder.createGrayLineBorder());
-                    panel6.setLayout(new BorderLayout());
+        //---- warningShowDialogLabel ----
+        warningShowDialogLabel.setOptionPane(warningOptionPane);
+        warningShowDialogLabel.setTitleLabel(warningLabel);
+        panel9.add(warningShowDialogLabel, "cell 1 4");
 
-                    //---- customOptionPane ----
-                    customOptionPane.setIcon(UIManager.getIcon("Tree.leafIcon"));
-                    panel6.add(customOptionPane, BorderLayout.CENTER);
-                }
-                panel9.add(panel6, "cell 1 7");
+        //---- inputLabel ----
+        inputLabel.setText("Input");
+        panel9.add(inputLabel, "cell 0 5");
 
-                //---- customShowDialogLabel ----
-                customShowDialogLabel.setOptionPane(customOptionPane);
-                customShowDialogLabel.setTitleLabel(customLabel);
-                panel9.add(customShowDialogLabel, "cell 1 7");
-            }
-            scrollPane1.setViewportView(panel9);
-        }
+        //======== panel7 ========
+
+        panel7.setBorder(LineBorder.createGrayLineBorder());
+        panel7.setLayout(new BorderLayout());
+
+        //---- inputOptionPane ----
+        inputOptionPane.setWantsInput(true);
+        inputOptionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        inputOptionPane.setMessage("Enter whatever you want:");
+        panel7.add(inputOptionPane, BorderLayout.CENTER);
+
+        panel9.add(panel7, "cell 1 5");
+
+        //---- inputShowDialogLabel ----
+        inputShowDialogLabel.setOptionPane(inputOptionPane);
+        inputShowDialogLabel.setTitleLabel(inputLabel);
+        panel9.add(inputShowDialogLabel, "cell 1 5");
+
+        //---- inputIconLabel ----
+        inputIconLabel.setText("Input + icon");
+        panel9.add(inputIconLabel, "cell 0 6");
+
+        //======== panel8 ========
+
+        panel8.setBorder(LineBorder.createGrayLineBorder());
+        panel8.setLayout(new BorderLayout());
+
+        //---- inputIconOptionPane ----
+        inputIconOptionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+        inputIconOptionPane.setWantsInput(true);
+        inputIconOptionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        inputIconOptionPane.setMessage("Enter something:");
+        panel8.add(inputIconOptionPane, BorderLayout.CENTER);
+
+        panel9.add(panel8, "cell 1 6");
+
+        //---- inputIconShowDialogLabel ----
+        inputIconShowDialogLabel.setTitleLabel(inputIconLabel);
+        inputIconShowDialogLabel.setOptionPane(inputIconOptionPane);
+        panel9.add(inputIconShowDialogLabel, "cell 1 6");
+
+        //---- customLabel ----
+        customLabel.setText("Custom");
+        panel9.add(customLabel, "cell 0 7");
+
+        //======== panel6 ========
+
+        panel6.setBorder(LineBorder.createGrayLineBorder());
+        panel6.setLayout(new BorderLayout());
+
+        //---- customOptionPane ----
+        customOptionPane.setIcon(UIManager.getIcon("Tree.leafIcon"));
+        panel6.add(customOptionPane, BorderLayout.CENTER);
+
+        panel9.add(panel6, "cell 1 7");
+
+        //---- customShowDialogLabel ----
+        customShowDialogLabel.setOptionPane(customOptionPane);
+        customShowDialogLabel.setTitleLabel(customLabel);
+        panel9.add(customShowDialogLabel, "cell 1 7");
+
+        scrollPane1.setViewportView(panel9);
         add(scrollPane1, BorderLayout.CENTER);
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+
     private OptionPanePanel.ShowDialogLinkLabel plainShowDialogLabel;
     private JCheckBox showTitleBarIconCheckBox;
     private ShowDialogLinkLabel errorShowDialogLabel;
     private ShowDialogLinkLabel informationShowDialogLabel;
     private JOptionPane customOptionPane;
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
+
 
     //---- class ShowDialogLinkLabel ------------------------------------------
 
+    @Getter
+    @Setter
     private static class ShowDialogLinkLabel
             extends JLabel {
         private JLabel titleLabel;
@@ -355,22 +353,5 @@ public class OptionPanePanel extends JPanel {
             }
         }
 
-        @SuppressWarnings("unused")
-        public JLabel getTitleLabel() {
-            return titleLabel;
-        }
-
-        public void setTitleLabel(JLabel titleLabel) {
-            this.titleLabel = titleLabel;
-        }
-
-        @SuppressWarnings("unused")
-        public JOptionPane getOptionPane() {
-            return optionPane;
-        }
-
-        public void setOptionPane(JOptionPane optionPane) {
-            this.optionPane = optionPane;
-        }
     }
 }

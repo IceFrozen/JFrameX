@@ -12,7 +12,6 @@ import java.awt.*;
 @Component
 @SettingMenu(value = "app.setting.item.components.container", category = "app.setting.item.category.components", toolTipText = "app.setting.item.components.container.toolTipText")
 public class ContainerComponentsPanel extends JPanel {
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     private JProgressBar progressBar3;
     private JProgressBar progressBar4;
     private JSlider slider3;
@@ -26,22 +25,21 @@ public class ContainerComponentsPanel extends JPanel {
 
     private void changeProgress() {
         int value = slider3.getValue();
-        progressBar1.setValue( value );
-        progressBar2.setValue( value );
-        progressBar3.setValue( value );
-        progressBar4.setValue( value );
+        progressBar1.setValue(value);
+        progressBar2.setValue(value);
+        progressBar3.setValue(value);
+        progressBar4.setValue(value);
     }
 
     private void indeterminateCheckBoxActionPerformed() {
         boolean indeterminate = indeterminateCheckBox.isSelected();
-        progressBar1.setIndeterminate( indeterminate );
-        progressBar2.setIndeterminate( indeterminate );
-        progressBar3.setIndeterminate( indeterminate );
-        progressBar4.setIndeterminate( indeterminate );
+        progressBar1.setIndeterminate(indeterminate);
+        progressBar2.setIndeterminate(indeterminate);
+        progressBar3.setIndeterminate(indeterminate);
+        progressBar4.setIndeterminate(indeterminate);
     }
 
     private void initComponents(ResourceLoaderManager resources) {
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         JLabel scrollPaneLabel = new JLabel();
         JScrollPane scrollPane13 = new JScrollPane();
         JPanel panel1 = new JPanel();
@@ -568,8 +566,8 @@ public class ContainerComponentsPanel extends JPanel {
                     splitPaneLabel, splitPane3,
             };
 
-            for( java.awt.Component c : components )
-                c.setVisible( false );
+            for (java.awt.Component c : components)
+                c.setVisible(false);
         }
     }
 
