@@ -1,13 +1,14 @@
 package cn.ximuli.jframex.ui.login;
 
 import cn.ximuli.jframex.model.LoggedInUser;
+import cn.ximuli.jframex.service.LoginService;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.event.UserLoginEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.FlatLightLaf;
+import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +16,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.time.LocalDateTime;
 
 @Component
-public class LoginFrame2 extends JFrame {
+@Slf4j
+public class LoginFrame extends JFrame {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JCheckBox rememberCheckbox;
@@ -27,9 +28,12 @@ public class LoginFrame2 extends JFrame {
     private JLabel forgetPasswordLink;
     private ResourceLoaderManager resources;
 
-    public LoginFrame2(ResourceLoaderManager resources) {
+    private LoginService loginService;
+
+    public LoginFrame(ResourceLoaderManager resources, LoginService loginService) {
         this.resources = resources;
         this.setVisible(false);
+        this.loginService = loginService;
         initializeUI();
     }
 
@@ -37,12 +41,9 @@ public class LoginFrame2 extends JFrame {
         setTitle(I18nHelper.getMessage("app.login.title"));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setUndecorated(true); // Remove title bar and borders
-
-
         Dimension windowSize = MainFrame.getScreenRatioSize();
-        int windowWidth = windowSize.width / 3;
-        int windowHeight = windowSize.height / 3 ; // Reserve space for progress bar
-
+        int windowHeight = Math.max(windowSize.height / 3 , 300) ; // Reserve space for progress bar
+        int windowWidth = windowHeight * 2;
         setSize(windowWidth, windowHeight);
         setLocationRelativeTo(null);
 
@@ -67,8 +68,6 @@ public class LoginFrame2 extends JFrame {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
                 Image backImage = resources.getImage("loginPanel");
-                Image icon = resources.getImage("icon_bottom_right_dark");
-
                 // Draw background image without stretching (centered)
                 int width = getWidth();
                 int height = getHeight();
@@ -92,28 +91,29 @@ public class LoginFrame2 extends JFrame {
             }
         };
 
-        JPanel illustrationPanel2 = new LoginPanel(resources.getImage("icon_bottom_right_dark"));
-
         illustrationPanel.setBackground(new Color(57, 141, 215)); // Blue background
         mainPanel.add(illustrationPanel, "grow");
-        //mainPanel.add(illustrationPanel2, "grow");
 
         // Right panel (login form)
-        JPanel formPanel = new JPanel(new MigLayout("wrap 2, fillx, insets 20", "[right][grow]", "30[]10[]20[]20[]20[]30")); // Adjusted for new row
+        int insetValue = (int) (windowHeight * 0.05); // 5% of window height as inset
+        JPanel formPanel = new JPanel(new MigLayout("wrap 2, fillx, insets " + insetValue, "[right][grow]", "3%[]3%[]3%[]3%[]3%[]")); // Dynamic row heights
+        //JPanel formPanel = new JPanel(new MigLayout("wrap 2, fillx, insets 20", "[right][grow]", "[][][]10[][][]")); // Adjusted for new row
         formPanel.setBackground(Color.WHITE);
         formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Title
         JLabel titleLabel = new JLabel(I18nHelper.getMessage("app.login.title"));
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 46));
+        Font font = UIManager.getFont("defaultFont");
+
+        titleLabel.setFont(new Font(font.getName(), Font.BOLD,  font.getSize()  * 2));
         formPanel.add(titleLabel, "span 2, align center");
         JLabel subtitleLabel = new JLabel(I18nHelper.getMessage("app.login.subtitle"));
-        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        subtitleLabel.setFont(new Font(font.getName(), Font.BOLD, font.getSize() + 5));
         formPanel.add(subtitleLabel, "span 2, align center");
 
         // Username
         JLabel usernameLabel = new JLabel(I18nHelper.getMessage("app.login.label.username"));
-        usernameLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        usernameLabel.setFont(new Font(font.getName(), Font.PLAIN, font.getSize() ));
         usernameField = new JTextField(20);
         usernameField.setPreferredSize(new Dimension(usernameField.getPreferredSize().width, usernameField.getPreferredSize().height + 15)); // Wider inp
         usernameField.putClientProperty("JTextField.placeholderText", I18nHelper.getMessage("app.login.username.placeholder"));
@@ -122,7 +122,7 @@ public class LoginFrame2 extends JFrame {
 
         // Password
         JLabel passwordLabel = new JLabel(I18nHelper.getMessage("app.login.password"));
-        passwordLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        passwordLabel.setFont(new Font("Segoe UI", Font.PLAIN, font.getSize() ));
         passwordField = new JPasswordField(20);
         passwordField.putClientProperty("JTextField.placeholderText", I18nHelper.getMessage("app.login.password.placeholder"));
         passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, passwordField.getPreferredSize().height + 15)); // Wider input field
@@ -136,7 +136,7 @@ public class LoginFrame2 extends JFrame {
         forgetPasswordLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
         forgetPasswordLink.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                JOptionPane.showMessageDialog(LoginFrame2.this, I18nHelper.getMessage("app.login.forget.message"));
+                JOptionPane.showMessageDialog(LoginFrame.this, I18nHelper.getMessage("app.login.forget.message"));
             }
         });
         formPanel.add(rememberCheckbox, "align center");
@@ -144,8 +144,8 @@ public class LoginFrame2 extends JFrame {
 
         // Login and Cancel Buttons
         loginButton = new JButton(I18nHelper.getMessage("app.login.button"));
-        loginButton.setFont(new Font("Segoe UI", Font.BOLD, 16)); // Increased font size
-        loginButton.setBackground(new Color(0, 120, 215));
+        loginButton.setFont(new Font(font.getName(), Font.BOLD, font.getSize() + 2)); // Increased font size
+        loginButton.setBackground(new Color(57, 141, 215));
         loginButton.setForeground(Color.WHITE);
         loginButton.setFocusPainted(false);
         loginButton.putClientProperty("JButton.buttonType", "roundRect"); // Round corners
@@ -154,12 +154,13 @@ public class LoginFrame2 extends JFrame {
         loginButton.addActionListener(e -> handleLogin());
 
         cancelButton = new JButton(I18nHelper.getMessage("app.login.cancel"));
-        cancelButton.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        cancelButton.setBackground(new Color(0, 120, 215)); // Gray background for cancel
+        cancelButton.setFont(new Font(font.getName(), Font.BOLD, font.getSize() + 2));
+        cancelButton.setBackground(new Color(57, 141, 215)); // Gray background for cancel
         cancelButton.setForeground(Color.WHITE);
         cancelButton.setFocusPainted(false);
         cancelButton.putClientProperty("JButton.buttonType", "roundRect");
         cancelButton.putClientProperty("JButton.arc", 10);
+
         cancelButton.setPreferredSize(new Dimension(150, 40));
         cancelButton.addActionListener(e -> System.exit(0)); // Close the frame on cancel
         JPanel buttonPanel = new JPanel(new MigLayout("fill, insets 0", "[]", "[]"));
@@ -174,6 +175,18 @@ public class LoginFrame2 extends JFrame {
     private void handleLogin() {
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword()).trim();
-        FrameManager.publishEvent(new UserLoginEvent(new LoggedInUser(username, password, LocalDateTime.now().plusHours(1))));
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, I18nHelper.getMessage("app.login.message.empty"));
+            return;
+        }
+
+        LoggedInUser login = loginService.login(username, password);
+        if (login == null) {
+            JOptionPane.showMessageDialog(this, I18nHelper.getMessage("app.message.login.invalidate")
+                    , I18nHelper.getMessage("app.message.title.error"),
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        FrameManager.publishEvent(new UserLoginEvent(login));
     }
 }

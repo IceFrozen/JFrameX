@@ -4,11 +4,10 @@ import cn.ximuli.jframex.model.LoggedInUser;
 import cn.ximuli.jframex.ui.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
-import cn.ximuli.jframex.ui.login.LoginFrame2;
+import cn.ximuli.jframex.ui.login.LoginFrame;
 import cn.ximuli.jframex.common.constants.Status;
 import cn.ximuli.jframex.ui.panels.StatePanel;
 import cn.ximuli.jframex.ui.event.*;
-import cn.ximuli.jframex.ui.login.LoginDialog;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.storage.JFramePref;
 import com.formdev.flatlaf.FlatLaf;
@@ -33,20 +32,18 @@ public class FrameManager {
     public static final String KEY_SYSTEM_SCALE_FACTOR = "systemScaleFactor";
     private volatile Status status = Status.NONE;
     private final MainFrame mainFrame;
-    private final LoginDialog loginDialog;
-    private final LoginFrame2 loginFrame2;
+    private final LoginFrame loginFrame;
     private final ResourceLoaderManager loaderManager;
     private final StatePanel statePanel;
     private final DesktopPanel desktopPanel;
 
     @Autowired
-    public FrameManager(MainFrame mainFrame, LoginDialog loginDialog, LoginFrame2 loginFrame2, ResourceLoaderManager loaderManager, StatePanel statePanel, DesktopPanel desktopPanel) {
+    public FrameManager(MainFrame mainFrame, LoginFrame loginFrame, ResourceLoaderManager loaderManager, StatePanel statePanel, DesktopPanel desktopPanel) {
         this.mainFrame = mainFrame;
-        this.loginDialog = loginDialog;
         this.loaderManager = loaderManager;
         this.statePanel = statePanel;
         this.desktopPanel = desktopPanel;
-        this.loginFrame2 = loginFrame2;
+        this.loginFrame = loginFrame;
     }
 
     @EventListener(ContextRefreshedEvent.class)
@@ -72,27 +69,21 @@ public class FrameManager {
     public void resourceLoadFinish(ResourceReadyEvent readyEvent) {
         if (this.status == Status.LOADING) {
             AppSplashScreen.close();
-
             LoggedInUser user = JFramePref.getUser();
             if (user != null && !user.isExpired()) {
                 userLogin(new UserLoginEvent(user));
             } else {
-                loginFrame2.setVisible(true);
-//                loginDialog.initialize();
-//                loginDialog.setVisible(true);
+                loginFrame.setVisible(true);
                 updateStatus(Status.SIGN_UP);
             }
-
         }
     }
 
     @EventListener(UserLoginEvent.class)
     public void userLogin(UserLoginEvent userLoginEvent) {
         JFramePref.setUser(userLoginEvent.getLoggedInUser());
-        loginDialog.setVisible(false);
         mainFrame.setVisible(true);
         updateStatus(Status.STARTED);
-
     }
 
     @EventListener(MenuButtonClickEvent.class)
@@ -101,7 +92,6 @@ public class FrameManager {
         Object aClass = jMenuItem.getClientProperty("class");
         createIFrame((Class<?>) aClass);
     }
-
 
     @EventListener(CreateFrameEvent.class)
     public void createFrameEvent(CreateFrameEvent<? extends JInternalFrame> event) {
@@ -151,8 +141,6 @@ public class FrameManager {
             int nextFrameX = fSpacing;
             int nextFrameY = fSpacing;
             iFrame.setLocation(nextFrameX, nextFrameY);
-//            iFrame.setResizable(true);
-//            iFrame.setMaximizable(false);
             iFrame.setVisible(true);
             iFrame.setSelected(true);
         } catch (Exception e) {
@@ -183,11 +171,9 @@ public class FrameManager {
        showJOptionPane(parentComponent, message, JOptionPane.PLAIN_MESSAGE, e);
     }
 
-
     public static void showJOptionPane(java.awt.Component parentComponent, String message, int type, ActionEvent e) {
         SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(parentComponent, e.getActionCommand(), message, type));
     }
-
 
     public static void registerKeyAction(int key, BiConsumer<MainFrame, ActionEvent> keyAction) {
         MainFrame main = SpringUtils.getBean(MainFrame.class);
@@ -249,17 +235,18 @@ public class FrameManager {
                 "Change system scale factor to "
                         + (scaleFactor != null ? scaleFactor : "default")
                         + " and exit?",
-                frame.getTitle(), JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
+                frame.getTitle(), JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
             return;
+        }
 
         if (scaleFactor != null)
             JFramePref.state.put(KEY_SYSTEM_SCALE_FACTOR, scaleFactor);
-        else
+        else {
             JFramePref.state.remove(KEY_SYSTEM_SCALE_FACTOR);
+        }
 
         System.exit(0);
     }
-
 
     public synchronized void updateStatus(Status status) {
         this.status = status;
