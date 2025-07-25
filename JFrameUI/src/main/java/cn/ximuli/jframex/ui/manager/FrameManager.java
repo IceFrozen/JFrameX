@@ -84,6 +84,7 @@ public class FrameManager {
         JFramePref.setUser(userLoginEvent.getLoggedInUser());
         mainFrame.setVisible(true);
         updateStatus(Status.STARTED);
+        loginFrame.reset();
     }
 
     @EventListener(MenuButtonClickEvent.class)

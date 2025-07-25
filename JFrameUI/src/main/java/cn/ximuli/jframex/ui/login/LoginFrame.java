@@ -10,13 +10,15 @@ import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import com.formdev.flatlaf.FlatClientProperties;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @Slf4j
@@ -43,7 +45,7 @@ public class LoginFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setUndecorated(true); // Remove title bar and borders
         Dimension windowSize = MainFrame.getScreenRatioSize();
-        int windowHeight = Math.max(windowSize.height / 3 , 300) ; // Reserve space for progress bar
+        int windowHeight = Math.max(windowSize.height / 3 , 300); // Reserve space for progress bar
         int windowWidth = windowHeight * 2;
         setSize(windowWidth, windowHeight);
         setLocationRelativeTo(null);
@@ -98,7 +100,6 @@ public class LoginFrame extends JFrame {
         // Right panel (login form)
         int insetValue = (int) (windowHeight * 0.05); // 5% of window height as inset
         JPanel formPanel = new JPanel(new MigLayout("wrap 2, fillx, insets " + insetValue, "[right][grow]", "3%[]3%[]3%[]3%[]3%[]")); // Dynamic row heights
-        //JPanel formPanel = new JPanel(new MigLayout("wrap 2, fillx, insets 20", "[right][grow]", "[][][]10[][][]")); // Adjusted for new row
         formPanel.setBackground(Color.WHITE);
         formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -106,7 +107,7 @@ public class LoginFrame extends JFrame {
         JLabel titleLabel = new JLabel(I18nHelper.getMessage("app.login.title"));
         Font font = UIManager.getFont("defaultFont");
 
-        titleLabel.setFont(new Font(font.getName(), Font.BOLD,  font.getSize()  * 2));
+        titleLabel.setFont(new Font(font.getName(), Font.BOLD, font.getSize() * 2));
         formPanel.add(titleLabel, "span 2, align center");
         JLabel subtitleLabel = new JLabel(I18nHelper.getMessage("app.login.subtitle"));
         subtitleLabel.setFont(new Font(font.getName(), Font.BOLD, font.getSize() + 5));
@@ -114,22 +115,27 @@ public class LoginFrame extends JFrame {
 
         // Username
         JLabel usernameLabel = new JLabel(I18nHelper.getMessage("app.login.label.username"));
-        usernameLabel.setFont(new Font(font.getName(), Font.PLAIN, font.getSize() ));
+        usernameLabel.setFont(new Font(font.getName(), Font.PLAIN, font.getSize()));
         usernameField = new JTextField(20);
-        usernameField.setPreferredSize(new Dimension(usernameField.getPreferredSize().width, usernameField.getPreferredSize().height + 15)); // Wider inp
+        usernameField.setPreferredSize(new Dimension(usernameField.getPreferredSize().width, usernameField.getPreferredSize().height + 15)); // Wider input
         usernameField.putClientProperty("JTextField.placeholderText", I18nHelper.getMessage("app.login.username.placeholder"));
         usernameField.putClientProperty("JTextField.leadingIcon", resources.getIcon("icons/user"));
+
+        // Add auto-complete decorator
+        String[] suggestions = loginService.getUserSuggestions(); // Assume this method exists
+        AutoCompleteDecorator.decorate(usernameField, Arrays.asList(suggestions), false);
+
         formPanel.add(usernameField, "span 2, growx");
 
         // Password
         JLabel passwordLabel = new JLabel(I18nHelper.getMessage("app.login.password"));
-        passwordLabel.setFont(new Font("Segoe UI", Font.PLAIN, font.getSize() ));
+        passwordLabel.setFont(new Font("Segoe UI", Font.PLAIN, font.getSize()));
         passwordField = new JPasswordField(20);
         passwordField.putClientProperty("JTextField.placeholderText", I18nHelper.getMessage("app.login.password.placeholder"));
         passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, passwordField.getPreferredSize().height + 15)); // Wider input field
         passwordField.putClientProperty("JTextField.leadingIcon", resources.getIcon("icons/locked")); // Corrected to lock icon
         passwordField.putClientProperty(FlatClientProperties.STYLE, "showRevealButton: true");
-        formPanel.add(passwordField, "span 2 , growx");
+        formPanel.add(passwordField, "span 2, growx");
 
         // Remember and Forget Password in the same row, centered
         rememberCheckbox = new JCheckBox(I18nHelper.getMessage("app.login.remember"));
@@ -161,7 +167,6 @@ public class LoginFrame extends JFrame {
         cancelButton.setFocusPainted(false);
         cancelButton.putClientProperty("JButton.buttonType", "roundRect");
         cancelButton.putClientProperty("JButton.arc", 10);
-
         cancelButton.setPreferredSize(new Dimension(150, 40));
         cancelButton.addActionListener(e -> System.exit(0)); // Close the frame on cancel
         JPanel buttonPanel = new JPanel(new MigLayout("fill, insets 0", "[]", "[]"));
@@ -172,13 +177,16 @@ public class LoginFrame extends JFrame {
         mainPanel.add(formPanel, "grow, align center"); // Center the form panel
         add(mainPanel);
 
-
         // Add enter key to trigger login
         getRootPane().registerKeyboardAction(
                 new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        loginButton.doClick();
+                        if (new String(passwordField.getPassword()).trim().isEmpty()) {
+                            passwordField.requestFocusInWindow(); // Move focus to passwordField if empty
+                        } else {
+                            loginButton.doClick(); // Trigger login if password is not empty
+                        }
                     }
                 },
                 KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
@@ -190,20 +198,57 @@ public class LoginFrame extends JFrame {
     private void handleLogin() {
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword()).trim();
+        // Disable all components at the start of login
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, I18nHelper.getMessage("app.login.message.empty"));
             return;
         }
 
-        LoggedInUser login = loginService.login(username, password);
-        if (login == null) {
-            JOptionPane.showMessageDialog(this, I18nHelper.getMessage("app.message.login.invalidate")
-                    , I18nHelper.getMessage("app.message.title.error"),
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        FrameManager.publishEvent(new UserLoginEvent(login));
+
+        enableOrDisableComponents(false);
+        // Perform login asynchronously
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                Thread.sleep(3000); // Simulate long-running login
+                return loginService.login(username, password);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).thenAcceptAsync(login -> SwingUtilities.invokeLater(() -> {
+            if (login != null) {
+                FrameManager.publishEvent(new UserLoginEvent(login));
+            } else {
+                JOptionPane.showMessageDialog(this, I18nHelper.getMessage("app.message.login.invalidate"),
+                        I18nHelper.getMessage("app.message.title.error"),
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            // Re-enable components after login attempt
+            enableOrDisableComponents(true);
+        }), SwingUtilities::invokeLater).exceptionally(e -> {
+            SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(this, I18nHelper.getMessage("app.message.login.invalidate"),
+                        I18nHelper.getMessage("app.message.title.error"),
+                        JOptionPane.ERROR_MESSAGE);
+                // Re-enable components on exception
+                enableOrDisableComponents(true);
+            });
+            return null;
+        });
     }
 
+    private void enableOrDisableComponents(boolean  enabled) {
+        loginButton.setEnabled(enabled);
+        cancelButton.setEnabled(enabled);
+        usernameField.setEnabled(enabled);
+        passwordField.setEnabled(enabled);
+        forgetPasswordLink.setEnabled(enabled);
+        rememberCheckbox.setEnabled(enabled);
+    }
 
+    public void reset() {
+        enableOrDisableComponents(true);
+        usernameField.setText("");
+        passwordField.setText("");
+        rememberCheckbox.setSelected(false);
+    }
 }

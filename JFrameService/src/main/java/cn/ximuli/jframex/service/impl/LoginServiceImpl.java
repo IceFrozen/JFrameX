@@ -15,4 +15,10 @@ public class LoginServiceImpl implements LoginService {
         }
         return new LoggedInUser(userName, password, LocalDateTime.now().plusDays(1));
     }
+
+    @Override
+    public String[] getUserSuggestions() {
+
+        return new String[]{"abc2", "tdesaz2", "casdt3"};
+    }
 }

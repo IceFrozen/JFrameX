@@ -131,6 +131,11 @@
                 <version>${miglayout.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.swinglabs.swingx</groupId>
+                <artifactId>swingx-all</artifactId>
+                <version>1.6.4</version>
+            </dependency>
 
 
             <!-- 全局单元测试 -->
