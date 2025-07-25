@@ -229,7 +229,7 @@ public class OptionsMenu extends JMenu {
 //                "Use 'Themes' list to try out various themes.",
 //                themesPanel, SwingConstants.LEFT, "hint.themesPanel", optionsMenuHint);
 
-        ToolBar2 toolBar2 = SpringUtils.getBean(ToolBar2.class);
+        ToolBar toolBar = SpringUtils.getBean(ToolBar.class);
         SettingInternalJFrame settingInternalJFrame = SpringUtils.getBean(SettingInternalJFrame.class);
         HintManager.Hint themesHint = new HintManager.Hint(
                 "Use 'Themes' list to try out various themes.",

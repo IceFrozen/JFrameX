@@ -1,14 +1,14 @@
 package cn.ximuli.jframex.ui;
 
-import cn.ximuli.jframex.service.util.SpringUtils;
-import cn.ximuli.jframex.ui.component.SettingInternalJFrame;
+
+import cn.ximuli.jframex.ui.component.ContactDetailsInternalFrame;
 import cn.ximuli.jframex.ui.event.CreateFrameEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.core.env.Environment;
+
 
 
 @SpringBootApplication(scanBasePackages = {"cn.ximuli.jframex"})
@@ -40,6 +40,9 @@ public class Application implements CommandLineRunner {
         public static final String APPLE_AWT_FULL_WINDOW_CONTENT = "apple.awt.fullWindowContent";
         public static final String APPLE_AWT_TRANSPARENT_TITLE_BAR = "apple.awt.transparentTitleBar";
         public static final String APPLE_AWT_WINDOW_TITLE_VISIBLE = "apple.awt.windowTitleVisible";
+        public static final String APPLE_LAF_USE_SCREEN_MENUBAR= "apple.laf.useScreenMenuBar";
+
+
 
 
         public static final String APPLE_AWT_FULL_FULL_SCREENABLE = "apple.awt.fullscreenable";

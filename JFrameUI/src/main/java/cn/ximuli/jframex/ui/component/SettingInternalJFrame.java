@@ -4,7 +4,7 @@ import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.menu.MenuBar;
-import cn.ximuli.jframex.ui.menu.ToolBar2;
+import cn.ximuli.jframex.ui.menu.ToolBar;
 import cn.ximuli.jframex.ui.panels.*;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -56,7 +56,7 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
 
         // create fullWindowContent mode toggle button
         MenuBar menuBar = SpringUtils.getBean(MenuBar.class);
-        ToolBar2 toolBar = SpringUtils.getBean(ToolBar2.class);
+        ToolBar toolBar = SpringUtils.getBean(ToolBar.class);
         Icon expandIcon = resources.getIcon("icons/expand");
         Icon collapseIcon = resources.getIcon("icons/collapse");
         JToggleButton fullWindowContentButton = new JToggleButton(expandIcon);

@@ -1,7 +1,9 @@
 package cn.ximuli.jframex.ui.panels;
 
 import cn.ximuli.jframex.common.utils.DateUtil;
+import cn.ximuli.jframex.model.LoggedInUser;
 import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.storage.JFramePref;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -47,7 +49,7 @@ public class StatePanel extends JPanel {
         gridBagConstraints11.insets = new Insets(0, 5, 0, 5);
         gridBagConstraints11.gridy = 0;
         nowDateLabel = new JLabel();
-        nowDateLabel.setText(DateUtil.formatTime(LocalDateTime.now(), "YYYY-MM-DD"));
+        nowDateLabel.setText(DateUtil.formatTime(LocalDateTime.now(), "yyyy-MM-dd"));
         GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
         gridBagConstraints2.gridx = 7;
         gridBagConstraints2.weightx = 0.0;
@@ -80,8 +82,13 @@ public class StatePanel extends JPanel {
     }
 
     public static JLabel getCzyStateLabel() {
+        LoggedInUser user = JFramePref.getUser();
+        String userName = "Unknown";
+        if (user != null) {
+            userName = user.getUsername();
+        }
         if (czyStateLabel == null) {
-            czyStateLabel = new JLabel(I18nHelper.getMessage("app.mainframe.state.operator") + ":");
+            czyStateLabel = new JLabel(I18nHelper.getMessage("app.mainframe.state.operator") + ":" + userName);
         }
         return czyStateLabel;
     }
@@ -131,7 +138,19 @@ public class StatePanel extends JPanel {
         }
         String finalCurrentContext = currentContext;
         SwingUtilities.invokeLater(() -> this.setStateLabelText(finalCurrentContext));
+    }
 
+    public void updateStats() {
+        LoggedInUser user = JFramePref.getUser();
+        String userName = "Unknown";
+        if (user != null) {
+            userName = user.getUsername();
+        }
+        if (czyStateLabel == null) {
+            czyStateLabel = new JLabel(I18nHelper.getMessage("app.mainframe.state.operator") + ":" + userName);
+        } else {
+            czyStateLabel.setText(I18nHelper.getMessage("app.mainframe.state.operator") + ":" + userName);
+        }
     }
 
     public boolean isFrameSelected(JInternalFrame frame) {

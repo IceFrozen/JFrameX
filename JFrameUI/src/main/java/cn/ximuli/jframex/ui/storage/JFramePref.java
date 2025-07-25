@@ -6,16 +6,19 @@ import com.formdev.flatlaf.util.SystemInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 import java.util.prefs.Preferences;
 
 @Slf4j
 public class JFramePref {
     private static volatile LoggedInUser loggedInUser;
+    private static final int MAX_USER_LIST_SIZE = 10;
 
     private static final String JFRAMEX_STATE_ROOT_PATH = "/JFrameX";
 
     private static final String USER_KEY = "user";
+    private static final String TOKEN_LIST = "user_list";
     public static final Preferences state = Preferences.userRoot().node(JFRAMEX_STATE_ROOT_PATH);
 
     private static final String SPRING_APPLICATION_PROPERTIES = "application.properties";
@@ -53,13 +56,38 @@ public class JFramePref {
     }
 
     
-    public static synchronized void setUser(LoggedInUser loggedInUser) {
+    public static synchronized void setUser(LoggedInUser loggedInUser, boolean rememberMe) {
         JFramePref.loggedInUser = loggedInUser;
         String userJsonStr = JSONUtil.to(loggedInUser);
-        state.put(USER_KEY, userJsonStr);
+        if (rememberMe) {
+            state.put(USER_KEY, userJsonStr);
+            String userListStr = state.get(TOKEN_LIST, "[]");
+            List<String> userList = JSONUtil.fromList(userListStr, String.class);
+            String userName = loggedInUser.getUsername(); // Assume username as identifier
+            if (userList.contains(userName)) {
+                userList.remove(userName);
+            }
+            userList.add(0, userName); // Add to first position
+            // Limit size to 10
+            while (userList.size() > MAX_USER_LIST_SIZE) {
+                userList.remove(userList.size() - 1);
+            }
+            state.put(TOKEN_LIST, JSONUtil.to(userList));
+        }
+    }
+
+    public static void reset() {
+        JFramePref.loggedInUser = null;
+        state.remove(USER_KEY);
     }
 
     public static LoggedInUser getUser() {
         return loggedInUser;
+    }
+
+    public static List<String> getHistoryUserList() {
+        String userListStr = state.get(TOKEN_LIST, "[]");
+        List<String> userList = JSONUtil.fromList(userListStr, String.class);
+        return userList;
     }
 }

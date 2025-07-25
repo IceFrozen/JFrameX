@@ -7,6 +7,7 @@ import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.event.UserLoginEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
+import cn.ximuli.jframex.ui.storage.JFramePref;
 import com.formdev.flatlaf.FlatClientProperties;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
@@ -18,6 +19,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Component
@@ -122,8 +124,8 @@ public class LoginFrame extends JFrame {
         usernameField.putClientProperty("JTextField.leadingIcon", resources.getIcon("icons/user"));
 
         // Add auto-complete decorator
-        String[] suggestions = loginService.getUserSuggestions(); // Assume this method exists
-        AutoCompleteDecorator.decorate(usernameField, Arrays.asList(suggestions), false);
+        List<String> suggestions = JFramePref.getHistoryUserList();
+        AutoCompleteDecorator.decorate(usernameField, suggestions, false);
 
         formPanel.add(usernameField, "span 2, growx");
 
@@ -209,14 +211,14 @@ public class LoginFrame extends JFrame {
         // Perform login asynchronously
         CompletableFuture.supplyAsync(() -> {
             try {
-                Thread.sleep(3000); // Simulate long-running login
+                Thread.sleep(1000); // Simulate long-running login
                 return loginService.login(username, password);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }).thenAcceptAsync(login -> SwingUtilities.invokeLater(() -> {
             if (login != null) {
-                FrameManager.publishEvent(new UserLoginEvent(login));
+                FrameManager.publishEvent(new UserLoginEvent(login, rememberCheckbox.isSelected()));
             } else {
                 JOptionPane.showMessageDialog(this, I18nHelper.getMessage("app.message.login.invalidate"),
                         I18nHelper.getMessage("app.message.title.error"),

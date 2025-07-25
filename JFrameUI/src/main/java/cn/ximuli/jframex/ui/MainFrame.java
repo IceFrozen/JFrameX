@@ -6,7 +6,6 @@ import cn.ximuli.jframex.ui.panels.StatePanel;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.menu.MenuBar;
 import cn.ximuli.jframex.ui.menu.ToolBar;
-import cn.ximuli.jframex.ui.menu.ToolBar2;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,6 @@ public class MainFrame extends JFrame {
 
 
     private final ToolBar toolBar;
-    private final JPanel toolBar2;
 
     private final DesktopPanel desktopPanel;
 
@@ -39,10 +37,9 @@ public class MainFrame extends JFrame {
     private final ResourceLoaderManager resources;
 
     @Autowired
-    public MainFrame(ResourceLoaderManager resources, DesktopPanel desktopPanel, ToolBar toolBar, ToolBar2 toolBar2, StatePanel statePanel, MenuBar menuBar) throws HeadlessException {
+    public MainFrame(ResourceLoaderManager resources, DesktopPanel desktopPanel, ToolBar toolBar,  StatePanel statePanel, MenuBar menuBar) throws HeadlessException {
         this.desktopPanel = desktopPanel;
         this.toolBar = toolBar;
-        this.toolBar2 = toolBar2;
         this.statePanel = statePanel;
         this.menuBar = menuBar;
         this.resources = resources;
@@ -55,8 +52,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameContentPane = new JPanel();
         frameContentPane.setLayout(new BorderLayout());
-        frameContentPane.add(toolBar2, PAGE_START);
-        //frameContentPane.add(toolBar, NORTH);
+        frameContentPane.add(toolBar, PAGE_START);
         frameContentPane.add(desktopPanel, CENTER);
         frameContentPane.add(statePanel, SOUTH);
         this.setContentPane(frameContentPane);
@@ -79,6 +75,7 @@ public class MainFrame extends JFrame {
                     setTitle(null);
                 }
             }
+
             // enable full screen mode for this window (for Java 8 - 10; not necessary for Java 11+)
             if (!SystemInfo.isJava_11_orLater) {
                 rootPane.putClientProperty(Application.MAC.APPLE_AWT_FULL_FULL_SCREENABLE, ConvertUtil.toBool(System.getProperty(Application.MAC.APPLE_AWT_FULL_FULL_SCREENABLE, "false")));

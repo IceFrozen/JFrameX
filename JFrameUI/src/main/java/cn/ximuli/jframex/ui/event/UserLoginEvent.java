@@ -6,9 +6,11 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 public class UserLoginEvent extends ApplicationEvent {
     private LoggedInUser loggedInUser;
-    public UserLoginEvent(LoggedInUser loggedInUser) {
+    private boolean rememberMe;
+    public UserLoginEvent(LoggedInUser loggedInUser, boolean rememberMe) {
         super(loggedInUser);
         this.loggedInUser = loggedInUser;
+        this.rememberMe = rememberMe;
     }
 }
 

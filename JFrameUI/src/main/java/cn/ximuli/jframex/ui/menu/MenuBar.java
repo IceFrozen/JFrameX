@@ -1,6 +1,8 @@
 package cn.ximuli.jframex.ui.menu;
 
+import cn.ximuli.jframex.common.utils.ConvertUtil;
 import cn.ximuli.jframex.common.utils.StringUtil;
+import cn.ximuli.jframex.ui.Application;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -35,7 +37,6 @@ public class MenuBar extends JMenuBar {
     }
 
     private void initialize() {
-        this.setSize(new Dimension(600, 24));
         for (JMenu jMenu : menuList) {
             JMenuMeta jMenuMeta = AnnotationUtils.findAnnotation(jMenu.getClass(), JMenuMeta.class);
             if (StringUtil.isNoneBlank(jMenuMeta.icon())) {
@@ -46,16 +47,10 @@ public class MenuBar extends JMenuBar {
             jMenu.setMnemonic(jMenuMeta.shortKey());
             add(jMenu);
         }
-
-        // add "Users" button to menubar
-        FlatButton usersButton = new FlatButton();
-        usersButton.setIcon(new FlatSVGIcon("com/formdev/flatlaf/demo1/icons/users.svg"));
-        usersButton.setButtonType(FlatButton.ButtonType.toolBarButton);
-        usersButton.setFocusable(false);
-        usersButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "Hello User! How are you?", "User", JOptionPane.INFORMATION_MESSAGE));
-        add(Box.createVerticalGlue());
-        add(usersButton);
-
+        boolean fullScreenableBar = ConvertUtil.toBool(System.getProperty(Application.MAC.APPLE_LAF_USE_SCREEN_MENUBAR));
+        if (!fullScreenableBar) {
+            setBorder(BorderFactory.createEmptyBorder(14, 80, 5, 0));
+        }
     }
     private List<JMenu> orderMenu(List<JMenu> menuList) {
         menuList.sort(Comparator.comparingInt(this::getOrder));

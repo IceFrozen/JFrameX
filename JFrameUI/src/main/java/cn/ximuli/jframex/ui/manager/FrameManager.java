@@ -71,20 +71,44 @@ public class FrameManager {
             AppSplashScreen.close();
             LoggedInUser user = JFramePref.getUser();
             if (user != null && !user.isExpired()) {
-                userLogin(new UserLoginEvent(user));
+                userLogin(new UserLoginEvent(user, false));
             } else {
                 loginFrame.setVisible(true);
                 updateStatus(Status.SIGN_UP);
+//                mainFrame.setVisible(true);
             }
         }
     }
 
     @EventListener(UserLoginEvent.class)
     public void userLogin(UserLoginEvent userLoginEvent) {
-        JFramePref.setUser(userLoginEvent.getLoggedInUser());
+        JFramePref.setUser(userLoginEvent.getLoggedInUser(), userLoginEvent.isRememberMe());
         mainFrame.setVisible(true);
         updateStatus(Status.STARTED);
+        statePanel.updateStats();
         loginFrame.reset();
+        loginFrame.dispose();
+    }
+
+    @EventListener(UserLogoutEvent.class)
+    public void userLogin(UserLogoutEvent userLogoutEvent) {
+        JFramePref.reset();
+        java.awt.Component[] components = desktopPanel.getComponents();
+        for (java.awt.Component comp : components) {
+            if (comp instanceof JInternalFrame) {
+                ((JInternalFrame) comp).dispose();
+            }
+        }
+
+        mainFrame.setVisible(false);
+        updateStatus(Status.SIGN_UP);
+        JOptionPane.showMessageDialog(mainFrame,
+                I18nHelper.getMessage("app.logout.success"),
+                I18nHelper.getMessage("app.logout.title"),
+                JOptionPane.INFORMATION_MESSAGE);
+
+        loginFrame.reset();
+        loginFrame.setVisible(true);
     }
 
     @EventListener(MenuButtonClickEvent.class)
@@ -123,8 +147,6 @@ public class FrameManager {
         }
     }
 
-
-
     public JInternalFrame createIFrame(Class<?> clazz, Object... args) {
         JInternalFrame iFrame = (JInternalFrame) SpringUtils.getBean(clazz, args);
         try {
@@ -154,7 +176,6 @@ public class FrameManager {
     @EventListener
     public void JInternalFrameSelected(FrameSelectedEvent e) {
         SwingUtilities.invokeLater(() -> {
-            String statusPanelContext = I18nHelper.getMessage("app.mainframe.state.selected");
             if (e.isSelected() && !statePanel.isFrameSelected(e.getJInternalFrame())) {
                 updateStatuePanel(e.getJInternalFrame());
             } else {
@@ -220,6 +241,7 @@ public class FrameManager {
     }
 
     private static void registerSystemScaleFactor(JFrame frame, String keyStrokeStr, String scaleFactor) {
+        log.info("register:frame: {}, keyStrokeStr:{}, scaleFactor: {}", frame, keyStrokeStr, scaleFactor);
         KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStrokeStr);
         if (keyStroke == null)
             throw new IllegalArgumentException("Invalid key stroke '" + keyStrokeStr + "'");
