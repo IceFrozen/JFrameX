@@ -2,7 +2,7 @@ package cn.ximuli.jframex.ui.component.themes;
 
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.storage.JFramePref;
-import cn.ximuli.jframex.ui.theme.ThemeUIManager;
+import cn.ximuli.jframex.ui.manager.ThemeUIManager;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;

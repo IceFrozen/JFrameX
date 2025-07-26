@@ -60,6 +60,11 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
         return Arrays.stream(beanNamesForAnnotation).map(name -> beanFactory.getBean(name, clz)).toList();
     }
 
+    public static <T> List<T> getBeanForType(Class<T> clz) throws BeansException {
+        String[] beanNamesForType = beanFactory.getBeanNamesForType(clz);
+        return Arrays.stream(beanNamesForType).map(name -> beanFactory.getBean(name, clz)).toList();
+    }
+
 
     public static boolean containsBean(String name) {
         return beanFactory.containsBean(name);

@@ -1,11 +1,11 @@
 package cn.ximuli.jframex.ui;
 
 import cn.ximuli.jframex.common.utils.ConvertUtil;
-import cn.ximuli.jframex.ui.panels.DesktopPanel;
-import cn.ximuli.jframex.ui.panels.StatePanel;
+import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
+import cn.ximuli.jframex.ui.component.panels.StatePanel;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
-import cn.ximuli.jframex.ui.menu.MenuBar;
-import cn.ximuli.jframex.ui.menu.ToolBar;
+import cn.ximuli.jframex.ui.component.menu.MenuBar;
+import cn.ximuli.jframex.ui.component.menu.ToolBar;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +18,17 @@ import javax.swing.*;
 
 @Component
 public class MainFrame extends JFrame {
-    private static final double SCREEN_RATIO_WIDTH = 0.75;  // 宽度占屏幕75%
-    private static final double SCREEN_RATIO_HEIGHT = 0.90; // 高度占屏幕65%
     @Serial
     private static final long serialVersionUID = 1L;
 
+    private static final double SCREEN_RATIO_WIDTH = 0.75;  // 宽度占屏幕75%
+    private static final double SCREEN_RATIO_HEIGHT = 0.90; // 高度占屏幕65%
+
     private final JPanel frameContentPane;
-
-
     private final ToolBar toolBar;
-
     private final DesktopPanel desktopPanel;
-
     private final StatePanel statePanel;
-
     private final MenuBar menuBar;
-
     private final ResourceLoaderManager resources;
 
     @Autowired
@@ -90,9 +85,4 @@ public class MainFrame extends JFrame {
         return new Dimension(adaptedWidth, adaptedHeight);
     }
 
-
-
-    public StatePanel getStatePanel() {
-        return this.statePanel;
-    }
 }

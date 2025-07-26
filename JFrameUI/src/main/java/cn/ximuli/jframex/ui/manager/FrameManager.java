@@ -1,12 +1,13 @@
 package cn.ximuli.jframex.ui.manager;
 
 import cn.ximuli.jframex.model.LoggedInUser;
-import cn.ximuli.jframex.ui.panels.DesktopPanel;
+import cn.ximuli.jframex.ui.AppSplashScreen;
+import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.login.LoginFrame;
 import cn.ximuli.jframex.common.constants.Status;
-import cn.ximuli.jframex.ui.panels.StatePanel;
+import cn.ximuli.jframex.ui.component.panels.StatePanel;
 import cn.ximuli.jframex.ui.event.*;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.storage.JFramePref;
@@ -91,15 +92,8 @@ public class FrameManager {
     }
 
     @EventListener(UserLogoutEvent.class)
-    public void userLogin(UserLogoutEvent userLogoutEvent) {
+    public void userLogout(UserLogoutEvent userLogoutEvent) {
         JFramePref.reset();
-        java.awt.Component[] components = desktopPanel.getComponents();
-        for (java.awt.Component comp : components) {
-            if (comp instanceof JInternalFrame) {
-                ((JInternalFrame) comp).dispose();
-            }
-        }
-
         mainFrame.setVisible(false);
         updateStatus(Status.SIGN_UP);
         JOptionPane.showMessageDialog(mainFrame,

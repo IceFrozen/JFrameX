@@ -1,8 +1,7 @@
 package cn.ximuli.jframex.ui;
 
-import cn.ximuli.jframex.ui.manager.AppSplashScreen;
 import cn.ximuli.jframex.ui.storage.JFramePref;
-import cn.ximuli.jframex.ui.theme.ThemeUIManager;
+import cn.ximuli.jframex.ui.manager.ThemeUIManager;
 import com.formdev.flatlaf.util.SystemInfo;
 import lombok.extern.slf4j.Slf4j;
 

@@ -3,6 +3,7 @@ package cn.ximuli.jframex.ui.manager;
 import cn.ximuli.jframex.common.constants.CharConstants;
 import cn.ximuli.jframex.common.utils.FileUtil;
 import cn.ximuli.jframex.common.utils.StringUtil;
+import cn.ximuli.jframex.ui.AppSplashScreen;
 import cn.ximuli.jframex.ui.Application;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.event.ProgressEvent;

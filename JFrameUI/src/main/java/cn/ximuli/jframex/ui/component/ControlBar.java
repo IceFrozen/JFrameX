@@ -1,7 +1,7 @@
 package cn.ximuli.jframex.ui.component;
 
 import cn.ximuli.jframex.ui.manager.FrameManager;
-import cn.ximuli.jframex.ui.theme.ThemeUIManager;
+import cn.ximuli.jframex.ui.manager.ThemeUIManager;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
@@ -23,16 +23,16 @@ import java.awt.event.*;
 @Slf4j
 public class ControlBar extends JPanel {
     private JInternalFrame parentFrame;
-    private JTabbedPane tabbedPane;
+    private Component component;
     private JSeparator separator1;
     private LookAndFeelsComboBox lookAndFeelComboBox;
     private JCheckBox rightToLeftCheckBox;
     private JCheckBox enabledCheckBox;
     private JLabel infoLabel;
 
-    public ControlBar(JInternalFrame parentFrame, JTabbedPane tabbedPane) {
+    public ControlBar(JInternalFrame parentFrame, Component component) {
         this.parentFrame = parentFrame;
-        this.tabbedPane = tabbedPane;
+        this.component = component;
         initComponents();
         // remove top insets
         MigLayout layout = (MigLayout) getLayout();
@@ -162,8 +162,8 @@ public class ControlBar extends JPanel {
     }
 
     private void enabledChanged() {
-        enabledDisable(tabbedPane, enabledCheckBox.isSelected());
-        tabbedPane.repaint();
+        enabledDisable((Container) component, enabledCheckBox.isSelected());
+        component.repaint();
     }
 
     private void enabledDisable(Container container, boolean enabled) {

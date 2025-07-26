@@ -1,15 +1,9 @@
 package cn.ximuli.jframex.ui;
 
-
-import cn.ximuli.jframex.ui.component.ContactDetailsInternalFrame;
-import cn.ximuli.jframex.ui.event.CreateFrameEvent;
-import cn.ximuli.jframex.ui.manager.FrameManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-
-
 
 @SpringBootApplication(scanBasePackages = {"cn.ximuli.jframex"})
 @Slf4j
