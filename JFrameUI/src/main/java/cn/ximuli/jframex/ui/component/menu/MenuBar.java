@@ -6,16 +6,13 @@ import cn.ximuli.jframex.ui.Application;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.util.Comparator;
 import java.util.List;
 
-@Component
 @Getter
 public class MenuBar extends JMenuBar {
     public static final String MENU_SYNC_TOOL_BAR_KEY = "jframex.menu.sync.tool.bar.key";
@@ -24,8 +21,6 @@ public class MenuBar extends JMenuBar {
     ResourceLoaderManager resources;
     List<JMenu> menuList;
 
-
-    @Autowired
     public MenuBar(List<JMenu> menuList, ResourceLoaderManager resources) {
         super();
         this.menuList = orderMenu(menuList);
@@ -35,13 +30,13 @@ public class MenuBar extends JMenuBar {
 
     private void initialize() {
         for (JMenu jMenu : menuList) {
-            JMenuMeta jMenuMeta = AnnotationUtils.findAnnotation(jMenu.getClass(), JMenuMeta.class);
-            if (StringUtil.isNoneBlank(jMenuMeta.icon())) {
-                jMenu.setIcon(resources.getIcon(jMenuMeta.icon()));
+            Mate mate = AnnotationUtils.findAnnotation(jMenu.getClass(), Mate.class);
+            if (StringUtil.isNoneBlank(mate.icon())) {
+                jMenu.setIcon(resources.getIcon(mate.icon()));
             }
-            String jMenuName = I18nHelper.getMessage(jMenuMeta.value());
+            String jMenuName = I18nHelper.getMessage(mate.value());
             jMenu.setText(jMenuName);
-            jMenu.setMnemonic(jMenuMeta.shortKey());
+            jMenu.setMnemonic(mate.shortKey());
             add(jMenu);
         }
         boolean fullScreenableBar = ConvertUtil.toBool(System.getProperty(Application.MAC.APPLE_LAF_USE_SCREEN_MENUBAR));
@@ -55,7 +50,7 @@ public class MenuBar extends JMenuBar {
     }
 
     private int getOrder(JMenu menu) {
-        JMenuMeta annotation = menu.getClass().getAnnotation(JMenuMeta.class);
+        Mate annotation = menu.getClass().getAnnotation(Mate.class);
         return (annotation != null) ? annotation.order() : Integer.MAX_VALUE; // 默认值处理
     }
 

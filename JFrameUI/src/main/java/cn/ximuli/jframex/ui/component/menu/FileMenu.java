@@ -10,10 +10,6 @@ import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import com.formdev.flatlaf.extras.FlatDesktop;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,12 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Component
-@JMenuMeta(value = "app.menu.file.title", shortKey = KeyEvent.VK_F, order = 1)
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Mate(value = "app.menu.file.title", shortKey = KeyEvent.VK_F, order = 100)
 public class FileMenu extends JMenu {
     ResourceLoaderManager resources;
-    @Autowired
+
     public FileMenu(ResourceLoaderManager resources) {
         this.resources = resources;
         createJMenuItem().forEach(this::add);
@@ -88,11 +82,11 @@ public class FileMenu extends JMenu {
         add(exitMenuItem);
 
 
-        CreateNewInternalJFrame jInternalFrame = SpringUtils.getBean(CreateNewInternalJFrame.class);
+        Mate mate = CreateNewInternalJFrame.class.getAnnotation(Mate.class);
         JMenuItem  createNewItem = new JMenuItem();
-        createNewItem.setText(jInternalFrame.getTitle() + "Internal");
-        createNewItem.setIcon(jInternalFrame.getFrameIcon());
-        createNewItem.putClientProperty("class", jInternalFrame.getClass());
+        createNewItem.setText(mate.value() + "Internal");
+        createNewItem.setIcon(resources.getIcon(mate.icon()));
+        createNewItem.putClientProperty("class", CreateNewInternalJFrame.class);
         createNewItem.addActionListener(e -> FrameManager.publishEvent(new MenuButtonClickEvent(createNewItem)));
         add(createNewItem);
 
@@ -102,30 +96,32 @@ public class FileMenu extends JMenu {
     }
 
     private void newActionPerformed() {
-        MainFrame mainFrame = SpringUtils.getBean(MainFrame.class);
+        MainFrame mainFrame = FrameManager.getCurrentUISession().getMainFrame();
         NewDialog newDialog = new NewDialog(mainFrame);
         newDialog.setVisible(true);
     }
 
     private void openActionPerformed() {
-        MainFrame mainFrame = SpringUtils.getBean(MainFrame.class);
+        MainFrame mainFrame = FrameManager.getCurrentUISession().getMainFrame();
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(mainFrame);
     }
 
     private void saveAsActionPerformed() {
-        MainFrame mainFrame = SpringUtils.getBean(MainFrame.class);
+        MainFrame mainFrame = FrameManager.getCurrentUISession().getMainFrame();
         JFileChooser chooser = new JFileChooser();
         chooser.showSaveDialog(mainFrame);
     }
 
     private void exitActionPerformed() {
-        MainFrame mainFrame = SpringUtils.getBean(MainFrame.class);
+        //TODO clean up
+        MainFrame mainFrame = FrameManager.getCurrentUISession().getMainFrame();
         mainFrame.dispose();
+        System.exit(0);
     }
 
     private void menuItemActionPerformed(ActionEvent e) {
-        MainFrame mainFrame = SpringUtils.getBean(MainFrame.class);
+        MainFrame mainFrame = FrameManager.getCurrentUISession().getMainFrame();
         SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, e.getActionCommand(), "Menu Item", JOptionPane.PLAIN_MESSAGE));
     }
 

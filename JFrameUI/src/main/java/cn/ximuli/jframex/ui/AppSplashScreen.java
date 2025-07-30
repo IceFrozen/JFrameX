@@ -118,10 +118,10 @@ public class AppSplashScreen extends JWindow {
      */
     public void updateProgress(ProgressEvent event) {
         Objects.requireNonNull(event, "ProgressEvent cannot be null");
-        log.debug("Updating progress: value={}", event.getValue());
-        int addedValue = event.getValue();
         SwingUtilities.invokeLater(() -> {
             progressBar.setIndeterminate(false);
+            log.debug("Updating progress: value={}", event.getValue());
+            int addedValue = event.getValue();
             int currentValue = progressBar.getValue();
             int finalValue = Math.min(currentValue + addedValue, progressBar.getMaximum());
             if (finalValue >= progressBar.getMaximum()) {

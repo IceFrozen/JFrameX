@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 import java.awt.*;
 
-@Component
 @Slf4j
 public class ThemesPanelPanel extends JPanel {
     ResourceLoaderManager resources;

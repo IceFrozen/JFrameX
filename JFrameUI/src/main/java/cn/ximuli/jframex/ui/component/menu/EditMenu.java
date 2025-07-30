@@ -1,12 +1,10 @@
 package cn.ximuli.jframex.ui.component.menu;
 
-import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
+import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
@@ -17,12 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Component
-@JMenuMeta(value = "app.menu.edit.title", shortKey = KeyEvent.VK_E, order = 2)
+@Mate(value = "app.menu.edit.title", shortKey = KeyEvent.VK_E, order = 2)
 public class EditMenu extends JMenu {
-
     ResourceLoaderManager resources;
-    @Autowired
+
     public EditMenu(ResourceLoaderManager resources) {
         this.resources = resources;
         createJMenuItem().forEach(this::add);
@@ -95,7 +91,7 @@ public class EditMenu extends JMenu {
     }
 
     private void menuItemActionPerformed(ActionEvent e) {
-        MainFrame mainFrame = SpringUtils.getBean(MainFrame.class);
+        MainFrame mainFrame = FrameManager.getCurrentUISession().getMainFrame();
         SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainFrame, e.getActionCommand(), "Menu Item", JOptionPane.PLAIN_MESSAGE));
     }
 }

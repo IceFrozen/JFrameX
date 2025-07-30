@@ -1,6 +1,7 @@
 package cn.ximuli.jframex.ui.internalJFrame;
 
 import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.component.menu.Mate;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.DataComponentsPanel;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
@@ -14,15 +15,16 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-@Component
+@Mate(value = "app.menu.view.components.data", icon = "icons/data_component", order = 3)
 @Slf4j
 public class DataInternalJFrame extends CommonInternalJFrame {
     private JPanel jPanel;
 
     public DataInternalJFrame(ResourceLoaderManager resources, DesktopPanel desktopPane) {
         super(resources, desktopPane);
-        setTitle(I18nHelper.getMessage("app.menu.view.components.data"));
-        setFrameIcon(super.resources.getIcon("icons/data_component"));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
+
         // Add component listener to adjust size when shown
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -32,8 +34,8 @@ public class DataInternalJFrame extends CommonInternalJFrame {
         });
     }
 
-    @Override
-    protected void refleshUI() {
+
+    public void refleshUI() {
         jPanel = new DataComponentsPanel(resources);
         jPanel.setBorder(LineBorder.createGrayLineBorder());
         setLayout(new BorderLayout());

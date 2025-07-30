@@ -27,7 +27,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
 
-@Component
 @Slf4j
 public class ToolBar extends JPanel {
     private MenuBar menuBar;
@@ -49,7 +48,7 @@ public class ToolBar extends JPanel {
     private ToolBar() {
     }
 
-    @Autowired
+
     public ToolBar(MenuBar frameMenuBar, ResourceLoaderManager resources) {
         super();
         this.menuBar = frameMenuBar;
@@ -193,7 +192,7 @@ public class ToolBar extends JPanel {
 
     public void addSettingButton() {
         JButton button = new JButton();
-        button.setIcon(resources.getIcon("settings"));
+        button.setIcon(resources.getIcon("icons/settings"));
         button.addActionListener(e -> FrameManager.publishEvent(new CreateFrameEvent<>(SettingInternalJFrame.class)));
         toolBar.add(button);
     }

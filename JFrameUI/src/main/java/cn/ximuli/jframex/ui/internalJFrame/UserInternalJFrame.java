@@ -9,7 +9,9 @@ import cn.ximuli.jframex.model.constants.Sex;
 import cn.ximuli.jframex.model.constants.Status;
 import cn.ximuli.jframex.service.DepartmentService;
 import cn.ximuli.jframex.service.UserService;
+import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.component.menu.Mate;
 import cn.ximuli.jframex.ui.event.CreateFrameEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
@@ -31,13 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
 @Slf4j
-@Lazy
+@Mate(value = "app.menu.user.internal.userService.title", icon = "icons/left_arrow", order = 1)
 public class UserInternalJFrame extends CommonInternalJFrame {
-    private static final String LEFT_ARROW_ICON_PATH = "icons/left_arrow";
-    private static final String USER_INTERNAL_FRAME_TITLE_KEY = "app.menu.user.internal.userService.title";
-
     private JSplitPane splitPane;
     private JTree departmentTree;
     private JPanel departmentPanel;
@@ -48,22 +46,20 @@ public class UserInternalJFrame extends CommonInternalJFrame {
     private transient Department selectedDepartment;
 
     public UserInternalJFrame(ResourceLoaderManager resources,
-                              DesktopPanel desktopPane,
-                              DepartmentService departmentService,
-                              UserService userService) {
+                              DesktopPanel desktopPane) {
         super(resources, desktopPane);
-        setTitle(I18nHelper.getMessage(USER_INTERNAL_FRAME_TITLE_KEY));
-        setFrameIcon(resources.getIcon(LEFT_ARROW_ICON_PATH));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
         setResizable(true);
         setIconifiable(true);
         setMaximizable(true);
         this.setClosable(true);
-        this.departmentService = departmentService;
-        this.userService = userService;
+        this.departmentService = SpringUtils.getBean(DepartmentService.class);
+        this.userService = SpringUtils.getBean(UserService.class);
     }
 
-    @Override
-    protected void refleshUI() {
+
+    public void refleshUI() {
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         departmentPanel = initLeftPanel();
         tablePanel = initRightPanel();

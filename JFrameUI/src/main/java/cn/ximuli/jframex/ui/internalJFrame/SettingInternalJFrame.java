@@ -3,6 +3,7 @@ package cn.ximuli.jframex.ui.internalJFrame;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.component.ControlBar;
+import cn.ximuli.jframex.ui.component.menu.Mate;
 import cn.ximuli.jframex.ui.component.panels.ComponentsShowSettingPanel;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.component.panels.SettingListPanel;
@@ -22,7 +23,7 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.*;
 
-@org.springframework.stereotype.Component
+@Mate(value = "app.setting.title", icon = "icons/settings", order = 6)
 @Slf4j
 public class SettingInternalJFrame extends CommonInternalJFrame {
     private ComponentsShowSettingPanel tabbedPane;
@@ -38,8 +39,8 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
 
     public SettingInternalJFrame(ResourceLoaderManager resources, DesktopPanel desktopPane) {
         super(resources, desktopPane);
-        setFrameIcon(resources.getIcon("settings"));
-        setTitle(I18nHelper.getMessage("app.setting.title"));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
     }
 
     private void initFullWindowContent() {
@@ -93,7 +94,7 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
         settingContentPane.add(controlBar, BorderLayout.PAGE_END);
 
         settingListPanel.addSelectedAction(info -> {
-            JComponent bean = SpringUtils.getBean(info.getClz());
+            JComponent bean =  info.getValue() ;
             controlPanel.removeAll();
             controlPanel.add(bean, BorderLayout.CENTER);
             refreshUI();
@@ -113,8 +114,8 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
         settingListPanel.select(0);
     }
 
-    @Override
-    protected void refleshUI() {
+
+    public void refleshUI() {
         initComponents();
         initFullWindowContent();
     }

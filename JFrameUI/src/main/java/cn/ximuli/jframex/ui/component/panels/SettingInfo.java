@@ -14,4 +14,5 @@ public class SettingInfo<T> {
     private String name;
     private String toolTipText;
     private Class<T> clz;
+    private T value;
 }

@@ -8,15 +8,12 @@ import cn.ximuli.jframex.ui.component.menu.MenuBar;
 import cn.ximuli.jframex.ui.component.menu.ToolBar;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import static java.awt.BorderLayout.*;
 
 import java.awt.*;
 import java.io.Serial;
 import javax.swing.*;
 
-@Component
 public class MainFrame extends JFrame {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -31,7 +28,6 @@ public class MainFrame extends JFrame {
     private final MenuBar menuBar;
     private final ResourceLoaderManager resources;
 
-    @Autowired
     public MainFrame(ResourceLoaderManager resources, DesktopPanel desktopPanel, ToolBar toolBar,  StatePanel statePanel, MenuBar menuBar) throws HeadlessException {
         this.desktopPanel = desktopPanel;
         this.toolBar = toolBar;

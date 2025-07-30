@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
 
-@Component
+
 @SettingMenu(value = "app.setting.item.components.basic", category = "app.setting.item.category.components", toolTipText = "app.setting.item.components.basic.toolTipText")
 public class BasicComponentsPanel extends JPanel {
     private JPasswordField passwordField1;

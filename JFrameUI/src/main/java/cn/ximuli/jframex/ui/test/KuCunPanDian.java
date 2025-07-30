@@ -1,5 +1,6 @@
 package cn.ximuli.jframex.ui.test;
 
+import cn.ximuli.jframex.ui.component.menu.Mate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.table.*;
 
-@Component
+@Mate(value = "app.menu.user.internal.userService.title", icon = "icons/left_arrow", order = 1)
 public class KuCunPanDian extends JInternalFrame {
 
     private final JTable table;
@@ -23,7 +24,7 @@ public class KuCunPanDian extends JInternalFrame {
     private JTextField czy = new JTextField();// 盘点员
 
     private Date pdDate = new Date();
-    @Autowired
+
     public KuCunPanDian() {
         super();
         setMaximizable(true);

@@ -1,5 +1,6 @@
 package cn.ximuli.jframex.ui.test;
 
+import cn.ximuli.jframex.ui.component.menu.Mate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,7 @@ import java.awt.Insets;
 import javax.swing.table.*;
 import javax.swing.JComboBox;
 
-@Component
+@Mate(value = "app.menu.user.internal.userService.title", icon = "icons/left_arrow", order = 1)
 public class Jinhuo_Tuihuo_IFram extends JInternalFrame {
 
     private JPanel jContentPane = null;
@@ -85,7 +86,7 @@ public class Jinhuo_Tuihuo_IFram extends JInternalFrame {
     /**
      * This is the xxx default constructor
      */
-    @Autowired
+
     public Jinhuo_Tuihuo_IFram() {
         super();
         initialize();

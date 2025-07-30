@@ -14,7 +14,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-@Component
+
 @Slf4j
 @SettingMenu(value = "app.setting.item.components.option", category = "app.setting.item.category.components", toolTipText = "app.setting.item.components.option.toolTipText")
 public class OptionPanePanel extends JPanel {

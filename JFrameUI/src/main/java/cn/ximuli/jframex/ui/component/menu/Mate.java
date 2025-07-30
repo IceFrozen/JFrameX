@@ -6,7 +6,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface JMenuMeta {
+public @interface Mate {
     int order() default 0;
     String value() default "";
     String role() default Anyone;

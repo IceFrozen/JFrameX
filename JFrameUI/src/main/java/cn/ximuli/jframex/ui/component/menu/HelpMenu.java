@@ -1,14 +1,12 @@
 package cn.ximuli.jframex.ui.component.menu;
 
-import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
+import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatDesktop;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,12 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Component
-@JMenuMeta(value = "app.menu.help.title", shortKey = KeyEvent.VK_F, order = Integer.MAX_VALUE)
+@Mate(value = "app.menu.help.title", shortKey = KeyEvent.VK_F, order = Integer.MAX_VALUE)
 public class HelpMenu extends JMenu {
     ResourceLoaderManager resources;
 
-    @Autowired
     public HelpMenu(ResourceLoaderManager resources) {
         this.resources = resources;
         createJMenuItem().forEach(this::add);
@@ -66,7 +62,7 @@ public class HelpMenu extends JMenu {
             }
         });
 
-        MainFrame mainFrame = SpringUtils.getBean(MainFrame.class);
+        MainFrame mainFrame = FrameManager.getCurrentUISession().getMainFrame();
         JOptionPane.showMessageDialog(mainFrame,
                 new Object[]{
                         titleLabel,

@@ -13,14 +13,11 @@ import cn.ximuli.jframex.service.util.SpringUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class MockClass {
 
     public static final List<UserType> userTypes = getUserTypes();
-
     public static final List<Department> departmentList = getDepartmentList();
-
 
     public static final List<User> allUser = getAllUser();
 

@@ -12,7 +12,7 @@ import java.util.Optional;
 public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<Department> queryAllDepartments() {
-        return MockClass.departmentList;
+        return MockClass.getDepartmentList();
     }
 
     @Override

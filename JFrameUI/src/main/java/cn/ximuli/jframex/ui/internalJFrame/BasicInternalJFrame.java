@@ -1,18 +1,19 @@
 package cn.ximuli.jframex.ui.internalJFrame;
 
 import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.component.menu.Mate;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.BasicComponentsPanel;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 
-@Component
+@Mate(value = "app.menu.view.components.basic", icon = "icons/basic_component", order = 0)
 @Slf4j
 public class BasicInternalJFrame extends CommonInternalJFrame {
 
@@ -20,12 +21,12 @@ public class BasicInternalJFrame extends CommonInternalJFrame {
 
     public BasicInternalJFrame(ResourceLoaderManager resources, DesktopPanel desktopPane) {
         super(resources, desktopPane);
-        setTitle(I18nHelper.getMessage("app.menu.view.components.basic"));
-        setFrameIcon(super.resources.getIcon("icons/basic_component"));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
     }
 
     @Override
-    protected void refleshUI() {
+     public void refleshUI() {
         jPanel = new BasicComponentsPanel(super.resources);
         jPanel.setBorder(LineBorder.createGrayLineBorder());
         setLayout(new BorderLayout());

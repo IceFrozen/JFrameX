@@ -17,10 +17,9 @@ import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-@Component
+
 @Slf4j
-@Lazy
-abstract public class CommonInternalJFrame extends JInternalFrame implements ComponentListener, InternalFrameListener, InitializingBean {
+public abstract class CommonInternalJFrame extends JInternalFrame implements ComponentListener, InternalFrameListener {
     protected final ResourceLoaderManager resources;
     protected final DesktopPanel desktopPane;
 
@@ -36,7 +35,7 @@ abstract public class CommonInternalJFrame extends JInternalFrame implements Com
         setClosable(true);
     }
 
-    protected abstract void refleshUI();
+    public abstract void refleshUI();
 
     @Override
     public void componentShown(ComponentEvent e) {
@@ -100,9 +99,5 @@ abstract public class CommonInternalJFrame extends JInternalFrame implements Com
     @Override
     public void internalFrameDeactivated(InternalFrameEvent e) {
         FrameManager.publishEvent(new FrameSelectedEvent(e.getInternalFrame(), false));
-    }
-
-    public void afterPropertiesSet() {
-        refleshUI();
     }
 }

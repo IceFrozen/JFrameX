@@ -5,6 +5,7 @@ import cn.ximuli.jframex.common.utils.StringUtil;
 import cn.ximuli.jframex.ui.Application;
 import cn.ximuli.jframex.ui.I18nHelper;
 
+import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.storage.JFramePref;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
@@ -23,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-@Component
+
 @Slf4j
 @SettingMenu(value = "app.setting.item.components.font", category = "app.setting.item.category.setting", toolTipText = "app.setting.item.components.font.toolTipText", order = Ordered.HIGHEST_PRECEDENCE)
 public class FontPanel extends JPanel {
@@ -35,7 +36,7 @@ public class FontPanel extends JPanel {
     JComboBox<String> langListBox;
     List<String> fontList;
 
-    public FontPanel() {
+    public FontPanel(ResourceLoaderManager resources) {
         initComponents();
     }
 

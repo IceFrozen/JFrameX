@@ -5,6 +5,6 @@ public enum Status {
     NONE,
     LOADING,
     SIGN_UP,
-    STARTED;
+    STARTED, STARTING;
 
 }

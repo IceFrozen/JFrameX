@@ -9,7 +9,7 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
-@Component
+
 @SettingMenu(value = "app.setting.item.components.container", category = "app.setting.item.category.components", toolTipText = "app.setting.item.components.container.toolTipText")
 public class ContainerComponentsPanel extends JPanel {
     private JProgressBar progressBar3;

@@ -13,16 +13,13 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.util.SystemInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.prefs.Preferences;
 
 @Slf4j
-@Component
-@JMenuMeta(value = "app.menu.options.title", shortKey = KeyEvent.VK_F, order = 5)
+@Mate(value = "app.menu.options.title", shortKey = KeyEvent.VK_F, order = 5)
 public class OptionsMenu extends JMenu {
     private final ResourceLoaderManager resources;
     private final JCheckBoxMenuItem windowDecorationsCheckBoxMenuItem;
@@ -36,7 +33,6 @@ public class OptionsMenu extends JMenu {
     private final JMenuItem showHintsMenuItem;
 
 
-    @Autowired
     public OptionsMenu(ResourceLoaderManager resources) {
         this.resources = resources;
         windowDecorationsCheckBoxMenuItem = createWindowDecorations();
@@ -229,8 +225,10 @@ public class OptionsMenu extends JMenu {
 //                "Use 'Themes' list to try out various themes.",
 //                themesPanel, SwingConstants.LEFT, "hint.themesPanel", optionsMenuHint);
 
-        ToolBar toolBar = SpringUtils.getBean(ToolBar.class);
-        SettingInternalJFrame settingInternalJFrame = SpringUtils.getBean(SettingInternalJFrame.class);
+        ToolBar toolBar = FrameManager.getCurrentUISession().getToolBar();
+        SettingInternalJFrame settingInternalJFrame = FrameManager.getCurrentUISession().getInternalJFrame(SettingInternalJFrame.class);
+
+
         HintManager.Hint themesHint = new HintManager.Hint(
                 "Use 'Themes' list to try out various themes.",
                 settingInternalJFrame.getThemesPanel(), SwingConstants.LEFT, "hint.themesPanel", null);

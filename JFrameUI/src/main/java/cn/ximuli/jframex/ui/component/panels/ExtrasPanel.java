@@ -12,7 +12,7 @@ import java.awt.*;
 import java.awt.event.HierarchyEvent;
 import java.util.function.Function;
 
-@Component
+
 @SettingMenu(value = "app.setting.item.components.extras", category = "app.setting.item.category.components", toolTipText = "app.setting.item.components.extras.toolTipText")
 public class ExtrasPanel extends JPanel {
     private Timer rainbowIconTimer;

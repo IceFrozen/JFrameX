@@ -2,11 +2,9 @@ package cn.ximuli.jframex.ui.component.panels;
 
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 
-@Component
 @Slf4j
 @SettingMenu(value = "app.setting.item.components.all", category = "app.setting.item.category.components", toolTipText = "app.setting.item.components.all.toolTipText", order = 1)
 public class ComponentsShowSettingPanel extends JTabbedPane {

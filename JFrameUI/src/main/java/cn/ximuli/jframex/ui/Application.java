@@ -15,7 +15,11 @@ public class Application implements CommandLineRunner {
     public static final String APP_ICON = "/style/icon.png";
     public static final String APP_THEMES_PACKAGE = "/style/intellijthemes/themes.json";
 
+    public static final String APP_INTERNAL_FRAME_PACKAGE = "cn.ximuli.jframex.ui.internalJFrame";
+    public static final String APP_COMMON_COMPONENT = "cn.ximuli.jframex.ui.component";
+
     public static void main(String[] args) throws Exception {
+        log.debug("Start.......{}", args);
         ApplicationInitializer.init(args);
         new SpringApplicationBuilder(Application.class)
                 .headless(false)

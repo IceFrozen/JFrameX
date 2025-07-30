@@ -1,6 +1,7 @@
 package cn.ximuli.jframex.ui.internalJFrame;
 
 import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.component.menu.Mate;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.util.concurrent.Callable;
 
-@Component
+@Mate(value = "app.menu.file.new", icon = "icons/newFolder", order = 1)
 @Slf4j
 public class CreateNewInternalJFrame extends CommonInternalJFrame {
     private Pair<JLabel, JTextField> nameLine;
@@ -31,13 +32,13 @@ public class CreateNewInternalJFrame extends CommonInternalJFrame {
     public CreateNewInternalJFrame(ResourceLoaderManager resources, DesktopPanel desktopPane) {
         super(resources, desktopPane);
         this.setSize(600, 320);
-        setTitle(I18nHelper.getMessage("app.menu.file.new"));
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setFrameIcon(super.resources.getIcon("icons/newFolder"));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
     }
 
-    @Override
-    protected void refleshUI() {
+
+    public void refleshUI() {
         initComponents();
         getRootPane().setDefaultButton(okButton);
         // register ESC key to close frame

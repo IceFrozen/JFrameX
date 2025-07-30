@@ -8,14 +8,14 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
-@Component
+
 public class DesktopPanel extends JDesktopPane {
     private Image backImage;
     private Image topLeftIcon;
     private Image bottomRightIcon;
     private final ResourceLoaderManager resources;
 
-    @Autowired
+
     public DesktopPanel(ResourceLoaderManager resources) {
         super();
         this.resources = resources;

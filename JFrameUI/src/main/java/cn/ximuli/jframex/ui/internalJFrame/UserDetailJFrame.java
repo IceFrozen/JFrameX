@@ -1,6 +1,7 @@
 package cn.ximuli.jframex.ui.internalJFrame;
 
 import cn.ximuli.jframex.model.User;
+import cn.ximuli.jframex.ui.component.menu.Mate;
 import cn.ximuli.jframex.ui.test.InputKeyListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
@@ -11,8 +12,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-@Component
-@Scope("prototype")
+
+@Mate(value = "app.menu.view.components.userDetail", icon = "icons/user_detail", order = 10)
 @Slf4j
 public class UserDetailJFrame extends JInternalFrame {
     private User user;

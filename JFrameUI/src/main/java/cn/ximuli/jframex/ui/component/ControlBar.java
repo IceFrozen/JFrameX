@@ -88,7 +88,7 @@ public class ControlBar extends JPanel {
             updateInfoLabel();
     }
 
-    void initialize() {
+    public void initialize() {
         // register F1, F2, ... keys to switch to Light, Dark or other LaFs
         registerSwitchToLookAndFeelKey(KeyEvent.VK_F1, FlatLightLaf.class.getName());
         registerSwitchToLookAndFeelKey(KeyEvent.VK_F2, FlatDarkLaf.class.getName());

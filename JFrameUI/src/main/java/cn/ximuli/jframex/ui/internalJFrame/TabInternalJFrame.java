@@ -1,6 +1,7 @@
 package cn.ximuli.jframex.ui.internalJFrame;
 
 import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.component.menu.Mate;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.component.panels.TabsComponentsPanel;
@@ -12,7 +13,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-@Component
+@Mate(value = "app.menu.view.components.tab", icon = "icons/tab_component", order = 9)
 @Slf4j
 public class TabInternalJFrame extends CommonInternalJFrame {
 
@@ -20,8 +21,8 @@ public class TabInternalJFrame extends CommonInternalJFrame {
 
     public TabInternalJFrame(ResourceLoaderManager resources, DesktopPanel desktopPane) {
         super(resources, desktopPane);
-        setTitle(I18nHelper.getMessage("app.menu.view.components.tab"));
-        setFrameIcon(super.resources.getIcon("icons/tab_component"));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
         // Add component listener to adjust size when shown
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -31,8 +32,8 @@ public class TabInternalJFrame extends CommonInternalJFrame {
         });
     }
 
-    @Override
-    protected void refleshUI() {
+
+    public void refleshUI() {
         tabsComponentsPanel = new TabsComponentsPanel(super.resources);
         tabsComponentsPanel.setBorder(LineBorder.createGrayLineBorder());
         setLayout(new BorderLayout());

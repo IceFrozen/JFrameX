@@ -1,6 +1,7 @@
 package cn.ximuli.jframex.ui.internalJFrame;
 
 import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.component.menu.Mate;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.ContainerComponentsPanel;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
@@ -13,15 +14,15 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-@Component
+@Mate(value = "app.menu.view.components.container", icon = "icons/basic_component", order = 2)
 @Slf4j
 public class ContainerInternalJFrame extends CommonInternalJFrame {
     private JPanel jPanel;
 
     public ContainerInternalJFrame(ResourceLoaderManager resources, DesktopPanel desktopPane) {
         super(resources, desktopPane);
-        setTitle(I18nHelper.getMessage("app.menu.view.components.container"));
-        setFrameIcon(super.resources.getIcon("icons/basic_component"));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
         // Add component listener to adjust size when shown
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -31,8 +32,8 @@ public class ContainerInternalJFrame extends CommonInternalJFrame {
         });
     }
 
-    @Override
-    protected void refleshUI() {
+
+    public void refleshUI() {
         jPanel = new ContainerComponentsPanel(super.resources);
         jPanel.setBorder(LineBorder.createGrayLineBorder());
         setLayout(new BorderLayout());

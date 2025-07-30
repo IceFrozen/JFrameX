@@ -5,6 +5,7 @@ import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.component.themes.ListCellTitledBorder;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
+import cn.ximuli.jframex.ui.manager.UICreator;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon;
 import com.formdev.flatlaf.ui.FlatListUI;
@@ -26,7 +27,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
-@org.springframework.stereotype.Component
 @Slf4j
 public class SettingListPanel extends JPanel {
 
@@ -128,7 +128,7 @@ public class SettingListPanel extends JPanel {
         this.categories = new HashMap<>();
         this.settingInfos = new ArrayList<>();
         this.settingsList = new JList<>();
-        this.settingPanels = SpringUtils.getBean(JComponent.class, SettingMenu.class);
+        this.settingPanels = UICreator.createSettingPanels();
         this.isChangeUI.set(true);
         updatePanels();
         this.isChangeUI.set(false);
@@ -235,10 +235,10 @@ public class SettingListPanel extends JPanel {
                 settings.getValue().sort(Comparator.comparingInt(pair -> -pair.getLeft().order()));
                 for (Pair<SettingMenu, JComponent> pair : settings.getValue()) {
                     SettingMenu settingMeta = pair.getKey();
-                    JComponent settingClass = pair.getValue();
+                    JComponent settingComponent = pair.getValue();
                     String settingName = I18nHelper.has(settingMeta.value()) ? I18nHelper.getMessage(settingMeta.value()) : settingMeta.value();
                     String settingTooltipText = I18nHelper.has(settingMeta.toolTipText()) ? I18nHelper.getMessage(settingMeta.toolTipText()) : settingMeta.toolTipText();
-                    SettingInfo<JComponent> info = new SettingInfo(categoryName, settingName, settingTooltipText, settingClass.getClass());
+                    SettingInfo<JComponent> info = new SettingInfo(categoryName, settingName, settingTooltipText, settingComponent.getClass(), settingComponent);
                     settingInfos.add(info);
                 }
                 index = index + settings.getValue().size();

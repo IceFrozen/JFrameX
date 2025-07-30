@@ -1,6 +1,7 @@
 package cn.ximuli.jframex.ui.internalJFrame;
 
 import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.component.menu.Mate;
 import cn.ximuli.jframex.ui.event.UserLogoutEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
@@ -8,14 +9,12 @@ import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import com.formdev.flatlaf.FlatClientProperties;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
-import org.springframework.stereotype.Component;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-@Component
+@Mate(value = "app.menu.view.components.tab", icon = "icons/tab_component", order = 1)
 @Slf4j
 public class ContactDetailsInternalFrame extends CommonInternalJFrame {
     private final ResourceLoaderManager resources;
@@ -25,8 +24,8 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
     public ContactDetailsInternalFrame(ResourceLoaderManager resources, DesktopPanel desktopPanel) {
         super(resources, desktopPanel);
         this.resources = resources;
-        setTitle(I18nHelper.getMessage("app.menu.view.components.tab"));
-        setFrameIcon(super.resources.getIcon("icons/tab_component"));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
         // Add component listener to adjust size when shown
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -111,7 +110,6 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
     }
 
     private void handleLogOut() {
-
         int confirm = JOptionPane.showConfirmDialog(this,
                 I18nHelper.getMessage("app.logout.confirm"),
                 I18nHelper.getMessage("app.logout.title"),
@@ -119,13 +117,10 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         if (confirm != JOptionPane.YES_OPTION) {
             return;
         }
-
         FrameManager.publishEvent(new UserLogoutEvent( this));
-
     }
 
-    @Override
-    protected void refleshUI() {
+    public void refleshUI() {
         setLayout(new BorderLayout());
         // Main panel with MigLayout
         this.mainPanel = createContactPanel();

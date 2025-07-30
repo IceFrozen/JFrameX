@@ -13,6 +13,7 @@ import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.storage.JFramePref;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.SystemInfo;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -24,26 +25,29 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 @Slf4j
 @Component
 public class FrameManager {
-    public static final String KEY_SYSTEM_SCALE_FACTOR = "systemScaleFactor";
     private volatile Status status = Status.NONE;
-    private final MainFrame mainFrame;
+    @Getter
+    private volatile UISession uiSession;
     private final LoginFrame loginFrame;
     private final ResourceLoaderManager loaderManager;
-    private final StatePanel statePanel;
-    private final DesktopPanel desktopPanel;
+    @Getter
+    private LoggedInUser currentUser;
+
+    @Getter
+    public List<Runnable> afterUIReady = new ArrayList<>();
+
 
     @Autowired
-    public FrameManager(MainFrame mainFrame, LoginFrame loginFrame, ResourceLoaderManager loaderManager, StatePanel statePanel, DesktopPanel desktopPanel) {
-        this.mainFrame = mainFrame;
+    public FrameManager(LoginFrame loginFrame, ResourceLoaderManager loaderManager) {
         this.loaderManager = loaderManager;
-        this.statePanel = statePanel;
-        this.desktopPanel = desktopPanel;
         this.loginFrame = loginFrame;
     }
 
@@ -54,7 +58,6 @@ public class FrameManager {
     @EventListener(ApplicationReadyEvent.class)
     public void handleApplication(ApplicationReadyEvent event) {
         log.info("springboot ready and begin loading resources");
-        registerSystemScaleFactors(event.getApplicationContext().getBean(MainFrame.class));
         loaderManager.completeLoading();
     }
 
@@ -62,12 +65,11 @@ public class FrameManager {
     public void handleApplication(ApplicationStartedEvent event) {
         log.info("springboot starting: {}", event.getClass().getSimpleName());
         updateStatus(Status.LOADING);
-        initSystemScale();
         AppSplashScreen.setProgressBarValue(new ProgressEvent(10, "app starting..."));
     }
 
     @EventListener(ResourceReadyEvent.class)
-    public void resourceLoadFinish(ResourceReadyEvent readyEvent) {
+    public void resourceLoadFinish(ResourceReadyEvent readyEvent) throws ClassNotFoundException {
         if (this.status == Status.LOADING) {
             AppSplashScreen.close();
             LoggedInUser user = JFramePref.getUser();
@@ -82,11 +84,17 @@ public class FrameManager {
     }
 
     @EventListener(UserLoginEvent.class)
-    public void userLogin(UserLoginEvent userLoginEvent) {
+    public void userLogin(UserLoginEvent userLoginEvent) throws ClassNotFoundException {
         JFramePref.setUser(userLoginEvent.getLoggedInUser(), userLoginEvent.isRememberMe());
-        mainFrame.setVisible(true);
+        updateStatus(Status.STARTING);
+        this.currentUser = userLoginEvent.getLoggedInUser();
+        this.uiSession = new UISession(userLoginEvent.getLoggedInUser(), loaderManager);
+        this.uiSession.prepareUI();
+        this.uiSession.getMainFrame().setVisible(true);
         updateStatus(Status.STARTED);
-        statePanel.updateStats();
+        for (Runnable runnable : this.afterUIReady) {
+            runnable.run();
+        }
         loginFrame.reset();
         loginFrame.dispose();
     }
@@ -94,13 +102,17 @@ public class FrameManager {
     @EventListener(UserLogoutEvent.class)
     public void userLogout(UserLogoutEvent userLogoutEvent) {
         JFramePref.reset();
-        mainFrame.setVisible(false);
+        this.uiSession.getMainFrame().setVisible(false);
         updateStatus(Status.SIGN_UP);
-        JOptionPane.showMessageDialog(mainFrame,
-                I18nHelper.getMessage("app.logout.success"),
-                I18nHelper.getMessage("app.logout.title"),
-                JOptionPane.INFORMATION_MESSAGE);
-
+        if (userLogoutEvent != null) {
+            JOptionPane.showMessageDialog(this.uiSession.getMainFrame(),
+                    I18nHelper.getMessage("app.logout.success"),
+                    I18nHelper.getMessage("app.logout.title"),
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+        this.uiSession.destory();
+        this.uiSession = null;
+        this.currentUser = null;
         loginFrame.reset();
         loginFrame.setVisible(true);
     }
@@ -122,6 +134,11 @@ public class FrameManager {
     public void handleWindowEvent(WindowsEvent event) {
         log.info("event: {}", event);
         int type = event.getType();
+
+        if (this.uiSession == null) {
+            return;
+        }
+        MainFrame mainFrame = this.uiSession.getMainFrame();
         if (type == WindowsEvent.WINDOW_DECORATIONS_CHANGED) {
             boolean windowDecorations = (boolean) event.getSource();
             if (SystemInfo.isLinux) {
@@ -142,10 +159,13 @@ public class FrameManager {
     }
 
     public JInternalFrame createIFrame(Class<?> clazz, Object... args) {
-        JInternalFrame iFrame = (JInternalFrame) SpringUtils.getBean(clazz, args);
+        if (this.uiSession == null) {
+            return null;
+        }
+        JInternalFrame iFrame = (JInternalFrame) this.uiSession.getInternalJFrame(clazz);
         try {
             if (!hasComponent(iFrame)) {
-                desktopPanel.add(iFrame);
+                this.uiSession.getDesktopPanel().add(iFrame);
             }
             if (iFrame.isVisible()) {
                 iFrame.setSelected(true);
@@ -169,8 +189,11 @@ public class FrameManager {
 
     @EventListener
     public void JInternalFrameSelected(FrameSelectedEvent e) {
+        if (this.uiSession == null) {
+            return;
+        }
         SwingUtilities.invokeLater(() -> {
-            if (e.isSelected() && !statePanel.isFrameSelected(e.getJInternalFrame())) {
+            if (e.isSelected() && !this.uiSession.getStatePanel().isFrameSelected(e.getJInternalFrame())) {
                 updateStatuePanel(e.getJInternalFrame());
             } else {
                 updateStatuePanel(null);
@@ -192,77 +215,26 @@ public class FrameManager {
     }
 
     public static void registerKeyAction(int key, BiConsumer<MainFrame, ActionEvent> keyAction) {
-        MainFrame main = SpringUtils.getBean(MainFrame.class);
-        ((JComponent) main.getContentPane()).registerKeyboardAction(
-                e -> keyAction.accept(main, e),
-                KeyStroke.getKeyStroke(key, 0, false),
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
-    }
-
-    public static void initSystemScale() {
-        if (System.getProperty("sun.java2d.uiScale") == null) {
-            String scaleFactor = JFramePref.state.get(KEY_SYSTEM_SCALE_FACTOR, null);
-            if (scaleFactor != null) {
-                System.setProperty("sun.java2d.uiScale", scaleFactor);
-                log.info("JFrameX: setting 'sun.java2d.uiScale' to {}", scaleFactor);
-                log.info("use 'Alt+Shift+F1...12' to change it to 1x...4x");
+        FrameManager frameManager = SpringUtils.getBean(FrameManager.class);
+        Runnable runnable = () -> {
+            UISession curretUISession = frameManager.getUiSession();
+            if (curretUISession == null) {
+                return;
             }
-        }
-    }
+            MainFrame mainFrame = curretUISession.getMainFrame();
+            ((JComponent) mainFrame.getContentPane()).registerKeyboardAction(
+                    e -> keyAction.accept(mainFrame, e),
+                    KeyStroke.getKeyStroke(key, 0, false),
+                    JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        };
 
-    public static void registerSystemScaleFactors(JFrame frame) {
-        registerSystemScaleFactor(frame, "alt shift F1", null);
-        registerSystemScaleFactor(frame, "alt shift F2", "1");
-
-        if (SystemInfo.isWindows) {
-            registerSystemScaleFactor(frame, "alt shift F3", "1.25");
-            registerSystemScaleFactor(frame, "alt shift F4", "1.5");
-            registerSystemScaleFactor(frame, "alt shift F5", "1.75");
-            registerSystemScaleFactor(frame, "alt shift F6", "2");
-            registerSystemScaleFactor(frame, "alt shift F7", "2.25");
-            registerSystemScaleFactor(frame, "alt shift F8", "2.5");
-            registerSystemScaleFactor(frame, "alt shift F9", "2.75");
-            registerSystemScaleFactor(frame, "alt shift F10", "3");
-            registerSystemScaleFactor(frame, "alt shift F11", "3.5");
-            registerSystemScaleFactor(frame, "alt shift F12", "4");
+        if (frameManager.status == Status.STARTING) {
+            frameManager.afterUIReady.add(runnable);
+        } else if (frameManager.status == Status.STARTED){
+            runnable.run();
         } else {
-            // Java on macOS and Linux supports only integer scale factors
-            registerSystemScaleFactor(frame, "alt shift F3", "2");
-            registerSystemScaleFactor(frame, "alt shift F4", "3");
-            registerSystemScaleFactor(frame, "alt shift F5", "4");
+            log.warn("unknown status status: {}", frameManager.status);
         }
-    }
-
-    private static void registerSystemScaleFactor(JFrame frame, String keyStrokeStr, String scaleFactor) {
-        log.info("register:frame: {}, keyStrokeStr:{}, scaleFactor: {}", frame, keyStrokeStr, scaleFactor);
-        KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStrokeStr);
-        if (keyStroke == null)
-            throw new IllegalArgumentException("Invalid key stroke '" + keyStrokeStr + "'");
-
-        ((JComponent) frame.getContentPane()).registerKeyboardAction(
-                e -> applySystemScaleFactor(frame, scaleFactor),
-                keyStroke,
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-    }
-
-    private static void applySystemScaleFactor(JFrame frame, String scaleFactor) {
-        //TODO i8
-        if (JOptionPane.showConfirmDialog(frame,
-                "Change system scale factor to "
-                        + (scaleFactor != null ? scaleFactor : "default")
-                        + " and exit?",
-                frame.getTitle(), JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
-            return;
-        }
-
-        if (scaleFactor != null)
-            JFramePref.state.put(KEY_SYSTEM_SCALE_FACTOR, scaleFactor);
-        else {
-            JFramePref.state.remove(KEY_SYSTEM_SCALE_FACTOR);
-        }
-
-        System.exit(0);
     }
 
     public synchronized void updateStatus(Status status) {
@@ -270,10 +242,19 @@ public class FrameManager {
     }
 
     public synchronized void updateStatuePanel(JInternalFrame frame) {
-        statePanel.frameSelected(frame);
+        if (this.uiSession == null) {
+            return;
+        }
+        this.uiSession.getStatePanel().frameSelected(frame);
     }
 
     public boolean hasComponent(JComponent com) {
+        DesktopPanel desktopPanel = uiSession.getDesktopPanel();
         return Arrays.asList(desktopPanel.getComponents()).contains(com);
     }
+
+    public static UISession getCurrentUISession() {
+        return SpringUtils.getBean(FrameManager.class).getUiSession();
+    }
+
 }

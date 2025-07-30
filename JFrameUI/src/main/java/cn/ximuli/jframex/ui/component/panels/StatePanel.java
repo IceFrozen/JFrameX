@@ -4,6 +4,7 @@ import cn.ximuli.jframex.common.utils.DateUtil;
 import cn.ximuli.jframex.model.LoggedInUser;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.storage.JFramePref;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -12,8 +13,9 @@ import java.time.LocalDateTime;
 
 import static javax.swing.border.EtchedBorder.RAISED;
 
-@Component
+@Slf4j
 public class StatePanel extends JPanel {
+    LoggedInUser user;
     JLabel stateLabel = null;
     private JLabel nameLabel = null;
     private JLabel nowDateLabel = null;
@@ -26,7 +28,8 @@ public class StatePanel extends JPanel {
     private String statusPanelDefaultContext;
 
 
-    public StatePanel() {
+    public StatePanel(LoggedInUser user) {
+        this.user = user;
         init();
     }
 
@@ -138,19 +141,6 @@ public class StatePanel extends JPanel {
         }
         String finalCurrentContext = currentContext;
         SwingUtilities.invokeLater(() -> this.setStateLabelText(finalCurrentContext));
-    }
-
-    public void updateStats() {
-        LoggedInUser user = JFramePref.getUser();
-        String userName = "Unknown";
-        if (user != null) {
-            userName = user.getUsername();
-        }
-        if (czyStateLabel == null) {
-            czyStateLabel = new JLabel(I18nHelper.getMessage("app.mainframe.state.operator") + ":" + userName);
-        } else {
-            czyStateLabel.setText(I18nHelper.getMessage("app.mainframe.state.operator") + ":" + userName);
-        }
     }
 
     public boolean isFrameSelected(JInternalFrame frame) {
