@@ -1,6 +1,5 @@
 package cn.ximuli.jframex.ui.login;
 
-import cn.ximuli.jframex.model.LoggedInUser;
 import cn.ximuli.jframex.service.LoginService;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
@@ -31,7 +30,7 @@ public class LoginFrame extends JFrame {
     private JButton cancelButton;
     private JLabel forgetPasswordLink;
     private ResourceLoaderManager resources;
-
+    private JProgressBar progressBar;
     private LoginService loginService;
 
     public LoginFrame(ResourceLoaderManager resources, LoginService loginService) {
@@ -63,6 +62,7 @@ public class LoginFrame extends JFrame {
 
         // Main panel with split layout
         JPanel mainPanel = new JPanel(new MigLayout("fill, insets 0", "[100%][100%]", "[100%]"));
+        mainPanel.setOpaque(false);
         mainPanel.setBackground(new Color(57, 141, 215)); // Blue background
 
         // Left panel (illustration)
@@ -171,6 +171,8 @@ public class LoginFrame extends JFrame {
         cancelButton.setPreferredSize(new Dimension(150, 40));
         cancelButton.addActionListener(e -> System.exit(0)); // Close the frame on cancel
         JPanel buttonPanel = new JPanel(new MigLayout("fill, insets 0", "[]", "[]"));
+        buttonPanel.setOpaque(true);
+        buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(loginButton, "growx");
         buttonPanel.add(cancelButton, "growx");
         formPanel.add(buttonPanel, "span 2, align center, gapy 10");
@@ -194,6 +196,15 @@ public class LoginFrame extends JFrame {
                 JComponent.WHEN_IN_FOCUSED_WINDOW
         );
 
+        // Progress bar at the bottom
+        progressBar = new JProgressBar();
+        progressBar.setIndeterminate(true);
+        progressBar.setVisible(false);
+        progressBar.setOpaque(false); // Make progress bar transparent
+        progressBar.setBackground(new Color(0, 0, 0, 0)); // Fully transparent background
+        progressBar.setForeground(new Color(57, 141, 215));
+        progressBar.setBorder(null); // Remove border to blend seamlessly
+        mainPanel.add(progressBar, "dock south, span 2, growx, height 5!");
     }
 
     private void handleLogin() {
@@ -204,8 +215,6 @@ public class LoginFrame extends JFrame {
             JOptionPane.showMessageDialog(this, I18nHelper.getMessage("app.login.message.empty"));
             return;
         }
-
-
         enableOrDisableComponents(false);
         // Perform login asynchronously
         CompletableFuture.supplyAsync(() -> {
@@ -238,6 +247,7 @@ public class LoginFrame extends JFrame {
     }
 
     private void enableOrDisableComponents(boolean  enabled) {
+        progressBar.setVisible(!enabled);
         loginButton.setEnabled(enabled);
         cancelButton.setEnabled(enabled);
         usernameField.setEnabled(enabled);

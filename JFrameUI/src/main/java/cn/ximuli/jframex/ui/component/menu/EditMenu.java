@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @Mate(value = "app.menu.edit.title", shortKey = KeyEvent.VK_E, order = 2)
 public class EditMenu extends JMenu {
-    ResourceLoaderManager resources;
+    final ResourceLoaderManager resources;
 
     public EditMenu(ResourceLoaderManager resources) {
         this.resources = resources;

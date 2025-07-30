@@ -5,13 +5,11 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import com.formdev.flatlaf.util.HSLColor;
 import net.miginfocom.swing.MigLayout;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.HierarchyEvent;
 import java.util.function.Function;
-
 
 @SettingMenu(value = "app.setting.item.components.extras", category = "app.setting.item.category.components", toolTipText = "app.setting.item.components.extras.toolTipText")
 public class ExtrasPanel extends JPanel {
@@ -49,7 +47,6 @@ public class ExtrasPanel extends JPanel {
         addSVGIcon("objects/css");
         addSVGIcon("objects/javaScript");
         addSVGIcon("objects/xhtml");
-
         addSVGIcon("errorDialog");
         addSVGIcon("informationDialog");
         addSVGIcon("warningDialog");

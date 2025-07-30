@@ -9,7 +9,6 @@ import net.miginfocom.layout.BoundSize;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.DimConstraint;
 import net.miginfocom.swing.MigLayout;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
@@ -33,11 +32,8 @@ public class BasicComponentsPanel extends JPanel {
         // add leading/trailing icons to text fields
         leadingIconTextField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search");
         leadingIconTextField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSearchIcon());
-        resources.getIcon("icons/DataTables");
-        trailingIconTextField.putClientProperty(FlatClientProperties.TEXT_FIELD_TRAILING_ICON,
-                resources.getIcon("icons/DataTables"));
-        iconsTextField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
-                resources.getIcon("icons/user"));
+        trailingIconTextField.putClientProperty(FlatClientProperties.TEXT_FIELD_TRAILING_ICON, resources.getIcon("icons/DataTables"));
+        iconsTextField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, resources.getIcon("icons/user"));
         iconsTextField.putClientProperty(FlatClientProperties.TEXT_FIELD_TRAILING_ICON, resources.getIcon("icons/bookmarkGroup"));
 
         // search history button

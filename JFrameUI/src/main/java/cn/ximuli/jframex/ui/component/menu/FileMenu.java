@@ -8,6 +8,7 @@ import cn.ximuli.jframex.ui.demo.NewDialog;
 import cn.ximuli.jframex.ui.event.MenuButtonClickEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
+import cn.ximuli.jframex.ui.manager.UICreator;
 import com.formdev.flatlaf.extras.FlatDesktop;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +22,7 @@ import java.util.List;
 @Slf4j
 @Mate(value = "app.menu.file.title", shortKey = KeyEvent.VK_F, order = 100)
 public class FileMenu extends JMenu {
-    ResourceLoaderManager resources;
+    final ResourceLoaderManager resources;
 
     public FileMenu(ResourceLoaderManager resources) {
         this.resources = resources;
@@ -81,14 +82,10 @@ public class FileMenu extends JMenu {
         exitMenuItem.setIcon(resources.getIcon("icons/exit"));
         add(exitMenuItem);
 
-
-        Mate mate = CreateNewInternalJFrame.class.getAnnotation(Mate.class);
-        JMenuItem  createNewItem = new JMenuItem();
-        createNewItem.setText(mate.value() + "Internal");
-        createNewItem.setIcon(resources.getIcon(mate.icon()));
-        createNewItem.putClientProperty("class", CreateNewInternalJFrame.class);
-        createNewItem.addActionListener(e -> FrameManager.publishEvent(new MenuButtonClickEvent(createNewItem)));
-        add(createNewItem);
+        List<JMenuItem> internalJFrameItems = UICreator.createJMenuItemForInternalJFrame(CreateNewInternalJFrame.class);
+        for (JMenuItem internalJFrameItem : internalJFrameItems) {
+            add(internalJFrameItem);
+        }
 
         // integrate into macOS screen menu
         FlatDesktop.setQuitHandler(response -> response.performQuit());

@@ -30,17 +30,16 @@ public class AppSplashScreen extends JWindow {
     private AppSplashScreen() {
         setSize(MainFrame.getScreenRatioSize());
         setAlwaysOnTop(false);
-        setLayout(new MigLayout("fill, insets 0", "[grow]", "[grow][]"));
+        setLayout(new MigLayout("fill, insets 0", "[grow]", "[grow][10%]"));
 
         ImageIcon icon = loadSplashImage();
         splashLabel = new JLabel(icon);
-        splashLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-
         progressBar = new JProgressBar(0, 100);
         progressBar.setValue(0);
         progressBar.setIndeterminate(true);
         progressBar.setStringPainted(true);
         progressBar.setString("Loading...");
+        progressBar.setBorder(null);
         add(splashLabel, "grow, center"); // Center the image label
         add(progressBar, "growx, dock south"); // Dock progress bar at the bottom
         pack();
@@ -81,7 +80,7 @@ public class AppSplashScreen extends JWindow {
 
             Dimension windowSize = MainFrame.getScreenRatioSize();
             int windowWidth = windowSize.width;
-            int windowHeight = windowSize.height - 30; // Reserve space for progress bar
+            int windowHeight = windowSize.height; // Reserve space for progress bar
 
             // Calculate scaling factor to maintain aspect ratio
             int imgWidth = icon.getIconWidth();
@@ -124,8 +123,8 @@ public class AppSplashScreen extends JWindow {
             int addedValue = event.getValue();
             int currentValue = progressBar.getValue();
             int finalValue = Math.min(currentValue + addedValue, progressBar.getMaximum());
-            if (finalValue >= progressBar.getMaximum()) {
-                FrameManager.publishEvent(new ResourceReadyEvent(""));
+            if (finalValue >= progressBar.getMaximum()){
+                finalValue = progressBar.getMaximum();
             }
             progressBar.setValue(finalValue);
             String message = Formatter.format("{} ({}) ... {}%",
@@ -133,6 +132,9 @@ public class AppSplashScreen extends JWindow {
                     event.getMessage(),
                     finalValue);
             progressBar.setString(message);
+            if (finalValue >= progressBar.getMaximum()) {
+                FrameManager.publishEvent(new ResourceReadyEvent(""));
+            }
         });
     }
 
