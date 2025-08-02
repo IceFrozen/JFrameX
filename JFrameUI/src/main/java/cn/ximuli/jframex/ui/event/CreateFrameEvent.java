@@ -1,7 +1,6 @@
 package cn.ximuli.jframex.ui.event;
 
 import org.springframework.context.ApplicationEvent;
-
 import javax.swing.*;
 
 public class CreateFrameEvent<T extends JInternalFrame> extends ApplicationEvent {

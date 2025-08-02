@@ -1,17 +1,16 @@
 package cn.ximuli.jframex.ui.component.panels;
 
 import cn.ximuli.jframex.common.utils.ConvertUtil;
-import cn.ximuli.jframex.common.utils.RestartUtil;
 import cn.ximuli.jframex.common.utils.StringUtil;
 import cn.ximuli.jframex.ui.Application;
 import cn.ximuli.jframex.ui.I18nHelper;
 
+import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.event.RestartEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.manager.ThemeUIManager;
 import cn.ximuli.jframex.ui.storage.JFramePref;
-import com.formdev.flatlaf.util.FontUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import org.springframework.core.Ordered;
@@ -20,9 +19,6 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 
@@ -95,37 +91,35 @@ public class FontPanel extends JPanel {
 
     private void languagesChanges(ActionEvent e) {
         String lang = (String) langListBox.getSelectedItem();
-        String currentLang = System.getenv(Application.APP_LANGUAGE);
-        if (StringUtil.isNotBlank(lang) && !lang.equals(currentLang)) {
-            log.info("Language changed to: {}", lang);
-            JFramePref.state.put(Application.APP_LANGUAGE, lang);
-            Object[] options = {"Restart Now", "Cancel"};
-            int i = JOptionPane.showOptionDialog(
-                    this,
-                    "Language changed to " + lang + ". Please restart the application to apply changes.",
-                    "Title",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
-                    null,
-                    options,
-                    options[0]);
+        if (I18nHelper.isCurrentLanguage(lang)) {
+            langListBox.setSelectedItem(I18nHelper.getCurrentLocale());
+            return;
+        }
 
-
-            if (i == JOptionPane.OK_OPTION) {
-                try {
-                    I18nHelper.init();
-                    FrameManager.publishEvent(new RestartEvent(this));
-                } catch (Exception ex) {
-                    log.error("Failed to restart application", ex);
-                    JOptionPane.showMessageDialog(null,
-                            "Failed to restart application: " + ex.getMessage(),
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                    langListBox.setSelectedItem(I18nHelper.getDefaultLocale());
-                }
-            } else {
-                langListBox.setSelectedItem(I18nHelper.getDefaultLocale());
-            }
+        int result = JOptionPane.showConfirmDialog(
+                FontPanel.this,
+                I18nHelper.getMessage("app.setting.item.components.font.change.language.message", I18nHelper.getCurrentLocale().getLanguage(), lang),
+                I18nHelper.getMessage("app.setting.item.components.font.change.language.title"),
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+        log.debug("Close dialog result: {}", result == JOptionPane.YES_OPTION ? "YES" : "NO/CANCEL");
+        if (result != JOptionPane.YES_OPTION) {
+            langListBox.setSelectedItem(I18nHelper.getCurrentLocale());
+            return;
+        }
+        log.info("Language changed to: {}", lang);
+        try {
+            I18nHelper.updateLanguage(lang);
+            I18nHelper.init();
+            FrameManager.publishEvent(new RestartEvent(this));
+        } catch (Exception ex) {
+            log.error("Failed to restart application", ex);
+            JOptionPane.showMessageDialog(null,
+                    "Failed to restart application: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            langListBox.setSelectedItem(I18nHelper.getCurrentLocale());
         }
     }
 

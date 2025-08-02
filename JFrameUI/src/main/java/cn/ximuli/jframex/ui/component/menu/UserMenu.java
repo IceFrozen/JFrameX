@@ -15,8 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 
-import java.util.ArrayList;
-import java.util.List;
+
 @Slf4j
 @Mate(value = "app.menu.user.title", order = 6)
 public class UserMenu extends JMenu {

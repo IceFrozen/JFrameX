@@ -15,7 +15,9 @@ import org.springframework.core.annotation.AnnotationUtils;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UICreator {
 
@@ -30,18 +32,27 @@ public class UICreator {
             item.addActionListener(e -> FrameManager.publishEvent(new CreateFrameEvent(aClass)));
             result.add(item);
         }
-        return result;
+        return result.stream().filter(Objects::nonNull).toList();
     }
 
+    /**
+     * Creates a list of JComponent instances annotated with SettingMenu, sorted by their order attribute.
+     *
+     * @return A sorted list of JComponent instances
+     * @throws RuntimeException If an error occurs during class scanning or instantiation
+     */
     public static List<JComponent> createSettingPanels() {
         List<JComponent> result = new ArrayList<>();
         LoggedInUser currentUser = FrameManager.getCurrentUISession().getCurrentUser();
         ResourceLoaderManager resources = SpringUtils.getBean(ResourceLoaderManager.class);
+
         try {
+            // Scan for classes annotated with SettingMenu
             Set<Class<? extends JComponent>> classes = SpringUtils.scanClasses(Application.APP_COMMON_COMPONENT, JComponent.class);
             for (Class<? extends JComponent> aClass : classes) {
-                if (AnnotationUtils.findAnnotation(aClass, SettingMenu.class) != null) {
-                    SettingMenu settingMenu = aClass.getAnnotation(SettingMenu.class);
+                SettingMenu settingMenu = AnnotationUtils.findAnnotation(aClass, SettingMenu.class);
+                if (settingMenu != null) {
+                    // Instantiate the component with ResourceLoaderManager
                     JComponent component = ClassUtil.newInstance(aClass, new Class[]{ResourceLoaderManager.class}, new Object[]{resources});
                     component.setName(settingMenu.value());
                     component.setToolTipText(settingMenu.toolTipText());
@@ -49,9 +60,18 @@ public class UICreator {
                 }
             }
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to scan or instantiate setting panel classes", e);
         }
-        return result;
+
+        // Sort components by the order attribute of their SettingMenu annotation
+        return result.stream()
+                .filter(Objects::nonNull)
+                .sorted((c1, c2) -> {
+                    SettingMenu menu1 = c1.getClass().getAnnotation(SettingMenu.class);
+                    SettingMenu menu2 = c2.getClass().getAnnotation(SettingMenu.class);
+                    return Integer.compare(menu1.order(), menu2.order());
+                })
+                .collect(Collectors.toList());
     }
 
 
@@ -79,4 +99,5 @@ public class UICreator {
         }
         return menuList;
     }
+
 }

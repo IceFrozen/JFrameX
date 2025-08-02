@@ -39,11 +39,13 @@ public class ThemeUIManager {
     private static Set<String> availableFontFamilyNames;
 
     public static void setUp(String... args) {
+
         init();
         setupLaf(args);
     }
 
     private static void init() {
+        System.setProperty(Application.APP_STYLE_NAME, Application.APP_STYLE_NAME_DEFAULT);
         // Linux
         if (SystemInfo.isLinux) {
             // enable custom window decorations

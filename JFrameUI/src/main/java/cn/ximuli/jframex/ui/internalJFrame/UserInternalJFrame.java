@@ -126,7 +126,7 @@ public class UserInternalJFrame extends CommonInternalJFrame {
 
     private String convertSex(User user, Object value) {
         if (value instanceof Sex sex) {
-            return I18nHelper.i8nConvert(sex);
+            return I18nHelper.i18nConvert(sex);
         } else {
             return value.toString();
         }
@@ -149,7 +149,7 @@ public class UserInternalJFrame extends CommonInternalJFrame {
     }
 
     private String convertStatus(User user, Object value) {
-        return I18nHelper.i8nConvert((Status) value);
+        return I18nHelper.i18nConvert((Status) value);
     }
 
     private JTree createDepartmentTree(List<Department> departments) {
