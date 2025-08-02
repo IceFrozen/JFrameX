@@ -48,14 +48,6 @@ public class JFramePref {
         }
     }
 
-
-
-    public static synchronized void logOut() {
-        JFramePref.loggedInUser = null;
-        state.remove(USER_KEY);
-    }
-
-    
     public static synchronized void setUser(LoggedInUser loggedInUser, boolean rememberMe) {
         JFramePref.loggedInUser = loggedInUser;
         String userJsonStr = JSONUtil.to(loggedInUser);

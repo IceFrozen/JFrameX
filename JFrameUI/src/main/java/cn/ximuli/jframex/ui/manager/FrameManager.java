@@ -41,10 +41,6 @@ public class FrameManager {
     @Getter
     private LoggedInUser currentUser;
 
-    @Getter
-    public List<Runnable> afterUIReady = new ArrayList<>();
-
-
     @Autowired
     public FrameManager(LoginFrame loginFrame, ResourceLoaderManager loaderManager) {
         this.loaderManager = loaderManager;
@@ -92,9 +88,6 @@ public class FrameManager {
         this.uiSession.prepareUI();
         this.uiSession.getMainFrame().setVisible(true);
         updateStatus(Status.STARTED);
-        for (Runnable runnable : this.afterUIReady) {
-            runnable.run();
-        }
         loginFrame.reset();
         loginFrame.dispose();
     }
@@ -102,19 +95,32 @@ public class FrameManager {
     @EventListener(UserLogoutEvent.class)
     public void userLogout(UserLogoutEvent userLogoutEvent) {
         JFramePref.reset();
-        this.uiSession.getMainFrame().setVisible(false);
-        updateStatus(Status.SIGN_UP);
-        if (userLogoutEvent != null) {
-            JOptionPane.showMessageDialog(this.uiSession.getMainFrame(),
-                    I18nHelper.getMessage("app.logout.success"),
-                    I18nHelper.getMessage("app.logout.title"),
-                    JOptionPane.INFORMATION_MESSAGE);
+        if (this.uiSession != null) {
+            this.uiSession.getMainFrame().setVisible(false);
+            updateStatus(Status.SIGN_UP);
+            this.uiSession.destory();
+            this.uiSession = null;
         }
-        this.uiSession.destory();
-        this.uiSession = null;
+
         this.currentUser = null;
         loginFrame.reset();
         loginFrame.setVisible(true);
+    }
+
+    @EventListener(RestartEvent.class)
+    public void restartUI(RestartEvent event) throws ClassNotFoundException {
+        if (this.currentUser == null || this.currentUser.isExpired()) {
+            userLogout(null);
+            return;
+        }
+
+        if (this.uiSession != null) {
+            this.uiSession.getMainFrame().setVisible(false);
+            this.uiSession.destory();
+            this.uiSession = new UISession(this.currentUser, loaderManager);
+            this.uiSession.prepareUI();
+            this.uiSession.getMainFrame().setVisible(true);
+        }
     }
 
     @EventListener(MenuButtonClickEvent.class)
@@ -215,26 +221,11 @@ public class FrameManager {
     }
 
     public static void registerKeyAction(int key, BiConsumer<MainFrame, ActionEvent> keyAction) {
-        FrameManager frameManager = SpringUtils.getBean(FrameManager.class);
-        Runnable runnable = () -> {
-            UISession curretUISession = frameManager.getUiSession();
-            if (curretUISession == null) {
-                return;
-            }
-            MainFrame mainFrame = curretUISession.getMainFrame();
-            ((JComponent) mainFrame.getContentPane()).registerKeyboardAction(
-                    e -> keyAction.accept(mainFrame, e),
-                    KeyStroke.getKeyStroke(key, 0, false),
-                    JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        };
-
-        if (frameManager.status == Status.STARTING) {
-            frameManager.afterUIReady.add(runnable);
-        } else if (frameManager.status == Status.STARTED){
-            runnable.run();
-        } else {
-            log.warn("unknown status status: {}", frameManager.status);
+        UISession currentUISession = getCurrentUISession();
+        if (currentUISession == null) {
+            return;
         }
+        currentUISession.registerKeyAction(key, keyAction);
     }
 
     public synchronized void updateStatus(Status status) {

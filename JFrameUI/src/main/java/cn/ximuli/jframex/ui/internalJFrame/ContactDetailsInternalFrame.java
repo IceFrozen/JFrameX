@@ -26,7 +26,6 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         this.resources = resources;
         setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
         setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
-        // Add component listener to adjust size when shown
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
@@ -34,7 +33,6 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
             }
         });
     }
-
 
     private JPanel createContactPanel() {
         JPanel panel = new JPanel(new MigLayout("wrap 1, insets 10", "[grow]", ""));

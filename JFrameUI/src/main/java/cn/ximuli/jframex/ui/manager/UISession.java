@@ -3,6 +3,7 @@ package cn.ximuli.jframex.ui.manager;
 import cn.ximuli.jframex.model.LoggedInUser;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.Application;
+import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.component.menu.MenuBar;
 import cn.ximuli.jframex.ui.component.menu.ToolBar;
@@ -16,9 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 @Getter
 @Slf4j
@@ -33,6 +37,9 @@ public class UISession {
     private MenuBar menuBar;
     private ToolBar toolBar;
 
+    @Getter
+    public List<Runnable> afterUIReady = new ArrayList<>();
+
     private UISession() {
     }
 
@@ -43,6 +50,7 @@ public class UISession {
 
 
     public void prepareUI() throws ClassNotFoundException {
+        log.debug("Language: {}", I18nHelper.getMessage("app.login.subtitle"));
         desktopPanel = new DesktopPanel(this.resources);
         statePanel = new StatePanel(currentUser);
         internalJFrames = initInternalJFrames();
@@ -50,6 +58,7 @@ public class UISession {
         toolBar = initToolBar();
         mainFrame = new MainFrame(resources, desktopPanel, toolBar, statePanel, menuBar);
         registerSystemScaleFactors(mainFrame);
+        this.afterUIReady.forEach(Runnable::run);
     }
 
 
@@ -69,6 +78,7 @@ public class UISession {
     }
 
     public void destory() {
+        this.afterUIReady.clear();
         cleanupComponent(this.mainFrame);
         cleanupComponent(this.desktopPanel);
         cleanupComponent(this.statePanel);
@@ -79,7 +89,7 @@ public class UISession {
         }
     }
 
-    public static void registerSystemScaleFactors(JFrame frame) {
+    public void registerSystemScaleFactors(JFrame frame) {
         registerSystemScaleFactor(frame, "alt shift F1", null);
         registerSystemScaleFactor(frame, "alt shift F2", "1");
 
@@ -210,6 +220,21 @@ public class UISession {
 
         } catch (Exception e) {
             log.error("Error during component cleanup: " + e.getMessage(), e);
+        }
+    }
+
+    public void registerKeyAction(int key, BiConsumer<MainFrame, ActionEvent> keyAction) {
+        Runnable runnable = () -> {
+            ((JComponent) mainFrame.getContentPane()).registerKeyboardAction(
+                    e -> keyAction.accept(mainFrame, e),
+                    KeyStroke.getKeyStroke(key, 0, false),
+                    JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        };
+
+        if (this.mainFrame == null) {
+            this.afterUIReady.add(runnable);
+        } else {
+            runnable.run();
         }
     }
 }

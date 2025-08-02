@@ -47,7 +47,8 @@ public class MockClass {
     }
 
     public static List<UserType> getUserTypes() {
-        if (SpringUtils.getDefaultLocale().getLanguage().contains("en")) {
+
+        if (System.getProperty("app.language", "en").contains("en")) {
             return List.of(
                     new UserType(1, "Admin"),
                     new UserType(2, "User")
@@ -62,7 +63,7 @@ public class MockClass {
 
     public static List<Department> getDepartmentList() {
         // 根据语言动态获取部门数据
-        String[][] departmentData = getDepartmentData(SpringUtils.getDefaultLocale().getLanguage().contains("en"));
+        String[][] departmentData = getDepartmentData(System.getProperty("app.language", "en").contains("en"));
 
         // 创建部门列表
         List<Department> departments = new ArrayList<>();

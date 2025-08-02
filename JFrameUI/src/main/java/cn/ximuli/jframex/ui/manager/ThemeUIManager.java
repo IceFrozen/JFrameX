@@ -12,6 +12,7 @@ import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -22,6 +23,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 public class ThemeUIManager {
@@ -29,13 +35,15 @@ public class ThemeUIManager {
     public static final String KEY_LAF_THEME_FILE = "lafThemeFile";
     public static final String KEY_LAF_SYNC = "lafSync";
     static boolean screenshotsMode = Boolean.parseBoolean(System.getProperty("jframex.screenshotsMode"));
-    private static String[] availableFontFamilyNames;
-    public static void setUp(String... args) throws Exception {
+    @Getter
+    private static Set<String> availableFontFamilyNames;
+
+    public static void setUp(String... args) {
         init();
         setupLaf(args);
     }
 
-    private static void init() throws Exception {
+    private static void init() {
         // Linux
         if (SystemInfo.isLinux) {
             // enable custom window decorations
@@ -95,10 +103,27 @@ public class ThemeUIManager {
 
 
     private static void initFont() {
+        availableFontFamilyNames = new LinkedHashSet<>();
         // install fonts for lazy loading
         FlatInterFont.install();
-        availableFontFamilyNames = FontUtils.getAvailableFontFamilyNames().clone();
-        Arrays.sort(availableFontFamilyNames);
+        String[] fonts = FontUtils.getAvailableFontFamilyNames().clone();
+        availableFontFamilyNames.addAll(List.of(fonts));
+        availableFontFamilyNames.addAll(Arrays.asList(
+                "Arial", "Cantarell", "Comic Sans MS", "DejaVu Sans",
+                "Dialog", "Inter", "Liberation Sans", "Noto Sans", "Open Sans", "Roboto",
+                "SansSerif", "Segoe UI", "Serif", "Tahoma", "Ubuntu", "Verdana"));
+        availableFontFamilyNames = availableFontFamilyNames.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+        // get current font
+        Font currentFont = UIManager.getFont("Label.font");
+        String currentFamily = currentFont.getFamily();
+        String currentSize = Integer.toString(currentFont.getSize());
+
+        // add font families
+
+        if (!availableFontFamilyNames.contains(currentFamily)) {
+            availableFontFamilyNames.add(currentFamily);
+        }
+
 //        FlatInterFont.installLazy();
 //            FlatJetBrainsMonoFont.installLazy();
 //            FlatRobotoFont.installLazy();
@@ -119,8 +144,8 @@ public class ThemeUIManager {
 //			HiDPIUtils.installHiDPIRepaintManager();
         // application specific UI defaults
         String packageName = Application.class.getPackageName();
-        log.info("package:{}", packageName);
-        FlatLaf.registerCustomDefaultsSource("style");
+        log.debug("Package:{}", packageName);
+        FlatLaf.registerCustomDefaultsSource(Application.APP_STYLE_PATH);
         // install inspectors
         FlatInspector.install("ctrl shift alt X");
         FlatUIDefaultsInspector.install("ctrl shift alt Y");
@@ -190,7 +215,6 @@ public class ThemeUIManager {
                 } else {
                     FlatLaf.setup(IntelliJTheme.createLaf(new FileInputStream(themeInfo.getThemeFile())));
                 }
-
                 JFramePref.state.put(ThemeUIManager.KEY_LAF_THEME_FILE, themeInfo.getThemeFile().getAbsolutePath());
             } catch (Exception ex) {
                 LoggingFacade.INSTANCE.logSevere(null, ex);
@@ -205,77 +229,26 @@ public class ThemeUIManager {
         if (!reload) {
             FlatAnimatedLafChange.hideSnapshotWithAnimation();
         }
-
     }
 
-    private void fontFamilyChanged(ActionEvent e) {
-        String fontFamily = e.getActionCommand();
-
-        FlatAnimatedLafChange.showSnapshot();
-
-        Font font = UIManager.getFont("defaultFont");
-        Font newFont = FontUtils.getCompositeFont(fontFamily, font.getStyle(), font.getSize());
-        UIManager.put("defaultFont", newFont);
-
-        FlatLaf.updateUI();
-        FlatAnimatedLafChange.hideSnapshotWithAnimation();
+    public static void fontFamilyChanged(String fontFamily) {
+        SwingUtilities.invokeLater(() -> {
+            FlatAnimatedLafChange.showSnapshot();
+            Font font = UIManager.getFont("defaultFont");
+            Font newFont = FontUtils.getCompositeFont(fontFamily, font.getStyle(), font.getSize());
+            UIManager.put("defaultFont", newFont);
+            FlatLaf.updateUI();
+            FlatAnimatedLafChange.hideSnapshotWithAnimation();
+        });
     }
 
-    private void fontSizeChanged(ActionEvent e) {
-        String fontSizeStr = e.getActionCommand();
-
-        Font font = UIManager.getFont("defaultFont");
-        Font newFont = font.deriveFont((float) Integer.parseInt(fontSizeStr));
-        UIManager.put("defaultFont", newFont);
-
-        FlatLaf.updateUI();
-    }
-
-    private void restoreFont() {
-        UIManager.put("defaultFont", null);
-        updateFontMenuItems();
-        FlatLaf.updateUI();
-    }
-
-    private void incrFont() {
-        Font font = UIManager.getFont("defaultFont");
-        Font newFont = font.deriveFont((float) (font.getSize() + 1));
-        UIManager.put("defaultFont", newFont);
-
-        updateFontMenuItems();
-        FlatLaf.updateUI();
-    }
-
-    private void decrFont() {
-        Font font = UIManager.getFont("defaultFont");
-        Font newFont = font.deriveFont((float) Math.max(font.getSize() - 1, 10));
-        UIManager.put("defaultFont", newFont);
-
-        updateFontMenuItems();
-        FlatLaf.updateUI();
-    }
-
-    void updateFontMenuItems() {
-        // get current font
-        Font currentFont = UIManager.getFont("Label.font");
-        String currentFamily = currentFont.getFamily();
-        String currentSize = Integer.toString(currentFont.getSize());
-
-        // add font families
-        ArrayList<String> families = new ArrayList<>(Arrays.asList(
-                "Arial", "Cantarell", "Comic Sans MS", "DejaVu Sans",
-                "Dialog", "Inter", "Liberation Sans", "Noto Sans", "Open Sans", "Roboto",
-                "SansSerif", "Segoe UI", "Serif", "Tahoma", "Ubuntu", "Verdana"));
-        if (!families.contains(currentFamily))
-            families.add(currentFamily);
-        families.sort(String.CASE_INSENSITIVE_ORDER);
-        // add font
-        ArrayList<String> sizes = new ArrayList<>(Arrays.asList(
-                "10", "11", "12", "14", "16", "18", "20", "24", "28"));
-        if (!sizes.contains(currentSize))
-            sizes.add(currentSize);
-        sizes.sort(String.CASE_INSENSITIVE_ORDER);
-
+    public static void fontSizeChanged(float fontSize) {
+        SwingUtilities.invokeLater(() -> {
+            Font font = UIManager.getFont("defaultFont");
+            Font newFont = font.deriveFont(fontSize);
+            UIManager.put("defaultFont", newFont);
+            FlatLaf.updateUI();
+        });
     }
 
 

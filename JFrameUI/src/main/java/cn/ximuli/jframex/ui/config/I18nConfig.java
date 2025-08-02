@@ -12,24 +12,8 @@ import org.springframework.core.env.Environment;
 import java.util.Locale;
 
 
-@Configuration
-@Slf4j
+
 public class I18nConfig {
 
-    @Bean
-    public MessageSource messageSource(Locale defaultLocal) {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:i18n/messages");
-        messageSource.setDefaultEncoding("UTF-8");
-        I18nHelper.setMessageSource(messageSource, defaultLocal);
 
-        messageSource.setDefaultLocale(defaultLocal);
-        log.info("Service language: {}", defaultLocal);
-        return messageSource;
-    }
-
-    @Bean
-    public Locale defaultLocal(Environment environment) {
-        return Locale.forLanguageTag(environment.getProperty(Application.APP_LANGUAGE, Locale.getDefault().getLanguage()));
-    }
 }

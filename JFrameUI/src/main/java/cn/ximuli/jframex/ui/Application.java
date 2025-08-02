@@ -9,6 +9,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 @Slf4j
 public class Application implements CommandLineRunner {
     public static final String APP_STYLE_NAME = "app.style.name";
+    public static final String APP_STYLE_PATH = "style";
     public static final String APP_STYLE_NAME_DEFAULT = "default";
     public static final String APP_LANGUAGE = "app.language";
     public static final String APP_LANGUAGE_EN = "en";
