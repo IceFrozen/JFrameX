@@ -59,7 +59,7 @@ public class UserInternalJFrame extends CommonInternalJFrame {
     }
 
 
-    public void refleshUI() {
+    public void refreshUI() {
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         departmentPanel = initLeftPanel();
         tablePanel = initRightPanel();

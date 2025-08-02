@@ -80,31 +80,40 @@ public class FrameManager {
     }
 
     @EventListener(UserLoginEvent.class)
-    public void userLogin(UserLoginEvent userLoginEvent) throws ClassNotFoundException {
+    public void userLogin(UserLoginEvent userLoginEvent) {
         JFramePref.setUser(userLoginEvent.getLoggedInUser(), userLoginEvent.isRememberMe());
         updateStatus(Status.STARTING);
-        this.currentUser = userLoginEvent.getLoggedInUser();
-        this.uiSession = new UISession(userLoginEvent.getLoggedInUser(), loaderManager);
-        this.uiSession.prepareUI();
-        this.uiSession.getMainFrame().setVisible(true);
-        updateStatus(Status.STARTED);
-        loginFrame.reset();
-        loginFrame.dispose();
+        SwingUtilities.invokeLater(() -> {
+            try {
+                this.currentUser = userLoginEvent.getLoggedInUser();
+                this.uiSession = new UISession(userLoginEvent.getLoggedInUser(), loaderManager);
+                this.uiSession.prepareUI();
+                this.uiSession.getMainFrame().setVisible(true);
+                updateStatus(Status.STARTED);
+                loginFrame.reset();
+                loginFrame.dispose();
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
     }
 
     @EventListener(UserLogoutEvent.class)
     public void userLogout(UserLogoutEvent userLogoutEvent) {
-        JFramePref.reset();
-        if (this.uiSession != null) {
+        if (this.currentUser == null || this.currentUser.isExpired()) {
+            return;
+        }
+        SwingUtilities.invokeLater(() -> {
+            JFramePref.reset();
             this.uiSession.getMainFrame().setVisible(false);
             updateStatus(Status.SIGN_UP);
             this.uiSession.destory();
             this.uiSession = null;
-        }
-
-        this.currentUser = null;
-        loginFrame.reset();
-        loginFrame.setVisible(true);
+            this.currentUser = null;
+            loginFrame.reset();
+            loginFrame.setVisible(true);
+        });
     }
 
     @EventListener(RestartEvent.class)
@@ -213,7 +222,7 @@ public class FrameManager {
 
 
     public static void showMessageJOptionPane(java.awt.Component parentComponent, String message, ActionEvent e) {
-       showJOptionPane(parentComponent, message, JOptionPane.PLAIN_MESSAGE, e);
+        showJOptionPane(parentComponent, message, JOptionPane.PLAIN_MESSAGE, e);
     }
 
     public static void showJOptionPane(java.awt.Component parentComponent, String message, int type, ActionEvent e) {

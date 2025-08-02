@@ -81,7 +81,7 @@ public class UICreator {
         LoggedInUser currentUser = FrameManager.getCurrentUISession().getCurrentUser();
         for (Class<? extends CommonInternalJFrame> aClass : classes) {
             CommonInternalJFrame commonInternalJFrame = ClassUtil.newInstance(aClass, new Class[]{ResourceLoaderManager.class, DesktopPanel.class}, new Object[]{resources, desktopPanel});
-            commonInternalJFrame.refleshUI();
+            commonInternalJFrame.refreshUI();
             internalJFrames.add(commonInternalJFrame);
         }
         return internalJFrames;

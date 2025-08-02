@@ -33,7 +33,7 @@ public class ExtrasInternalJFrame extends CommonInternalJFrame {
     }
 
 
-    public void refleshUI() {
+    public void refreshUI() {
         jPanel = new ExtrasPanel(super.resources);
         jPanel.setBorder(LineBorder.createGrayLineBorder());
         setLayout(new BorderLayout());

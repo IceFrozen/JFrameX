@@ -33,7 +33,7 @@ public class ContainerInternalJFrame extends CommonInternalJFrame {
     }
 
 
-    public void refleshUI() {
+    public void refreshUI() {
         jPanel = new ContainerComponentsPanel(super.resources);
         jPanel.setBorder(LineBorder.createGrayLineBorder());
         setLayout(new BorderLayout());

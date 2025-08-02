@@ -12,11 +12,15 @@ import cn.ximuli.jframex.ui.manager.UICreator;
 import com.formdev.flatlaf.FlatClientProperties;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+/**
+ * Internal frame for displaying user contact details, with a logout button and responsive layout.
+ */
 @Mate(value = "app.menu.view.components.tab", icon = "icons/tab_component", order = 1)
 @Slf4j
 public class ContactDetailsInternalFrame extends CommonInternalJFrame {
@@ -24,11 +28,20 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
     private JPanel mainPanel;
     private JPanel widgetsPanel;
 
+    /**
+     * Constructs the contact details internal frame with specified resources and desktop panel.
+     *
+     * @param resources      Resource loader manager for accessing images and icons
+     * @param desktopPanel   Desktop panel to contain this internal frame
+     */
     public ContactDetailsInternalFrame(ResourceLoaderManager resources, DesktopPanel desktopPanel) {
         super(resources, desktopPanel);
         this.resources = resources;
         setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
         setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
+        // Make the frame non-draggable and non-resizable
+        setMaximizable(false);
+        setResizable(false);
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
@@ -37,10 +50,16 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         });
     }
 
+    /**
+     * Creates the main contact panel with user details, ensuring sub-panels wrap content when exceeding frame width.
+     *
+     * @return JPanel containing user contact details
+     */
     private JPanel createContactPanel() {
         LoggedInUser currentUser = FrameManager.getCurrentUser();
         User user = currentUser.getUser();
 
+        // Main panel with vertical stacking
         JPanel panel = new JPanel(new MigLayout("wrap 1, insets 10", "[grow]", ""));
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createEmptyBorder(50, 10, 10, 10));
@@ -60,7 +79,7 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         titleLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         panel.add(titleLabel, "align center");
 
-        // Rating
+        // Rating (Phone)
         JLabel ratingLabel = new JLabel(user.getPhone());
         ratingLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         panel.add(ratingLabel, "align center");
@@ -68,21 +87,20 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         // Contact Information
         JPanel contactInfoPanel = new JPanel(new MigLayout("wrap 1, insets 0", "[grow]", ""));
         contactInfoPanel.add(new JLabel(I18nHelper.getMessage("app.contact.info.title")), "wrap");
-        contactInfoPanel.add(new JLabel("Email:aaaaaaaaaaaaaaaaaaa " + user.getEmail()));
-        contactInfoPanel.add(new JLabel("Phone: " + user.getPhone()));
+        contactInfoPanel.add(new JLabel("Email: " + user.getEmail()), "growx, wrap");
+        contactInfoPanel.add(new JLabel("Phone: " + user.getPhone()), "growx, wrap");
         panel.add(contactInfoPanel, "growx");
 
         // Tags
-        JPanel tagsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        String[] tags = {"taggggg 1", "taggggg 2", "taggggg 3", "taggggg 4", "taggggg 5","taggggg 6", "taggggg 7"};
+        JPanel tagsPanel = new JPanel(new MigLayout("wrap, insets 0", "[grow][grow][grow][grow][grow]", "[grow]"));
+        String[] tags = {"taggggg 1", "taggggg 2", "taggggg 3", "taggggg 4", "taggggg 5", "taggggg 6", "taggggg 7"};
         for (String tag : tags) {
             JLabel tagLabel = new JLabel(tag);
-            //---- label13 ----
-            tagLabel.setText(tag);
             tagLabel.putClientProperty(FlatClientProperties.STYLE, "arc: 999; border: 2,10,2,10");
             tagLabel.setBackground(new Color(0xb8e4f3));
             tagLabel.setForeground(new Color(0x135b76));
-            tagsPanel.add(tagLabel);
+            tagsPanel.add(tagLabel, "growx, wrap, gapright ");
+
         }
         panel.add(tagsPanel, "growx");
 
@@ -92,6 +110,11 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         return panel;
     }
 
+    /**
+     * Creates the widgets panel with a logout button.
+     *
+     * @return JPanel containing the logout button
+     */
     private JPanel createWidgetsPanel() {
         JPanel panel = new JPanel(new MigLayout("insets 10", "[grow]", ""));
         panel.setBackground(new Color(240, 240, 240));
@@ -114,6 +137,9 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         return panel;
     }
 
+    /**
+     * Handles the logout action with a confirmation dialog.
+     */
     private void handleLogOut() {
         int confirm = JOptionPane.showConfirmDialog(this,
                 I18nHelper.getMessage("app.logout.confirm"),
@@ -122,10 +148,13 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         if (confirm != JOptionPane.YES_OPTION) {
             return;
         }
-        FrameManager.publishEvent(new UserLogoutEvent( this));
+        FrameManager.publishEvent(new UserLogoutEvent(this));
     }
 
-    public void refleshUI() {
+    /**
+     * Refreshes the UI by adding the main contact panel and widgets panel.
+     */
+    public void refreshUI() {
         setLayout(new BorderLayout());
         // Main panel with MigLayout
         this.mainPanel = createContactPanel();
@@ -135,6 +164,9 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         add(widgetsPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Adjusts the frame size to fit within the desktop pane with a 2:1 width-to-height ratio.
+     */
     private void adjustFrameSize() {
         // Get the desktop pane size
         Dimension desktopSize = desktopPane.getSize();

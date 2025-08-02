@@ -5,9 +5,6 @@ import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.event.InternalFrameEvent;
@@ -35,7 +32,7 @@ public abstract class CommonInternalJFrame extends JInternalFrame implements Com
         setClosable(true);
     }
 
-    public abstract void refleshUI();
+    public abstract void refreshUI();
 
     @Override
     public void componentShown(ComponentEvent e) {

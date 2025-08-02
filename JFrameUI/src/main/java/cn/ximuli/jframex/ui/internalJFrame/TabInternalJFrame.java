@@ -33,7 +33,7 @@ public class TabInternalJFrame extends CommonInternalJFrame {
     }
 
 
-    public void refleshUI() {
+    public void refreshUI() {
         tabsComponentsPanel = new TabsComponentsPanel(super.resources);
         tabsComponentsPanel.setBorder(LineBorder.createGrayLineBorder());
         setLayout(new BorderLayout());

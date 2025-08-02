@@ -97,7 +97,8 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
             JComponent bean =  info.getValue() ;
             controlPanel.removeAll();
             controlPanel.add(bean, BorderLayout.CENTER);
-            refreshUI();
+            controlPanel.revalidate();
+            controlPanel.updateUI();
         });
 
         // remove contentPanel bottom insets
@@ -115,13 +116,8 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
     }
 
 
-    public void refleshUI() {
+    public void refreshUI() {
         initComponents();
         initFullWindowContent();
-    }
-
-    protected void refreshUI(){
-        controlPanel.revalidate();
-        controlPanel.updateUI();
     }
 }

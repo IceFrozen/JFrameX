@@ -198,8 +198,8 @@ public class LoginFrame extends JFrame {
 
         // Progress bar at the bottom
         progressBar = new JProgressBar();
-        progressBar.setIndeterminate(true);
-        progressBar.setVisible(false);
+        progressBar.setIndeterminate(false);
+        progressBar.setVisible(true);
         progressBar.setOpaque(false); // Make progress bar transparent
         progressBar.setBackground(new Color(0, 0, 0, 0)); // Fully transparent background
         progressBar.setForeground(new Color(57, 141, 215));
@@ -248,6 +248,7 @@ public class LoginFrame extends JFrame {
 
     private void enableOrDisableComponents(boolean  enabled) {
         progressBar.setVisible(!enabled);
+        progressBar.setIndeterminate(!enabled);
         loginButton.setEnabled(enabled);
         cancelButton.setEnabled(enabled);
         usernameField.setEnabled(enabled);

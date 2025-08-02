@@ -35,7 +35,7 @@ public class DataInternalJFrame extends CommonInternalJFrame {
     }
 
 
-    public void refleshUI() {
+    public void refreshUI() {
         jPanel = new DataComponentsPanel(resources);
         jPanel.setBorder(LineBorder.createGrayLineBorder());
         setLayout(new BorderLayout());

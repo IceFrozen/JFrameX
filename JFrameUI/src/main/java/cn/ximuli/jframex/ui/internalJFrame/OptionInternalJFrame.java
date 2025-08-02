@@ -33,7 +33,7 @@ public class OptionInternalJFrame extends CommonInternalJFrame {
     }
 
 
-    public void refleshUI() {
+    public void refreshUI() {
         jPanel = new OptionPanePanel(super.resources);
         jPanel.setBorder(LineBorder.createGrayLineBorder());
         setLayout(new BorderLayout());

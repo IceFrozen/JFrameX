@@ -26,7 +26,7 @@ public class BasicInternalJFrame extends CommonInternalJFrame {
     }
 
     @Override
-     public void refleshUI() {
+     public void refreshUI() {
         jPanel = new BasicComponentsPanel(super.resources);
         jPanel.setBorder(LineBorder.createGrayLineBorder());
         setLayout(new BorderLayout());

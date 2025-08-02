@@ -38,7 +38,7 @@ public class CreateNewInternalJFrame extends CommonInternalJFrame {
     }
 
 
-    public void refleshUI() {
+    public void refreshUI() {
         initComponents();
         getRootPane().setDefaultButton(okButton);
         // register ESC key to close frame
