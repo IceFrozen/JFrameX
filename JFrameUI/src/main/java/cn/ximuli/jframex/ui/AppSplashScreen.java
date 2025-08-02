@@ -14,19 +14,13 @@ import java.awt.*;
 import java.net.URL;
 import java.util.Objects;
 
-/**
- * A splash screen window displaying a scaled image and a progress bar.
- * This class is a singleton and manages the application's loading progress.
- */
 @Slf4j
 public class AppSplashScreen extends JWindow {
     @Getter
     private final JProgressBar progressBar;
     private final JLabel splashLabel;
 
-    /**
-     * Private constructor to enforce singleton pattern.
-     */
+
     private AppSplashScreen() {
         setSize(MainFrame.getScreenRatioSize());
         setAlwaysOnTop(false);
@@ -46,11 +40,6 @@ public class AppSplashScreen extends JWindow {
         centerOnScreen();
     }
 
-    /**
-     * Closes and disposes of the splash screen.
-     *
-     * @return true if the splash screen was closed, false otherwise
-     */
     public static boolean close() {
         AppSplashScreen instance = SingletonHolder.INSTANCE;
         instance.setVisible(false);
@@ -58,11 +47,6 @@ public class AppSplashScreen extends JWindow {
         return true;
     }
 
-    /**
-     * Loads and scales the splash image based on the window size.
-     *
-     * @return the scaled ImageIcon, or an empty ImageIcon if loading fails
-     */
     private ImageIcon loadSplashImage() {
         URL url = DesktopPanel.class.getResource("/style/splash.png");
         if (url == null) {
@@ -103,18 +87,12 @@ public class AppSplashScreen extends JWindow {
         }
     }
 
-    /**
-     * Centers the splash screen on the screen.
-     */
+
     private void centerOnScreen() {
         setLocationRelativeTo(null);
     }
 
-    /**
-     * Updates the progress bar based on the provided event.
-     *
-     * @param event the progress event containing the value and message
-     */
+
     public void updateProgress(ProgressEvent event) {
         Objects.requireNonNull(event, "ProgressEvent cannot be null");
         SwingUtilities.invokeLater(() -> {
@@ -152,11 +130,6 @@ public class AppSplashScreen extends JWindow {
         private static final AppSplashScreen INSTANCE = new AppSplashScreen();
     }
 
-    /**
-     * Gets the singleton instance of AppSplashScreen.
-     *
-     * @return the singleton instance
-     */
     public static AppSplashScreen getInstance() {
         return SingletonHolder.INSTANCE;
     }

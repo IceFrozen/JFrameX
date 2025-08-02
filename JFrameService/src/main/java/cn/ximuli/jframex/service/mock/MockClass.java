@@ -8,7 +8,6 @@ import cn.ximuli.jframex.model.User;
 import cn.ximuli.jframex.model.UserType;
 import cn.ximuli.jframex.model.constants.Sex;
 import cn.ximuli.jframex.model.constants.Status;
-import cn.ximuli.jframex.service.util.SpringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +19,7 @@ public class MockClass {
     public static final List<Department> departmentList = getDepartmentList();
 
     public static final List<User> allUser = getAllUser();
+
 
     public static List<User> getAllUser() {
         return UserGenerator.generateUsers(1000);
@@ -176,9 +176,9 @@ public class MockClass {
         }
 
         private static LocalDate randomBirthday() {
-            int year = 1950 + RANDOM.nextInt(70); // 1950 到 2020 之间的随机年份
-            int month = 1 + RANDOM.nextInt(12); // 1 到 12 之间的随机月份
-            int day = 1 + RANDOM.nextInt(28); // 1 到 28 之间的随机日期
+            int year = 1950 + RANDOM.nextInt(70);
+            int month = 1 + RANDOM.nextInt(12);
+            int day = 1 + RANDOM.nextInt(28);
             return LocalDate.of(year, month, day);
         }
 
@@ -228,4 +228,5 @@ public class MockClass {
             return statuses[RANDOM.nextInt(statuses.length)];
         }
     }
+
 }

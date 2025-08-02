@@ -8,7 +8,6 @@ import cn.ximuli.jframex.ui.component.menu.MenuBar;
 import cn.ximuli.jframex.ui.component.menu.ToolBar;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import static java.awt.BorderLayout.*;
@@ -18,11 +17,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
 
-/**
- * Main application window, responsible for initializing and configuring the UI.
- * Includes a toolbar, desktop panel, status panel, and menu bar, with platform-specific
- * settings and a close confirmation dialog.
- */
 @Slf4j
 public class MainFrame extends JFrame {
     private static final double SCREEN_RATIO_WIDTH = 0.75;
@@ -36,16 +30,6 @@ public class MainFrame extends JFrame {
     private final MenuBar menuBar;
     private final ResourceLoaderManager resources;
 
-    /**
-     * Constructs the main window with specified components and initializes the UI.
-     *
-     * @param resources    Resource loader manager for accessing resources
-     * @param desktopPanel Desktop panel for the main content area
-     * @param toolBar      Toolbar for quick access controls
-     * @param statePanel   Status panel for displaying application status
-     * @param menuBar      Menu bar for application menus
-     * @throws HeadlessException If running in a headless environment
-     */
     public MainFrame(ResourceLoaderManager resources, DesktopPanel desktopPanel, ToolBar toolBar, StatePanel statePanel, MenuBar menuBar) throws HeadlessException {
         this.desktopPanel = desktopPanel;
         this.toolBar = toolBar;
@@ -109,11 +93,7 @@ public class MainFrame extends JFrame {
         }
     }
 
-    /**
-     * Calculates the window size based on screen ratio.
-     *
-     * @return Adjusted window size based on screen dimensions
-     */
+
     public static Dimension getScreenRatioSize() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int adaptedWidth = (int) (screenSize.width * SCREEN_RATIO_WIDTH);
@@ -122,9 +102,7 @@ public class MainFrame extends JFrame {
         return new Dimension(adaptedWidth, adaptedHeight);
     }
 
-    /**
-     * Adds a window close listener that displays a confirmation dialog.
-     */
+
     public void addCloseListener() {
         this.addWindowListener(new WindowAdapter() {
             @Override

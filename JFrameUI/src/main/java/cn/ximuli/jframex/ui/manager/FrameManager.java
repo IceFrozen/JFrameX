@@ -39,7 +39,7 @@ public class FrameManager {
     private final LoginFrame loginFrame;
     private final ResourceLoaderManager loaderManager;
     @Getter
-    private LoggedInUser currentUser;
+    private volatile LoggedInUser currentUser;
 
     @Autowired
     public FrameManager(LoginFrame loginFrame, ResourceLoaderManager loaderManager) {
@@ -246,6 +246,10 @@ public class FrameManager {
 
     public static UISession getCurrentUISession() {
         return SpringUtils.getBean(FrameManager.class).getUiSession();
+    }
+
+    public static LoggedInUser getCurrentUser() {
+        return SpringUtils.getBean(FrameManager.class).currentUser;
     }
 
 }

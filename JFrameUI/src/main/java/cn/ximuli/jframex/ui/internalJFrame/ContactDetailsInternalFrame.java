@@ -1,11 +1,14 @@
 package cn.ximuli.jframex.ui.internalJFrame;
 
+import cn.ximuli.jframex.model.LoggedInUser;
+import cn.ximuli.jframex.model.User;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.component.menu.Mate;
 import cn.ximuli.jframex.ui.event.UserLogoutEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
+import cn.ximuli.jframex.ui.manager.UICreator;
 import com.formdev.flatlaf.FlatClientProperties;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
@@ -35,6 +38,9 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
     }
 
     private JPanel createContactPanel() {
+        LoggedInUser currentUser = FrameManager.getCurrentUser();
+        User user = currentUser.getUser();
+
         JPanel panel = new JPanel(new MigLayout("wrap 1, insets 10", "[grow]", ""));
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createEmptyBorder(50, 10, 10, 10));
@@ -46,35 +52,36 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         panel.add(avatarLabel, "align center");
 
         // Name and Title
-        JLabel nameLabel = new JLabel("Claudia Mills");
+        JLabel nameLabel = new JLabel(user.getName());
         nameLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
         panel.add(nameLabel, "align center");
 
-        JLabel titleLabel = new JLabel("Product Manager @ TechCore");
+        JLabel titleLabel = new JLabel(user.getDepartment().getName());
         titleLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         panel.add(titleLabel, "align center");
 
         // Rating
-        JLabel ratingLabel = new JLabel("★★★★☆ 128");
+        JLabel ratingLabel = new JLabel(user.getPhone());
         ratingLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         panel.add(ratingLabel, "align center");
 
         // Contact Information
         JPanel contactInfoPanel = new JPanel(new MigLayout("wrap 1, insets 0", "[grow]", ""));
         contactInfoPanel.add(new JLabel(I18nHelper.getMessage("app.contact.info.title")), "wrap");
-        contactInfoPanel.add(new JLabel("Email: claudia.mills@techcore.com"));
-        contactInfoPanel.add(new JLabel("Phone: +1-415-555-0004"));
-        contactInfoPanel.add(new JLabel("Address: West End 123rd St, San Francisco 90210, CA, US"));
+        contactInfoPanel.add(new JLabel("Email:aaaaaaaaaaaaaaaaaaa " + user.getEmail()));
+        contactInfoPanel.add(new JLabel("Phone: " + user.getPhone()));
         panel.add(contactInfoPanel, "growx");
 
         // Tags
         JPanel tagsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        String[] tags = {"tag 1", "tag 2", "tag 3", "tag 4", "tag 5"};
+        String[] tags = {"taggggg 1", "taggggg 2", "taggggg 3", "taggggg 4", "taggggg 5","taggggg 6", "taggggg 7"};
         for (String tag : tags) {
             JLabel tagLabel = new JLabel(tag);
-            tagLabel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-            tagLabel.setOpaque(true);
-            tagLabel.setBackground(new Color(230, 230, 230));
+            //---- label13 ----
+            tagLabel.setText(tag);
+            tagLabel.putClientProperty(FlatClientProperties.STYLE, "arc: 999; border: 2,10,2,10");
+            tagLabel.setBackground(new Color(0xb8e4f3));
+            tagLabel.setForeground(new Color(0x135b76));
             tagsPanel.add(tagLabel);
         }
         panel.add(tagsPanel, "growx");

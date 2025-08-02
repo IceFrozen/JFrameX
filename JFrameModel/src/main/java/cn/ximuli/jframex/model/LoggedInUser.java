@@ -12,6 +12,7 @@ public class LoggedInUser {
     private String token;
     private LocalDateTime expireTime;
 
+    private User user;
 
     public boolean isExpired() {
         return LocalDateTime.now().isAfter(expireTime);
