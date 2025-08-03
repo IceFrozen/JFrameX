@@ -21,7 +21,7 @@ import java.awt.event.ComponentEvent;
 /**
  * Internal frame for displaying user contact details, with a logout button and responsive layout.
  */
-@Mate(value = "app.menu.view.components.tab", icon = "icons/tab_component", order = 1)
+@Mate(value = "app.contact.info.title", icon = "icons/tab_component", order = 1)
 @Slf4j
 public class ContactDetailsInternalFrame extends CommonInternalJFrame {
     private final ResourceLoaderManager resources;
@@ -55,60 +55,81 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
      *
      * @return JPanel containing user contact details
      */
+    /**
+     * Creates the main contact panel with user details, ensuring sub-panels wrap content when exceeding frame width.
+     *
+     * @return JPanel containing user contact details
+     */
     private JPanel createContactPanel() {
         LoggedInUser currentUser = FrameManager.getCurrentUser();
         User user = currentUser.getUser();
 
-        // Main panel with vertical stacking
-        JPanel panel = new JPanel(new MigLayout("wrap 1, insets 10", "[grow]", ""));
+        JPanel panel = new JPanel(new MigLayout("wrap 1, insets 30 20 20 20", "[grow, center]", ""));
         panel.setBackground(Color.WHITE);
-        panel.setBorder(BorderFactory.createEmptyBorder(50, 10, 10, 10));
 
         // Avatar
         JLabel avatarLabel = new JLabel();
         ImageIcon avatarIcon = new ImageIcon(resources.getImage("avatar").getScaledInstance(100, 100, Image.SCALE_SMOOTH));
         avatarLabel.setIcon(avatarIcon);
-        panel.add(avatarLabel, "align center");
+        panel.add(avatarLabel);
 
-        // Name and Title
+        // Name
         JLabel nameLabel = new JLabel(user.getName());
         nameLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
-        panel.add(nameLabel, "align center");
+        panel.add(nameLabel);
 
+        // Title
         JLabel titleLabel = new JLabel(user.getDepartment().getName());
         titleLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        panel.add(titleLabel, "align center");
+        panel.add(titleLabel);
 
-        // Rating (Phone)
+        // Phone
         JLabel ratingLabel = new JLabel(user.getPhone());
         ratingLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        panel.add(ratingLabel, "align center");
+        panel.add(ratingLabel);
 
-        // Contact Information
-        JPanel contactInfoPanel = new JPanel(new MigLayout("wrap 1, insets 0", "[grow]", ""));
-        contactInfoPanel.add(new JLabel(I18nHelper.getMessage("app.contact.info.title")), "wrap");
-        contactInfoPanel.add(new JLabel("Email: " + user.getEmail()), "growx, wrap");
-        contactInfoPanel.add(new JLabel("Phone: " + user.getPhone()), "growx, wrap");
-        panel.add(contactInfoPanel, "growx");
+        // ===== Contact Info Panel =====
+        JPanel contactInfoPanel = new JPanel(new MigLayout("wrap 2, insets 10, gapx 5", "[][grow]", ""));
+        contactInfoPanel.setBackground(new Color(250, 250, 250));
+        contactInfoPanel.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
+        contactInfoPanel.putClientProperty(FlatClientProperties.STYLE, "arc:12");
 
-        // Tags
-        JPanel tagsPanel = new JPanel(new MigLayout("wrap, insets 0", "[grow][grow][grow][grow][grow]", "[grow]"));
+        contactInfoPanel.add(new JLabel(I18nHelper.getMessage("app.contact.info.title")), "span, wrap");
+        contactInfoPanel.add(new JLabel("Email:"), "align left");
+        contactInfoPanel.add(new JLabel(user.getEmail()), "wrap");
+        contactInfoPanel.add(new JLabel("Phone:"), "align left");
+        contactInfoPanel.add(new JLabel(user.getPhone()), "wrap");
+
+        panel.add(contactInfoPanel, "growx, wrap");
+
+        // ===== Tags Panel =====
+        JPanel tagsPanel = new JPanel(new MigLayout("insets 10, wrap 4, gapx 8, gapy 5", "[]", ""));
+        tagsPanel.setBackground(new Color(232, 246, 249));
+        tagsPanel.setBorder(BorderFactory.createLineBorder(new Color(200, 230, 240)));
+        tagsPanel.putClientProperty(FlatClientProperties.STYLE, "arc:12");
+
         String[] tags = {"taggggg 1", "taggggg 2", "taggggg 3", "taggggg 4", "taggggg 5", "taggggg 6", "taggggg 7"};
         for (String tag : tags) {
             JLabel tagLabel = new JLabel(tag);
-            tagLabel.putClientProperty(FlatClientProperties.STYLE, "arc: 999; border: 2,10,2,10");
+            tagLabel.setOpaque(true);
+            tagLabel.putClientProperty(FlatClientProperties.STYLE, "arc:999; border: 2,10,2,10");
             tagLabel.setBackground(new Color(0xb8e4f3));
             tagLabel.setForeground(new Color(0x135b76));
-            tagsPanel.add(tagLabel, "growx, wrap, gapright ");
-
+            tagsPanel.add(tagLabel);
         }
-        panel.add(tagsPanel, "growx");
 
-        // Owner
-        panel.add(new JLabel("Owner: Mark Hansen"), "wrap");
+        panel.add(tagsPanel, "growx, wrap");
+
+        // ===== Owner =====
+        JLabel ownerLabel = new JLabel("Owner: Mark Hansen");
+        ownerLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        panel.add(ownerLabel);
 
         return panel;
     }
+
+
+
 
     /**
      * Creates the widgets panel with a logout button.

@@ -32,5 +32,7 @@ public class User {
     private Status status;
 
     private LocalDateTime createTime;
+    
+    private UserRole userRole;
 
 }

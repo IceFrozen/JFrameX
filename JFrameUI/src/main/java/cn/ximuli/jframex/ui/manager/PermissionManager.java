@@ -1,0 +1,83 @@
+package cn.ximuli.jframex.ui.manager;
+
+import cn.ximuli.jframex.model.LoggedInUser;
+import cn.ximuli.jframex.model.Role;
+import cn.ximuli.jframex.model.UserRole;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Slf4j
+@Component
+public class PermissionManager {
+    
+    /**
+     * Check if user has permission for specified permission ID
+     * @param user Logged in user
+     * @param permissionId Permission ID
+     * @return Whether user has permission
+     */
+    public boolean hasPermission(LoggedInUser user, String permissionId) {
+        if (user == null || user.getUser() == null || user.getUser().getUserRole() == null) {
+            log.warn("User or user role is null, denying access to permission: {}", permissionId);
+            return false;
+        }
+        
+        UserRole userRole = user.getUser().getUserRole();
+        if (!userRole.isEnabled()) {
+            log.warn("User role is disabled, denying access to permission: {}", permissionId);
+            return false;
+        }
+        
+        List<Role> roles = userRole.getRoles();
+        if (roles == null || roles.isEmpty()) {
+            log.warn("User has no assigned roles, denying access to permission: {}", permissionId);
+            return false;
+        }
+        
+        // Check if any of user's roles contain the permission ID
+        return roles.stream()
+                .filter(Role::isEnabled)
+                .anyMatch(role -> role.getPermissionIds() != null && 
+                        role.getPermissionIds().contains(permissionId));
+    }
+    
+    /**
+     * Get all permission IDs for user
+     * @param user Logged in user
+     * @return Set of permission IDs
+     */
+    public Set<String> getUserPermissions(LoggedInUser user) {
+        if (user == null || user.getUser() == null || user.getUser().getUserRole() == null) {
+            return Set.of();
+        }
+        
+        UserRole userRole = user.getUser().getUserRole();
+        if (!userRole.isEnabled()) {
+            return Set.of();
+        }
+        
+        List<Role> roles = userRole.getRoles();
+        if (roles == null || roles.isEmpty()) {
+            return Set.of();
+        }
+        
+        return roles.stream()
+                .filter(Role::isEnabled)
+                .filter(role -> role.getPermissionIds() != null)
+                .flatMap(role -> role.getPermissionIds().stream())
+                .collect(Collectors.toSet());
+    }
+    
+    /**
+     * Check if user has admin permissions (has all permissions)
+     * @param user Logged in user
+     * @return Whether user is admin
+     */
+    public boolean isAdmin(LoggedInUser user) {
+        return hasPermission(user, "ADMIN");
+    }
+} 

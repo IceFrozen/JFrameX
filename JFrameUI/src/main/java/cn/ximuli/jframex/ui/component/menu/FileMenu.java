@@ -1,11 +1,9 @@
 package cn.ximuli.jframex.ui.component.menu;
 
-import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.internalJFrame.CreateNewInternalJFrame;
 import cn.ximuli.jframex.ui.demo.NewDialog;
-import cn.ximuli.jframex.ui.event.MenuButtonClickEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.manager.UICreator;
@@ -20,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Mate(value = "app.menu.file.title", shortKey = KeyEvent.VK_F, order = 100)
+@Mate(value = "app.menu.file.title", shortKey = KeyEvent.VK_F, order = 100, permissionId = "MENU_FILE")
 public class FileMenu extends JMenu {
     final ResourceLoaderManager resources;
 

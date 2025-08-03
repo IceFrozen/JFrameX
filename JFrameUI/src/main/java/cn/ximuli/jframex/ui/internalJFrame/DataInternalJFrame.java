@@ -15,7 +15,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-@Mate(value = "app.menu.view.components.data", icon = "icons/data_component", order = 3)
+@Mate(value = "app.menu.view.components.data", icon = "icons/data_component", order = 3, permissionId = "FRAME_DATA_COMPONENTS")
 @Slf4j
 public class DataInternalJFrame extends CommonInternalJFrame {
     private JPanel jPanel;

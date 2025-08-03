@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Mate(value = "app.menu.edit.title", shortKey = KeyEvent.VK_E, order = 2)
+@Mate(value = "app.menu.edit.title", shortKey = KeyEvent.VK_E, order = 2, permissionId = "MENU_EDIT")
 public class EditMenu extends JMenu {
     final ResourceLoaderManager resources;
 

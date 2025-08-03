@@ -13,7 +13,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 
-@Mate(value = "app.menu.view.components.basic", icon = "icons/basic_component", order = 0)
+@Mate(value = "app.menu.view.components.basic", icon = "icons/basic_component", order = 0, permissionId = "FRAME_BASIC_COMPONENTS")
 @Slf4j
 public class BasicInternalJFrame extends CommonInternalJFrame {
 

@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Mate(value = "app.menu.user.internal.userService.title", icon = "icons/left_arrow", order = 1)
+@Mate(value = "app.menu.user.internal.userService.title", icon = "icons/users", order = 1)
 public class UserInternalJFrame extends CommonInternalJFrame {
     private JSplitPane splitPane;
     private JTree departmentTree;

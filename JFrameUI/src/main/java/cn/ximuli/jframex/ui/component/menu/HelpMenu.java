@@ -68,7 +68,7 @@ public class HelpMenu extends JMenu {
                         titleLabel,
                         "JFrameX Swing Framework develop by ximulil",
                         " ",
-                        "Copyright 2019-" + Year.now() + " Ximuli Software GmbH",
+                        "Copyright 2025-" + Year.now() + " Ximuli Software",
                         linkLabel,
                 },
                 "About", JOptionPane.PLAIN_MESSAGE);

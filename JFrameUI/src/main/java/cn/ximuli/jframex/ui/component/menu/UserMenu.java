@@ -1,16 +1,8 @@
 package cn.ximuli.jframex.ui.component.menu;
 
-
-import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.manager.UICreator;
-import cn.ximuli.jframex.ui.test.Jinhuo_Tuihuo_IFram;
 import cn.ximuli.jframex.ui.internalJFrame.UserInternalJFrame;
-import cn.ximuli.jframex.ui.event.MenuButtonClickEvent;
-import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
-import cn.ximuli.jframex.ui.test.KeHuGuanLi;
-import cn.ximuli.jframex.ui.test.KuCunPanDian;
-import cn.ximuli.jframex.ui.test.XiaoShouDan;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -24,11 +16,7 @@ public class UserMenu extends JMenu {
     public UserMenu(ResourceLoaderManager resources) {
         this.resources = resources;
         UICreator.createJMenuItemForInternalJFrame(
-                UserInternalJFrame.class,
-                Jinhuo_Tuihuo_IFram.class,
-                KuCunPanDian.class,
-                KeHuGuanLi.class,
-                XiaoShouDan.class
+                UserInternalJFrame.class
         ).forEach(this::add);
     }
 
