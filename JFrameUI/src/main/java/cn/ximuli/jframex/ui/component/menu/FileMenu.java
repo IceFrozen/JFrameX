@@ -109,7 +109,6 @@ public class FileMenu extends JMenu {
     }
 
     private void exitActionPerformed() {
-        //TODO clean up
         MainFrame mainFrame = FrameManager.getCurrentUISession().getMainFrame();
         mainFrame.dispose();
         System.exit(0);
