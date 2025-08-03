@@ -43,7 +43,7 @@ public class MainFrame extends JFrame {
         this.frameContentPane.add(desktopPanel, CENTER);
         this.frameContentPane.add(statePanel, SOUTH);
 
-        setTitle(I18nHelper.getMessage("app.mainframe.title"));
+        setTitle(I18nHelper.getMessage("app.name"));
         setJMenuBar(menuBar);
         setSize(getScreenRatioSize());
         setLocationRelativeTo(null);
@@ -64,7 +64,7 @@ public class MainFrame extends JFrame {
         if (SystemInfo.isMacOS) {
             log.debug("Initializing macOS-specific properties");
             JRootPane rootPane = getRootPane();
-            System.setProperty(Application.MAC.COM_APPLE_MRJ_APPLICATION_APPLE_MENU_ABOUT_NAME, I18nHelper.getMessage("app.mainframe.title"));
+            System.setProperty(Application.MAC.COM_APPLE_MRJ_APPLICATION_APPLE_MENU_ABOUT_NAME, I18nHelper.getMessage("app.name"));
             if (SystemInfo.isMacFullWindowContentSupported) {
                 rootPane.putClientProperty(Application.MAC.APPLE_AWT_FULL_WINDOW_CONTENT,
                         ConvertUtil.toBool(System.getProperty(Application.MAC.APPLE_AWT_FULL_WINDOW_CONTENT, "false")));
@@ -110,8 +110,8 @@ public class MainFrame extends JFrame {
                 log.debug("Window closing event triggered");
                 int result = JOptionPane.showConfirmDialog(
                         MainFrame.this,
+                        I18nHelper.getMessage("app.mainframe.close.message"),
                         I18nHelper.getMessage("app.mainframe.close.confirm"),
-                        I18nHelper.getMessage("app.mainframe.close.title"),
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE
                 );

@@ -29,9 +29,9 @@ public class UICreator {
         
         for (Class<?> aClass : classes) {
             Mate mate = aClass.getAnnotation(Mate.class);
-            if (mate != null && !mate.permissionId().isEmpty()) {
+            if (mate != null && !mate.id().isEmpty()) {
                 // Check permissions
-                if (!PermissionUtil.hasPermission(currentUser, mate.permissionId())) {
+                if (!PermissionUtil.hasPermission(currentUser, mate.id())) {
                     continue; // Skip menu items without permission
                 }
             }
@@ -93,9 +93,9 @@ public class UICreator {
         
         for (Class<? extends CommonInternalJFrame> aClass : classes) {
             Mate mate = aClass.getAnnotation(Mate.class);
-            if (mate != null && !mate.permissionId().isEmpty()) {
+            if (mate != null && !mate.id().isEmpty()) {
                 // Check permissions
-                if (!PermissionUtil.hasPermission(currentUser, mate.permissionId())) {
+                if (!PermissionUtil.hasPermission(currentUser, mate.id())) {
                     continue; // Skip internal frames without permission
                 }
             }
@@ -104,8 +104,8 @@ public class UICreator {
             commonInternalJFrame.refreshUI();
             
             // Set permission control
-            if (mate != null && !mate.permissionId().isEmpty()) {
-                PermissionUtil.setComponentVisibility(currentUser, commonInternalJFrame, mate.permissionId());
+            if (mate != null && !mate.id().isEmpty()) {
+                PermissionUtil.setComponentVisibility(currentUser, commonInternalJFrame, mate.id());
             }
             
             internalJFrames.add(commonInternalJFrame);
@@ -122,9 +122,9 @@ public class UICreator {
         
         for (Class<? extends JMenu> aClass : classes) {
             Mate mate = aClass.getAnnotation(Mate.class);
-            if (mate != null && !mate.permissionId().isEmpty()) {
+            if (mate != null && !mate.id().isEmpty()) {
                 // Check permissions
-                if (!PermissionUtil.hasPermission(currentUser, mate.permissionId())) {
+                if (!PermissionUtil.hasPermission(currentUser, mate.id())) {
                     continue; // Skip menus without permission
                 }
             }
@@ -132,8 +132,8 @@ public class UICreator {
             JMenu jMenu = ClassUtil.newInstance(aClass, new Class[]{ResourceLoaderManager.class}, new Object[]{resources});
             
             // Set permission control
-            if (mate != null && !mate.permissionId().isEmpty()) {
-                PermissionUtil.setComponentVisibility(currentUser, jMenu, mate.permissionId());
+            if (mate != null && !mate.id().isEmpty()) {
+                PermissionUtil.setComponentVisibility(currentUser, jMenu, mate.id());
             }
             
             menuList.add(jMenu);

@@ -3,6 +3,7 @@ package cn.ximuli.jframex.ui.login;
 import cn.ximuli.jframex.service.LoginService;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
+import cn.ximuli.jframex.ui.component.menu.Mate;
 import cn.ximuli.jframex.ui.event.UserLoginEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
@@ -41,7 +42,7 @@ public class LoginFrame extends JFrame {
     }
 
     private void initializeUI() {
-        setTitle(I18nHelper.getMessage("app.login.title"));
+        setTitle(I18nHelper.getMessage("app.login"));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setUndecorated(true); // Remove title bar and borders
         Dimension windowSize = MainFrame.getScreenRatioSize();
@@ -105,17 +106,17 @@ public class LoginFrame extends JFrame {
         formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Title
-        JLabel titleLabel = new JLabel(I18nHelper.getMessage("app.login.title"));
+        JLabel titleLabel = new JLabel(I18nHelper.getMessage("app.login"));
         Font font = UIManager.getFont("defaultFont");
 
         titleLabel.setFont(new Font(font.getName(), Font.BOLD, font.getSize() * 2));
         formPanel.add(titleLabel, "span 2, align center");
-        JLabel subtitleLabel = new JLabel(I18nHelper.getMessage("app.login.subtitle"));
+        JLabel subtitleLabel = new JLabel(I18nHelper.getMessage("app.login.welcome"));
         subtitleLabel.setFont(new Font(font.getName(), Font.BOLD, font.getSize() + 5));
         formPanel.add(subtitleLabel, "span 2, align center");
 
         // Username
-        JLabel usernameLabel = new JLabel(I18nHelper.getMessage("app.login.label.username"));
+        JLabel usernameLabel = new JLabel(I18nHelper.getMessage("app.login.username"));
         usernameLabel.setFont(new Font(font.getName(), Font.PLAIN, font.getSize()));
         usernameField = new JTextField(20);
         usernameField.setPreferredSize(new Dimension(usernameField.getPreferredSize().width, usernameField.getPreferredSize().height + 15)); // Wider input

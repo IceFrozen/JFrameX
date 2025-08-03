@@ -23,7 +23,7 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.*;
 
-@Mate(value = "app.setting.title", icon = "icons/settings", order = 6)
+@Mate(value = "app.setting", icon = "icons/settings", order = 6, id = "app.setting")
 @Slf4j
 public class SettingInternalJFrame extends CommonInternalJFrame {
     private ComponentsShowSettingPanel tabbedPane;

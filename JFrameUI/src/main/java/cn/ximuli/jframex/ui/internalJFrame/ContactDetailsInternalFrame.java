@@ -18,22 +18,15 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-/**
- * Internal frame for displaying user contact details, with a logout button and responsive layout.
- */
-@Mate(value = "app.contact.info.title", icon = "icons/tab_component", order = 1)
+
+@Mate(value = "app.contact.info", icon = "icons/tab_component", order = 1, id = "app.contact.info")
 @Slf4j
 public class ContactDetailsInternalFrame extends CommonInternalJFrame {
     private final ResourceLoaderManager resources;
     private JPanel mainPanel;
     private JPanel widgetsPanel;
 
-    /**
-     * Constructs the contact details internal frame with specified resources and desktop panel.
-     *
-     * @param resources      Resource loader manager for accessing images and icons
-     * @param desktopPanel   Desktop panel to contain this internal frame
-     */
+
     public ContactDetailsInternalFrame(ResourceLoaderManager resources, DesktopPanel desktopPanel) {
         super(resources, desktopPanel);
         this.resources = resources;
@@ -50,16 +43,6 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         });
     }
 
-    /**
-     * Creates the main contact panel with user details, ensuring sub-panels wrap content when exceeding frame width.
-     *
-     * @return JPanel containing user contact details
-     */
-    /**
-     * Creates the main contact panel with user details, ensuring sub-panels wrap content when exceeding frame width.
-     *
-     * @return JPanel containing user contact details
-     */
     private JPanel createContactPanel() {
         LoggedInUser currentUser = FrameManager.getCurrentUser();
         User user = currentUser.getUser();
@@ -94,7 +77,6 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         contactInfoPanel.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
         contactInfoPanel.putClientProperty(FlatClientProperties.STYLE, "arc:12");
 
-        contactInfoPanel.add(new JLabel(I18nHelper.getMessage("app.contact.info.title")), "span, wrap");
         contactInfoPanel.add(new JLabel("Email:"), "align left");
         contactInfoPanel.add(new JLabel(user.getEmail()), "wrap");
         contactInfoPanel.add(new JLabel("Phone:"), "align left");
@@ -129,13 +111,6 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
     }
 
 
-
-
-    /**
-     * Creates the widgets panel with a logout button.
-     *
-     * @return JPanel containing the logout button
-     */
     private JPanel createWidgetsPanel() {
         JPanel panel = new JPanel(new MigLayout("insets 10", "[grow]", ""));
         panel.setBackground(new Color(240, 240, 240));
@@ -158,13 +133,10 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         return panel;
     }
 
-    /**
-     * Handles the logout action with a confirmation dialog.
-     */
     private void handleLogOut() {
         int confirm = JOptionPane.showConfirmDialog(this,
-                I18nHelper.getMessage("app.logout.confirm"),
-                I18nHelper.getMessage("app.logout.title"),
+                I18nHelper.getMessage("app.logout.confirm.message"),
+                I18nHelper.getMessage("app.logout.confirm.title"),
                 JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) {
             return;
@@ -172,9 +144,6 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         FrameManager.publishEvent(new UserLogoutEvent(this));
     }
 
-    /**
-     * Refreshes the UI by adding the main contact panel and widgets panel.
-     */
     public void refreshUI() {
         setLayout(new BorderLayout());
         // Main panel with MigLayout
@@ -185,9 +154,6 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         add(widgetsPanel, BorderLayout.SOUTH);
     }
 
-    /**
-     * Adjusts the frame size to fit within the desktop pane with a 2:1 width-to-height ratio.
-     */
     private void adjustFrameSize() {
         // Get the desktop pane size
         Dimension desktopSize = desktopPane.getSize();

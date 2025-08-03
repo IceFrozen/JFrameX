@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Mate(value = "app.menu.user.internal.userService.title", icon = "icons/users", order = 1)
+@Mate(value = "app.menu.user.internal.userService", icon = "icons/users", order = 1, id = "app.menu.user.internal.userService")
 public class UserInternalJFrame extends CommonInternalJFrame {
     private JSplitPane splitPane;
     private JTree departmentTree;
@@ -109,7 +109,7 @@ public class UserInternalJFrame extends CommonInternalJFrame {
                 })
                 .doubleClick((tp, user) -> log.info("double click"))
                 .editClick((tp, user) -> FrameManager.publishEvent(new CreateFrameEvent<>(UserDetailJFrame.class, user)))
-                .delClick((tp, user) -> log.info("user delï¼š" + user))
+                .delClick((tp, user) -> log.info("user delï¼?" + user))
                 .converter(UserType.class, this::convertUserType)
                 .converter(Department.class, this::convertDepartment)
                 .converter(Status.class, this::convertStatus)

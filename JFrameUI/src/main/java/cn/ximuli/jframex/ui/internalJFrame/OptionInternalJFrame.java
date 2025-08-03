@@ -14,7 +14,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-@Mate(value = "app.menu.view.components.option", icon = "icons/infoOutline", order = 5)
+@Mate(value = "app.menu.view.components.option", icon = "icons/infoOutline", order = 5, id = "app.menu.view.components.option")
 @Slf4j
 public class OptionInternalJFrame extends CommonInternalJFrame {
     private JPanel jPanel;

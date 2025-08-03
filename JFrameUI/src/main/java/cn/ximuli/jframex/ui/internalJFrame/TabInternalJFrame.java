@@ -6,14 +6,13 @@ import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.component.panels.TabsComponentsPanel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-@Mate(value = "app.menu.view.components.tab", icon = "icons/tab_component", order = 9)
+@Mate(value = "app.menu.view.components.tab", icon = "icons/tab_component", order = 9, id = "app.menu.view.components.tab")
 @Slf4j
 public class TabInternalJFrame extends CommonInternalJFrame {
 

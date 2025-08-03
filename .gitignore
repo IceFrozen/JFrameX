@@ -59,3 +59,7 @@ build/
 .DS_Store
 Thumbs.db
 .vscode
+
+# Ignore demo and test code in JFrameUI module
+JFrameUI/src/main/java/cn/ximuli/jframex/ui/demo/
+JFrameUI/src/main/java/cn/ximuli/jframex/ui/test/

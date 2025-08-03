@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Mate(value = "app.menu.view.title", shortKey = KeyEvent.VK_F, order = 3)
+@Mate(value = "app.menu.view", shortKey = KeyEvent.VK_F, order = 3, id = "app.menu.view")
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ViewMenu extends JMenu {
     final ResourceLoaderManager resources;

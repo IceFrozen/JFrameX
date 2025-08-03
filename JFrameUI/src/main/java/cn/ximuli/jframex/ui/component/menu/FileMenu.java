@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Mate(value = "app.menu.file.title", shortKey = KeyEvent.VK_F, order = 100, permissionId = "MENU_FILE")
+@Mate(value = "app.menu.file", shortKey = KeyEvent.VK_F, order = 0, id = "app.menu.file")
 public class FileMenu extends JMenu {
     final ResourceLoaderManager resources;
 

@@ -14,7 +14,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-@Mate(value = "app.menu.view.components.container", icon = "icons/basic_component", order = 2, permissionId = "FRAME_CONTAINER_COMPONENTS")
+@Mate(value = "app.menu.view.components.container", icon = "icons/basic_component", order = 2, id = "app.menu.view.components.container")
 @Slf4j
 public class ContainerInternalJFrame extends CommonInternalJFrame {
     private JPanel jPanel;

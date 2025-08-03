@@ -43,6 +43,7 @@ public class PermissionServiceImpl implements PermissionService {
         adminRole.setEnabled(true);
         adminRole.setPermissionIds(Arrays.asList(
                 PermissionConstants.ADMIN,
+                PermissionConstants.BASE_PERMISSION,
                 PermissionConstants.MENU_FILE,
                 PermissionConstants.MENU_EDIT,
                 PermissionConstants.MENU_VIEW,
@@ -103,6 +104,7 @@ public class PermissionServiceImpl implements PermissionService {
         userRole.setDescription("Regular user with basic functionality permissions");
         userRole.setEnabled(true);
         userRole.setPermissionIds(Arrays.asList(
+                PermissionConstants.BASE_PERMISSION,
                 PermissionConstants.MENU_FILE,
                 PermissionConstants.MENU_EDIT,
                 PermissionConstants.MENU_VIEW,
@@ -137,6 +139,7 @@ public class PermissionServiceImpl implements PermissionService {
         guestRole.setDescription("Guest with view-only permissions");
         guestRole.setEnabled(true);
         guestRole.setPermissionIds(Arrays.asList(
+                PermissionConstants.BASE_PERMISSION,
                 PermissionConstants.MENU_VIEW,
                 PermissionConstants.MENU_HELP,
                 PermissionConstants.FRAME_BASIC_COMPONENTS,

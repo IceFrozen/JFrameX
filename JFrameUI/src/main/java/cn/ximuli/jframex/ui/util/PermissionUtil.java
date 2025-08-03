@@ -62,7 +62,7 @@ public class PermissionUtil {
                     if (mate == null) {
                         return true; // Components without Mate annotation are visible by default
                     }
-                    String permissionId = mate.permissionId();
+                    String permissionId = mate.id();
                     if (permissionId.isEmpty()) {
                         return true; // Components without permission ID are visible by default
                     }
@@ -94,8 +94,8 @@ public class PermissionUtil {
      */
     public static void setComponentVisibilityByMate(LoggedInUser user, Component component) {
         Mate mate = component.getClass().getAnnotation(Mate.class);
-        if (mate != null && !mate.permissionId().isEmpty()) {
-            setComponentVisibility(user, component, mate.permissionId());
+        if (mate != null && !mate.id().isEmpty()) {
+            setComponentVisibility(user, component, mate.id());
         }
     }
     
@@ -129,7 +129,7 @@ public class PermissionUtil {
      */
     public static String getComponentPermissionId(Component component) {
         Mate mate = component.getClass().getAnnotation(Mate.class);
-        return mate != null ? mate.permissionId() : "";
+        return mate != null ? mate.id() : "";
     }
     
     /**
@@ -139,6 +139,6 @@ public class PermissionUtil {
      */
     public static boolean needsPermissionControl(Component component) {
         Mate mate = component.getClass().getAnnotation(Mate.class);
-        return mate != null && !mate.permissionId().isEmpty();
+        return mate != null && !mate.id().isEmpty();
     }
 } 

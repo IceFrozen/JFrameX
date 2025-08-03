@@ -19,7 +19,7 @@ import java.awt.event.KeyEvent;
 import java.util.prefs.Preferences;
 
 @Slf4j
-@Mate(value = "app.menu.options.title", shortKey = KeyEvent.VK_F, order = 5)
+@Mate(value = "app.menu.options", shortKey = KeyEvent.VK_F, order = 5, id = "app.menu.options")
 public class OptionsMenu extends JMenu {
     private final ResourceLoaderManager resources;
     private final JCheckBoxMenuItem windowDecorationsCheckBoxMenuItem;

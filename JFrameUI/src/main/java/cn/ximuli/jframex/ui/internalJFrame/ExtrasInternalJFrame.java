@@ -14,7 +14,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-@Mate(value = "app.menu.view.components.extras", icon = "icons/extras_component", order = 4)
+@Mate(value = "app.menu.view.components.extras", icon = "icons/extras_component", order = 4, id = "app.menu.view.components.extras")
 @Slf4j
 public class ExtrasInternalJFrame extends CommonInternalJFrame {
     private JPanel jPanel;

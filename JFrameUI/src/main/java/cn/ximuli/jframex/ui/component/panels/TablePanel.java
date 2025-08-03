@@ -4,6 +4,8 @@ import cn.ximuli.jframex.common.exception.CommonException;
 import cn.ximuli.jframex.common.utils.StringUtil;
 import cn.ximuli.jframex.model.Page;
 import cn.ximuli.jframex.ui.I18nHelper;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.icons.FlatSearchIcon;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -92,6 +94,8 @@ public class TablePanel<T> extends JPanel {
         String searchLabelStr = I18nHelper.getMessage("app.message.search.label");
         searchLabel = new JLabel(searchLabelStr + ":");
         searchField = new JTextField(15);
+        searchField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search");
+        searchField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSearchIcon());
         topPanel.add(searchLabel);
         topPanel.add(searchField);
         searchButton = new JButton(I18nHelper.getMessage("app.message.search.button"));
@@ -119,7 +123,6 @@ public class TablePanel<T> extends JPanel {
         scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        // 初始化右键菜单
         popupMenu = new JPopupMenu();
         editMenuItem = new JMenuItem(I18nHelper.getMessage("app.message.edit"));
         deleteMenuItem = new JMenuItem(I18nHelper.getMessage("app.message.delete"));
@@ -286,7 +289,7 @@ public class TablePanel<T> extends JPanel {
         searchButton.addActionListener(e -> executeWithLoading(() -> {
             try {
                 Page<T> currentPage = getPage();
-                Thread.sleep(5000); // 模拟加载时间
+                Thread.sleep(5000); // TODO mock time loading
                 Page<T> newPage = fetchAction.apply(searchField.getText(), currentPage);
                 renderData(newPage);
             } catch (Exception ex) {
@@ -296,19 +299,19 @@ public class TablePanel<T> extends JPanel {
         }));
 
         goToPageButton.addActionListener(e -> executeWithLoading(() -> {
-            String pageText = pageTextField.getText();
+            String pageNumberStr = pageTextField.getText();
             try {
-                int targetPage = Integer.parseInt(pageText); // 重命名局部变量
+                int targetPage = Integer.parseInt(pageNumberStr);
                 Page<T> currentPage = this.getPage();
                 if (targetPage > currentPage.getTotalPage()) {
-                    showMessageDialog("app.message.error.illegal.pageNum", pageText);
+                    showMessageDialog("app.message.error.illegal.pageNum", pageNumberStr);
                     return;
                 }
-                currentPage.setPage(targetPage); // 使用重命名后的变量
+                currentPage.setPage(targetPage); // 使用重命名后的变�?
                 Page<T> newPage = fetchAction.apply(searchField.getText(), currentPage);
                 this.renderData(newPage);
             } catch (NumberFormatException ex) {
-                showMessageDialog("app.message.error.illegal.pageNum", pageText);
+                showMessageDialog("app.message.error.illegal.pageNum", pageNumberStr);
             }
         }));
 
@@ -451,6 +454,8 @@ public class TablePanel<T> extends JPanel {
             if (StringUtil.isNotBlank(searchLabelStr)) {
                 tablePanel.getSearchLabel().setText(searchLabelStr);
             }
+            
+    
             tablePanel.addDoubleClick(this.doubleClick);
             tablePanel.addDelClick(this.delClick);
             tablePanel.addEditClick(this.editClick);
@@ -459,4 +464,7 @@ public class TablePanel<T> extends JPanel {
             return tablePanel;
         }
     }
+
+
+  
 }

@@ -50,7 +50,6 @@ public class UISession {
 
 
     public void prepareUI() throws ClassNotFoundException {
-        log.debug("Language: {}", I18nHelper.getMessage("app.login.subtitle"));
         desktopPanel = new DesktopPanel(this.resources);
         statePanel = new StatePanel(currentUser);
         internalJFrames = initInternalJFrames();

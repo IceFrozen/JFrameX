@@ -15,7 +15,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.util.concurrent.Callable;
 
-@Mate(value = "app.menu.file.new", icon = "icons/newFolder", order = 1)
+@Mate(value = "app.menu.file.new", icon = "icons/newFolder", order = 1, id = "app.menu.file.new")
 @Slf4j
 public class CreateNewInternalJFrame extends CommonInternalJFrame {
     private Pair<JLabel, JTextField> nameLine;
