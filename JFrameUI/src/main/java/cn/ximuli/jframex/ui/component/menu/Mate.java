@@ -3,7 +3,7 @@ package cn.ximuli.jframex.ui.component.menu;
 
 import java.lang.annotation.*;
 
-@Target({ ElementType.TYPE})
+@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Mate {
@@ -12,6 +12,6 @@ public @interface Mate {
     String role() default Anyone;
     String Anyone = "*";
     String icon() default "";
-
+    String permissionId() default "";
     int shortKey() default -1;
 }
