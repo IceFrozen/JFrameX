@@ -67,6 +67,11 @@ public class CreateNewInternalJFrame extends CommonInternalJFrame {
         setLocation(x, y);
     }
 
+    @Override
+    public void showHint(boolean b) {
+
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         dialogPane = new JPanel();

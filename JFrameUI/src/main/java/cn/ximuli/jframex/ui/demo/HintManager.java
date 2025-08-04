@@ -17,7 +17,7 @@ import net.miginfocom.swing.*;
 public class HintManager {
     private static final List<HintPanel> hintPanels = new ArrayList<>();
 
-    static void showHint( Hint hint ) {
+    public static void showHint(Hint hint) {
         // check whether user already closed the hint
         if( DemoPrefs.getState().getBoolean( hint.prefsKey, false ) ) {
             if( hint.nextHint != null )
@@ -47,7 +47,7 @@ public class HintManager {
         private final String prefsKey;
         private final Hint nextHint;
 
-        Hint( String message, Component owner, int position, String prefsKey, Hint nextHint ) {
+        public Hint(String message, Component owner, int position, String prefsKey, Hint nextHint) {
             this.message = message;
             this.owner = owner;
             this.position = position;

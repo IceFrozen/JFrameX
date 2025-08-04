@@ -1,11 +1,13 @@
 package cn.ximuli.jframex.ui.manager;
 
+import cn.ximuli.jframex.common.constants.PermissionConstants;
 import cn.ximuli.jframex.common.utils.ClassUtil;
 import cn.ximuli.jframex.model.LoggedInUser;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.Application;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.component.menu.Mate;
+import cn.ximuli.jframex.ui.component.menu.MenuBar;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.component.panels.SettingMenu;
 import cn.ximuli.jframex.ui.event.CreateFrameEvent;
@@ -14,6 +16,8 @@ import cn.ximuli.jframex.ui.util.PermissionUtil;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,11 +26,12 @@ import java.util.stream.Collectors;
 
 public class UICreator {
 
+    @SuppressWarnings("unchecked")
     public static List<JMenuItem> createJMenuItemForInternalJFrame(Class<? extends JInternalFrame>... classes) {
         List<JMenuItem> result = new ArrayList<>();
         ResourceLoaderManager resources = SpringUtils.getBean(ResourceLoaderManager.class);
         LoggedInUser currentUser = FrameManager.getCurrentUISession().getCurrentUser();
-        
+
         for (Class<?> aClass : classes) {
             Mate mate = aClass.getAnnotation(Mate.class);
             if (mate != null && !mate.id().isEmpty()) {
@@ -35,7 +40,7 @@ public class UICreator {
                     continue; // Skip menu items without permission
                 }
             }
-            
+
             JMenuItem item = new JMenuItem();
             item.setText(I18nHelper.getMessage(mate.value()));
             item.setIcon(resources.getIcon(mate.icon()));
@@ -46,12 +51,6 @@ public class UICreator {
         return result.stream().filter(Objects::nonNull).toList();
     }
 
-    /**
-     * Creates a list of JComponent instances annotated with SettingMenu, sorted by their order attribute.
-     *
-     * @return A sorted list of JComponent instances
-     * @throws RuntimeException If an error occurs during class scanning or instantiation
-     */
     public static List<JComponent> createSettingPanels() {
         List<JComponent> result = new ArrayList<>();
         LoggedInUser currentUser = FrameManager.getCurrentUISession().getCurrentUser();
@@ -90,7 +89,7 @@ public class UICreator {
         List<CommonInternalJFrame> internalJFrames = new ArrayList<>();
         ResourceLoaderManager resources = SpringUtils.getBean(ResourceLoaderManager.class);
         LoggedInUser currentUser = FrameManager.getCurrentUISession().getCurrentUser();
-        
+
         for (Class<? extends CommonInternalJFrame> aClass : classes) {
             Mate mate = aClass.getAnnotation(Mate.class);
             if (mate != null && !mate.id().isEmpty()) {
@@ -99,15 +98,13 @@ public class UICreator {
                     continue; // Skip internal frames without permission
                 }
             }
-            
             CommonInternalJFrame commonInternalJFrame = ClassUtil.newInstance(aClass, new Class[]{ResourceLoaderManager.class, DesktopPanel.class}, new Object[]{resources, desktopPanel});
             commonInternalJFrame.refreshUI();
-            
             // Set permission control
             if (mate != null && !mate.id().isEmpty()) {
                 PermissionUtil.setComponentVisibility(currentUser, commonInternalJFrame, mate.id());
             }
-            
+
             internalJFrames.add(commonInternalJFrame);
         }
         return internalJFrames;
@@ -119,26 +116,82 @@ public class UICreator {
         ResourceLoaderManager resources = SpringUtils.getBean(ResourceLoaderManager.class);
         LoggedInUser currentUser = FrameManager.getCurrentUISession().getCurrentUser();
         Set<Class<? extends JMenu>> classes = SpringUtils.scanClasses(Application.APP_COMMON_COMPONENT, JMenu.class);
-        
+
         for (Class<? extends JMenu> aClass : classes) {
             Mate mate = aClass.getAnnotation(Mate.class);
             if (mate != null && !mate.id().isEmpty()) {
-                // Check permissions
                 if (!PermissionUtil.hasPermission(currentUser, mate.id())) {
-                    continue; // Skip menus without permission
+                    continue;
                 }
             }
-            
             JMenu jMenu = ClassUtil.newInstance(aClass, new Class[]{ResourceLoaderManager.class}, new Object[]{resources});
-            
+
             // Set permission control
             if (mate != null && !mate.id().isEmpty()) {
                 PermissionUtil.setComponentVisibility(currentUser, jMenu, mate.id());
             }
-            
             menuList.add(jMenu);
         }
         return menuList;
     }
 
+    public static JMenuItem createJMenuItem(String id,
+                                            String textKey,
+                                            String iconKey,
+                                            int key,
+                                            char mnemonic,
+                                            ActionListener actionListener) {
+        LoggedInUser currentUser = FrameManager.getCurrentUISession().getCurrentUser();
+        if (!PermissionUtil.hasPermission(currentUser, id)) {
+            return null;
+        }
+
+        ResourceLoaderManager resources = SpringUtils.getBean(ResourceLoaderManager.class);
+
+        JMenuItem item = new JMenuItem();
+        item.setText(I18nHelper.getMessage(textKey));
+        item.setIcon(resources.getIcon(iconKey));
+        item.setAccelerator(KeyStroke.getKeyStroke(key, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        item.setMnemonic(mnemonic);
+        item.addActionListener(actionListener);
+        item.putClientProperty(cn.ximuli.jframex.ui.component.menu.MenuBar.MENU_SYNC_TOOL_BAR_KEY, MenuBar.MENU_SYNC_TOOL_BAR_TYPE_SIMPLE);
+        return item;
+
+    }
+
+    public static JMenu createJMenu(String id, String text) {
+        LoggedInUser currentUser = FrameManager.getCurrentUISession().getCurrentUser();
+        if (!PermissionUtil.hasPermission(currentUser, id)) {
+            return null;
+        }
+
+        ResourceLoaderManager resources = SpringUtils.getBean(ResourceLoaderManager.class);
+        JMenu jmenu = new JMenu();
+        jmenu.setText(I18nHelper.getMessage(id));
+        jmenu.setIcon(resources.getIcon(text));
+        return jmenu;
+    }
+
+    public static JCheckBoxMenuItem createJCheckBoxMenuItem(String id, String string, int key, char mnemonic, ActionListener actionListener) {
+        LoggedInUser currentUser = FrameManager.getCurrentUISession().getCurrentUser();
+        if (!PermissionUtil.hasPermission(currentUser, id)) {
+            return null;
+        }
+
+        JCheckBoxMenuItem toolBarCheckBook = new JCheckBoxMenuItem(I18nHelper.getMessage("app.menu.view.show.toolbar"));
+        toolBarCheckBook.setAccelerator(KeyStroke.getKeyStroke(key, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        toolBarCheckBook.setSelected(true);
+        toolBarCheckBook.setMnemonic(mnemonic);
+        toolBarCheckBook.addActionListener(actionListener);
+        return toolBarCheckBook;
+    }
+
+    public static ButtonGroup createButtonGroup(String id) {
+        LoggedInUser currentUser = FrameManager.getCurrentUISession().getCurrentUser();
+        if (!PermissionUtil.hasPermission(currentUser, id)) {
+            return null;
+        }
+        return new ButtonGroup();
+
+    }
 }

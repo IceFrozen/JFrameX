@@ -1,14 +1,14 @@
 package cn.ximuli.jframex.ui.component.menu;
 
-import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.common.constants.PermissionConstants;
 import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
+import cn.ximuli.jframex.ui.manager.UICreator;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -21,73 +21,78 @@ public class EditMenu extends JMenu {
 
     public EditMenu(ResourceLoaderManager resources) {
         this.resources = resources;
-        createJMenuItem().forEach(this::add);
+        createJMenuItem();
     }
 
-    public java.util.List<JMenuItem> createJMenuItem() {
-        List<JMenuItem> items = new ArrayList<>();
-        //---- undoMenuItem ----
-        JMenuItem undoMenuItem = new JMenuItem();
-        undoMenuItem.setText(I18nHelper.getMessage("app.menu.edit.undo"));
-        undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        undoMenuItem.setMnemonic('U');
+    public void createJMenuItem() {
+        List<JMenuItem> jMenuItems = new ArrayList<>();
 
-        undoMenuItem.setIcon(resources.getIcon("icons/undo"));
-        undoMenuItem.putClientProperty(MenuBar.MENU_SYNC_TOOL_BAR_KEY, MenuBar.MENU_SYNC_TOOL_BAR_TYPE_SIMPLE);
-        undoMenuItem.addActionListener(e -> menuItemActionPerformed(e));
-        add(undoMenuItem);
+        JMenuItem undoMenuItem = UICreator.createJMenuItem(
+            PermissionConstants.APP_MENU_EDIT,
+            "app.menu.edit.undo", 
+            "icons/undo", 
+            KeyEvent.VK_Z, 
+            'U', 
+            e -> menuItemActionPerformed(e)
+        );
 
-        //---- redoMenuItem ----
-        JMenuItem redoMenuItem = new JMenuItem();
-        redoMenuItem.setText(I18nHelper.getMessage("app.menu.edit.redo"));
-        redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        redoMenuItem.setMnemonic('R');
-        redoMenuItem.setIcon(resources.getIcon(("icons/redo")));
-        redoMenuItem.putClientProperty(MenuBar.MENU_SYNC_TOOL_BAR_KEY, MenuBar.MENU_SYNC_TOOL_BAR_TYPE_SIMPLE);
-        redoMenuItem.addActionListener(e -> menuItemActionPerformed(e));
-        add(redoMenuItem);
-        addSeparator();
+        JMenuItem redoMenuItem = UICreator.createJMenuItem(
+            PermissionConstants.APP_MENU_EDIT_REDO,
+            "app.menu.edit.redo", 
+            "icons/redo", 
+            KeyEvent.VK_Y, 
+            'R', 
+            e -> menuItemActionPerformed(e)
+        );
 
-        //---- cutMenuItem ----
-        JMenuItem cutMenuItem = new JMenuItem();
-        cutMenuItem.setAction(new DefaultEditorKit.CutAction());
-        cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        cutMenuItem.setMnemonic('C');
-        cutMenuItem.setIcon(resources.getIcon(("icons/menu-cut")));
-        cutMenuItem.setText(I18nHelper.getMessage("app.menu.edit.cut"));
-        cutMenuItem.putClientProperty(MenuBar.MENU_SYNC_TOOL_BAR_KEY, MenuBar.MENU_SYNC_TOOL_BAR_TYPE_SIMPLE);
-        add(cutMenuItem);
-        //---- copyMenuItem ----
-        JMenuItem copyMenuItem = new JMenuItem();
-        copyMenuItem.setAction(new DefaultEditorKit.CopyAction());
-        copyMenuItem.setText(I18nHelper.getMessage("app.menu.edit.copy"));
-        copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        copyMenuItem.setMnemonic('O');
-        copyMenuItem.putClientProperty(MenuBar.MENU_SYNC_TOOL_BAR_KEY, MenuBar.MENU_SYNC_TOOL_BAR_TYPE_SIMPLE);
-        copyMenuItem.setIcon(resources.getIcon(("icons/copy")));
-        add(copyMenuItem);
+        JMenuItem cutMenuItem = UICreator.createJMenuItem(
+            PermissionConstants.APP_MENU_EDIT_CUT,
+            "app.menu.edit.cut", 
+            "icons/menu-cut", 
+            KeyEvent.VK_X, 
+            'C', 
+            e -> new DefaultEditorKit.CutAction().actionPerformed(e)
+        );
 
-        //---- pasteMenuItem ----
-        JMenuItem pasteMenuItem = new JMenuItem();
-        pasteMenuItem.setAction(new DefaultEditorKit.PasteAction());
-        pasteMenuItem.setText(I18nHelper.getMessage("app.menu.edit.paste"));
-        pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        pasteMenuItem.setMnemonic('P');
-        pasteMenuItem.putClientProperty(MenuBar.MENU_SYNC_TOOL_BAR_KEY, MenuBar.MENU_SYNC_TOOL_BAR_TYPE_SIMPLE);
-        pasteMenuItem.setIcon(resources.getIcon(("icons/menu-paste")));
-        add(pasteMenuItem);
-        addSeparator();
+        JMenuItem copyMenuItem = UICreator.createJMenuItem(
+            PermissionConstants.APP_MENU_EDIT_COPY,
+            "app.menu.edit.copy", 
+            "icons/copy", 
+            KeyEvent.VK_C, 
+            'O', 
+            e -> new DefaultEditorKit.CopyAction().actionPerformed(e)
+        );
 
-        //---- deleteMenuItem ----
-        JMenuItem deleteMenuItem = new JMenuItem();
-        deleteMenuItem.setText(I18nHelper.getMessage("app.menu.edit.delete"));
-        deleteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-        deleteMenuItem.setMnemonic('D');
-        deleteMenuItem.setIcon(resources.getIcon(("icons/delete")));
-        deleteMenuItem.addActionListener(e -> menuItemActionPerformed(e));
-        deleteMenuItem.putClientProperty(MenuBar.MENU_SYNC_TOOL_BAR_KEY, MenuBar.MENU_SYNC_TOOL_BAR_TYPE_SIMPLE);
-        add(deleteMenuItem);
-        return items;
+        JMenuItem pasteMenuItem = UICreator.createJMenuItem(
+            PermissionConstants.APP_MENU_EDIT_PASTE,
+            "app.menu.edit.paste", 
+            "icons/menu-paste", 
+            KeyEvent.VK_V, 
+            'P', 
+            e -> new DefaultEditorKit.PasteAction().actionPerformed(e)
+        );
+
+        JMenuItem deleteMenuItem = UICreator.createJMenuItem(
+            PermissionConstants.APP_MENU_EDIT_DELETE,
+            "app.menu.edit.delete", 
+            "icons/delete", 
+            KeyEvent.VK_D,
+            'D', 
+            e -> menuItemActionPerformed(e)
+        );
+
+        jMenuItems.add(undoMenuItem);
+        jMenuItems.add(redoMenuItem);
+        jMenuItems.add(cutMenuItem);
+        jMenuItems.add(copyMenuItem);
+        jMenuItems.add(pasteMenuItem);
+        jMenuItems.add(deleteMenuItem);
+
+        for (JMenuItem item : jMenuItems) {
+            if (item != null) {
+                add(item);
+            }
+        }
     }
 
     private void menuItemActionPerformed(ActionEvent e) {

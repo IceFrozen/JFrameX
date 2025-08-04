@@ -89,3 +89,58 @@ boolean hasPermission = PermissionUtil.hasPermission(user, "app.menu.file");
 2. 完善权限控制测试
 3. 更新文档和注释
 4. 进行全面的功能测试
+
+## 权限控制改进
+
+### 精准的JMenuItem权限控制
+
+#### 新增功能
+- **MenuItemConfig类**：用于配置菜单项的各种参数，包括权限ID、文本、图标、快捷键等
+- **UICreator增强**：新增了多个方法来创建带权限控制的JMenuItem
+- **批量权限控制**：支持批量创建和权限检查
+
+#### 使用方法
+
+##### 单个菜单项权限控制
+```java
+JMenuItem item = UICreator.createJMenuItemWithPermission(
+    "app.menu.edit.undo",           // 权限ID
+    "app.menu.edit.undo",           // 国际化文本key
+    "icons/undo",                   // 图标路径
+    KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), // 快捷键
+    'U',                            // 助记符
+    e -> menuItemActionPerformed(e) // 动作监听器
+);
+```
+
+##### 批量菜单项权限控制
+```java
+List<MenuItemConfig> configs = new ArrayList<>();
+configs.add(MenuItemConfig.builder()
+    .permissionId("app.menu.edit.undo")
+    .textKey("app.menu.edit.undo")
+    .iconPath("icons/undo")
+    .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()))
+    .mnemonic('U')
+    .actionListener(e -> menuItemActionPerformed(e))
+    .build());
+
+List<JMenuItem> items = UICreator.createJMenuItemsWithPermissions(configs);
+```
+
+#### 已重构的菜单类
+- **EditMenu**：编辑菜单，包含撤销、重做、剪切、复制、粘贴、删除等功能
+- **FileMenu**：文件菜单，包含新建、打开、另存为、关闭、退出等功能
+- **ViewMenu**：视图菜单，包含各种视图相关的功能
+
+#### 权限控制特性
+- **自动过滤**：没有权限的菜单项会自动隐藏
+- **动态控制**：根据用户权限动态显示/隐藏菜单项
+- **统一管理**：所有权限ID与国际化key保持一致
+- **易于维护**：使用配置类简化菜单项创建和管理
+
+### 忽略的文件
+- `JFrameUI/src/main/java/cn/ximuli/jframex/ui/demo/` - 演示代码目录
+- `JFrameUI/src/main/java/cn/ximuli/jframex/ui/test/` - 测试代码目录
+
+这些目录中的代码不会被权限控制影响，也不会参与权限检查。

@@ -5,11 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.swing.*;
+import java.util.function.Consumer;
+
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class SettingInfo<T> {
+public class SettingInfo<T extends JComponent> {
     private String category;
     private String name;
     private String toolTipText;

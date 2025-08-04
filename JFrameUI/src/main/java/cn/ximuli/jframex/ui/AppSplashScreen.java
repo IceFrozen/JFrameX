@@ -32,7 +32,7 @@ public class AppSplashScreen extends JWindow {
         progressBar.setValue(0);
         progressBar.setIndeterminate(true);
         progressBar.setStringPainted(true);
-        progressBar.setString("Loading...");
+        progressBar.setString(I18nHelper.getMessage("app.splash.screen.loading"));
         progressBar.setBorder(null);
         add(splashLabel, "grow, center"); // Center the image label
         add(progressBar, "growx, dock south"); // Dock progress bar at the bottom

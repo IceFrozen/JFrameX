@@ -7,6 +7,7 @@ import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.LC;
@@ -25,6 +26,7 @@ public class ControlBar extends JPanel {
     private JInternalFrame parentFrame;
     private Component component;
     private JSeparator separator1;
+    @Getter
     private LookAndFeelsComboBox lookAndFeelComboBox;
     private JCheckBox rightToLeftCheckBox;
     private JCheckBox enabledCheckBox;

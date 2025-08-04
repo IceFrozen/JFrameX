@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.util.ReflectionUtils;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -22,6 +23,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;

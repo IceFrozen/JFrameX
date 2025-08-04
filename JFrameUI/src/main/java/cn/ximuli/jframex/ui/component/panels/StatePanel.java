@@ -3,7 +3,9 @@ package cn.ximuli.jframex.ui.component.panels;
 import cn.ximuli.jframex.common.utils.DateUtil;
 import cn.ximuli.jframex.model.LoggedInUser;
 import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.ui.internalJFrame.CommonInternalJFrame;
 import cn.ximuli.jframex.ui.storage.JFramePref;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +25,7 @@ public class StatePanel extends JPanel {
     private static JLabel czyStateLabel = null;
     private JSeparator jSeparator2 = null;
 
+    @Getter
     private JInternalFrame currentFrame;
 
     private String statusPanelDefaultContext;

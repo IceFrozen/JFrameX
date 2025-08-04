@@ -5,6 +5,7 @@ import cn.ximuli.jframex.ui.AppSplashScreen;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
+import cn.ximuli.jframex.ui.internalJFrame.CommonInternalJFrame;
 import cn.ximuli.jframex.ui.login.LoginFrame;
 import cn.ximuli.jframex.common.constants.Status;
 import cn.ximuli.jframex.ui.component.panels.StatePanel;
@@ -89,6 +90,7 @@ public class FrameManager {
                 this.uiSession = new UISession(userLoginEvent.getLoggedInUser(), loaderManager);
                 this.uiSession.prepareUI();
                 this.uiSession.getMainFrame().setVisible(true);
+                this.uiSession.afterUIShow();
                 updateStatus(Status.STARTED);
                 loginFrame.reset();
                 loginFrame.dispose();
@@ -179,6 +181,10 @@ public class FrameManager {
         }
         JInternalFrame iFrame = (JInternalFrame) this.uiSession.getInternalJFrame(clazz);
         try {
+            if (this.getUiSession().getStatePanel().getCurrentFrame() == iFrame) {
+                return iFrame;
+            }
+
             if (!hasComponent(iFrame)) {
                 this.uiSession.getDesktopPanel().add(iFrame);
             }

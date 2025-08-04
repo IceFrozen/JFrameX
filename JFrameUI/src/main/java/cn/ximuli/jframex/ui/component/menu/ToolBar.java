@@ -17,6 +17,7 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +29,7 @@ import java.util.Objects;
 public class ToolBar extends JPanel {
     private MenuBar menuBar;
     private ResourceLoaderManager resources;
+    @Getter
     private final JToolBar toolBar = new JToolBar();
     private JPanel macFullWindowContentButtonsPlaceholder = new JPanel();
     private Color accentColor;
@@ -41,6 +43,14 @@ public class ToolBar extends JPanel {
             "Default", "Blue", "Purple", "Red", "Orange", "Yellow", "Green",
     };
     private final JToggleButton[] accentColorButtons = new JToggleButton[accentColorKeys.length];
+
+    @Getter
+    private FlatButton usersButton;
+    @Getter
+    private JButton lastToolButton;
+
+    @Getter
+    private JButton firstToolButton;
 
     private ToolBar() {
     }
@@ -69,7 +79,11 @@ public class ToolBar extends JPanel {
                 if (menuComponent instanceof JMenuItem item) {
                     JButton toolButton = createToolButton((item));
                     if (!Objects.isNull(toolButton)) {
-                        toolBar.add(createToolButton((item)));
+                        toolBar.add(toolButton);
+                        lastToolButton = toolButton;
+                        if (firstToolButton == null) {
+                            firstToolButton = toolButton;
+                        }
                     }
                 }
             }
@@ -174,7 +188,7 @@ public class ToolBar extends JPanel {
         JButton button = null;
         Object syncType = item.getClientProperty(MenuBar.MENU_SYNC_TOOL_BAR_KEY);
         if (MenuBar.MENU_SYNC_TOOL_BAR_TYPE_SIMPLE.equals(syncType)) {
-            button = new JButton();
+            button = new FlatButton();
             button.setToolTipText(item.getToolTipText());
             button.setIcon(item.getIcon());
             ActionListener[] actionListeners = item.getActionListeners();
@@ -212,8 +226,6 @@ public class ToolBar extends JPanel {
             // on macOS, panel left to toolBar is a placeholder for title bar buttons in fullWindowContent mode
             macFullWindowContentButtonsPlaceholder.putClientProperty(FlatClientProperties.FULL_WINDOW_CONTENT_BUTTONS_PLACEHOLDER, "mac zeroInFullScreen");
         }
-
-
     }
 
     public void initializeLinux() {
@@ -240,5 +252,7 @@ public class ToolBar extends JPanel {
             menuBar.add(Box.createGlue());
             menuBar.add(usersButton);
         }
+        this.usersButton = usersButton;
+
     }
 }

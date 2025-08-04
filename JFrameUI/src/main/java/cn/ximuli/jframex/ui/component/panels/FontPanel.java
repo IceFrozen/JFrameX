@@ -8,11 +8,13 @@ import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.event.RestartEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
+import cn.ximuli.jframex.ui.manager.HintManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.manager.ThemeUIManager;
 import cn.ximuli.jframex.ui.storage.JFramePref;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.core.Ordered;
 
 import javax.swing.*;
@@ -133,4 +135,33 @@ public class FontPanel extends JPanel {
         float size = ConvertUtil.toFloat(fontSizeSpinner.getValue());
         ThemeUIManager.fontSizeChanged(size);
     }
+
+    public void showHint(boolean reload) {
+        log.info("invoke show hint");
+        if (reload) {
+            clearHint();
+        }
+        HintManager.Hint languageList = new HintManager.Hint(
+                "Use 'language' list to try out various languages.",
+                langListBox, SwingConstants.RIGHT, "setting.hint.language", null);
+
+
+        HintManager.Hint fontSizeHint = new HintManager.Hint(
+                "Use 'Size' to set Font size.",
+                fontSizeSpinner, SwingConstants.RIGHT, "setting.hint.font.size", languageList);
+
+        HintManager.Hint fontList = new HintManager.Hint(
+                "Use 'Font' list to try out various font.",
+                fontListBox, SwingConstants.RIGHT, "setting.hint.font.name", fontSizeHint);
+
+        HintManager.showHint(fontList);
+    }
+
+    public void clearHint() {
+        log.info("clearHint show hint");
+        JFramePref.state.remove("setting.hint.font.name");
+        JFramePref.state.remove("setting.hint.font.size");
+        JFramePref.state.remove("setting.hint.language");
+    }
+
 }

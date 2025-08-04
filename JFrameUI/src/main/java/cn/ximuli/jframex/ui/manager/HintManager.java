@@ -6,6 +6,7 @@ import com.formdev.flatlaf.ui.FlatDropShadowBorder;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
+import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -16,15 +17,17 @@ import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 public class HintManager {
     private static final List<HintPanel> hintPanels = new ArrayList<>();
+
 
     public static void showHint(Hint hint) {
         // check whether user already closed the hint
         if (JFramePref.state.getBoolean(hint.prefsKey, false)) {
-            if (hint.nextHint != null)
+            if (hint.nextHint != null) {
                 showHint(hint.nextHint);
+            }
             return;
         }
 
@@ -158,6 +161,7 @@ public class HintManager {
                     break;
             }
 
+            log.debug("x:{}, y:{}, w:{}, h:{}", x, y, size.width, size.height);
             // set hint popup size and show it
             popup.setBounds(x, y, size.width, size.height);
             layeredPane.add(popup, JLayeredPane.POPUP_LAYER);

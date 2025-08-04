@@ -1,11 +1,11 @@
 package cn.ximuli.jframex.ui.component.menu;
 
-import cn.ximuli.jframex.service.util.SpringUtils;
+import cn.ximuli.jframex.ui.internalJFrame.CommonInternalJFrame;
 import cn.ximuli.jframex.ui.manager.HintManager;
-import cn.ximuli.jframex.ui.internalJFrame.SettingInternalJFrame;
 import cn.ximuli.jframex.ui.event.WindowsEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
+import cn.ximuli.jframex.ui.manager.UISession;
 import cn.ximuli.jframex.ui.storage.JFramePref;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
@@ -13,6 +13,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.util.SystemInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ReflectionUtils;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -201,42 +202,24 @@ public class OptionsMenu extends JMenu {
     }
 
     private void showHintsChanged() {
-        clearHints();
+        HintManager.hideAllHints();
         showHints();
     }
-
-    private void clearHints() {
-        HintManager.hideAllHints();
-        Preferences state = JFramePref.state;
-        state.remove("hint.fontMenu");
-        state.remove("hint.optionsMenu");
-        state.remove("hint.themesPanel");
-    }
+    
     private void showHints() {
-//        HintManager.Hint fontMenuHint = new HintManager.Hint(
-//                "Use 'Font' menu to increase/decrease font size or try different fonts.",
-//                fontMenu, SwingConstants.BOTTOM, "hint.fontMenu", null);
-//
-//        HintManager.Hint optionsMenuHint = new HintManager.Hint(
-//                "Use 'Options' menu to try out various FlatLaf options.",
-//                optionsMenu, SwingConstants.BOTTOM, "hint.optionsMenu", fontMenuHint);
-//
-//        HintManager.Hint themesHint = new HintManager.Hint(
-//                "Use 'Themes' list to try out various themes.",
-//                themesPanel, SwingConstants.LEFT, "hint.themesPanel", optionsMenuHint);
-
-        ToolBar toolBar = FrameManager.getCurrentUISession().getToolBar();
-        SettingInternalJFrame settingInternalJFrame = FrameManager.getCurrentUISession().getInternalJFrame(SettingInternalJFrame.class);
-
-
-        HintManager.Hint themesHint = new HintManager.Hint(
-                "Use 'Themes' list to try out various themes.",
-                settingInternalJFrame.getThemesPanel(), SwingConstants.LEFT, "hint.themesPanel", null);
-
-
-
-
-        HintManager.showHint(themesHint);
+        UISession currentUISession = FrameManager.getCurrentUISession();
+        if (currentUISession != null) {
+            JInternalFrame currentFrame = currentUISession.getStatePanel().getCurrentFrame();
+            if (currentFrame == null) {
+                log.debug("show main hint");
+                currentUISession.showHit(true);
+                return;
+            }
+            log.debug("show main hint: currentFrame:{}", currentFrame);
+            if (currentFrame instanceof CommonInternalJFrame commonInternalJFrame) {
+                commonInternalJFrame.showHint(true);
+            }
+        }
     }
 
 }

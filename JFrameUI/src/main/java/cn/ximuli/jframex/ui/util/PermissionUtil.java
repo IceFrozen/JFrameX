@@ -42,7 +42,8 @@ public class PermissionUtil {
      * @return Whether user is admin
      */
     public static boolean isAdmin(LoggedInUser user) {
-        return getPermissionManager().isAdmin(user);
+
+        return getPermissionManager().isAdmin( user);
     }
     
     /**

@@ -3,7 +3,6 @@ package cn.ximuli.jframex.ui.manager;
 import cn.ximuli.jframex.model.LoggedInUser;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.Application;
-import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.component.menu.MenuBar;
 import cn.ximuli.jframex.ui.component.menu.ToolBar;
@@ -235,5 +234,30 @@ public class UISession {
         } else {
             runnable.run();
         }
+    }
+
+    public void afterUIShow() {
+        showHit(false);
+    }
+    public void showHit(boolean reload) {
+        if (reload) {
+            JFramePref.state.remove("main.frame.hint.user.button");
+            JFramePref.state.remove("main.frame.hint.toolbar");
+            JFramePref.state.remove("main.frame.hint.status");
+        }
+
+        HintManager.Hint status = new HintManager.Hint(
+                "Current user is here",
+                statePanel.getCzyStateLabel(), SwingConstants.TOP, "main.frame.hint.status", null);
+
+        HintManager.Hint userButton = new HintManager.Hint(
+                "Use this to check information and logout",
+                toolBar.getUsersButton(), SwingConstants.LEFT, "main.frame.hint.user.button", status);
+
+        HintManager.Hint toolBarHint = new HintManager.Hint(
+                "Use tool bark do the operation",
+                toolBar.getFirstToolButton(), SwingConstants.BOTTOM, "main.frame.hint.toolbar", userButton);
+
+        HintManager.showHint(toolBarHint);
     }
 }

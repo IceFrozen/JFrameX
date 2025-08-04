@@ -1,6 +1,6 @@
 package cn.ximuli.jframex.ui.component.menu;
 
-import cn.ximuli.jframex.ui.I18nHelper;
+import cn.ximuli.jframex.common.constants.PermissionConstants;
 import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.internalJFrame.CreateNewInternalJFrame;
 import cn.ximuli.jframex.ui.demo.NewDialog;
@@ -11,7 +11,6 @@ import com.formdev.flatlaf.extras.FlatDesktop;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -24,62 +23,27 @@ public class FileMenu extends JMenu {
 
     public FileMenu(ResourceLoaderManager resources) {
         this.resources = resources;
-        createJMenuItem().forEach(this::add);
+        createJMenuItem();
     }
 
-    public List<JMenuItem> createJMenuItem() {
-        List<JMenuItem> items = new ArrayList<>();
-        //---- newMenuItem ----
-        JMenuItem newMenuItem = new JMenuItem();
-        JMenuItem openMenuItem = new JMenuItem();
-        JMenuItem saveAsMenuItem= new JMenuItem();
-        JMenuItem closeMenuItem= new JMenuItem();
-        JMenuItem  exitMenuItem = new JMenuItem();
-        newMenuItem.setText(I18nHelper.getMessage("app.menu.file.new"));
-        newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        newMenuItem.setIcon(resources.getIcon("icons/newFolder"));
-        newMenuItem.putClientProperty(MenuBar.MENU_SYNC_TOOL_BAR_KEY, MenuBar.MENU_SYNC_TOOL_BAR_TYPE_SIMPLE);
-        newMenuItem.setMnemonic('N');
-        newMenuItem.addActionListener(e -> newActionPerformed());
-        add(newMenuItem);
+    public void createJMenuItem() {
+        List<JMenuItem> jMenuItems = new ArrayList<>();
+        JMenuItem file = UICreator.createJMenuItem(PermissionConstants.APP_MENU_FILE, "app.menu.file.new", "icons/newFolder", KeyEvent.VK_N, 'N', e -> newActionPerformed());
+        JMenuItem openMenuItem = UICreator.createJMenuItem(PermissionConstants.APP_MENU_FILE_OPEN, "app.menu.file.open", "icons/open", KeyEvent.VK_O, 'O', e -> openActionPerformed());
+        JMenuItem saveAsMenuItem = UICreator.createJMenuItem(PermissionConstants.APP_MENU_FILE_SAVE_AS, "app.menu.file.saveAs", "icons/save", KeyEvent.VK_S, 'S', e -> saveAsActionPerformed());
+        JMenuItem closeMenuItem = UICreator.createJMenuItem(PermissionConstants.APP_MENU_FILE_CLOSE, "app.menu.file.close", "icons/save", KeyEvent.VK_W, 'C', e -> menuItemActionPerformed(e));
+        JMenuItem exitMenuItem = UICreator.createJMenuItem(PermissionConstants.APP_MENU_FILE_EXIT, "app.menu.file.exit", "icons/exit", KeyEvent.VK_Q, 'X', e -> exitActionPerformed());
 
-        //---- openMenuItem ----
-        openMenuItem.setText(I18nHelper.getMessage("app.menu.file.open"));
-        openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        openMenuItem.setMnemonic('O');
-        openMenuItem.setIcon(resources.getIcon("icons/open"));
-        openMenuItem.putClientProperty(MenuBar.MENU_SYNC_TOOL_BAR_KEY, MenuBar.MENU_SYNC_TOOL_BAR_TYPE_SIMPLE);
-        openMenuItem.addActionListener(e -> openActionPerformed());
-        add(openMenuItem);
+        jMenuItems.add(file);
+        jMenuItems.add(openMenuItem);
+        jMenuItems.add(saveAsMenuItem);
+        jMenuItems.add(closeMenuItem);
+        jMenuItems.add(exitMenuItem);
 
-        //---- saveAsMenuItem ----
-        saveAsMenuItem.setText(I18nHelper.getMessage("app.menu.file.saveAs"));
-        saveAsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        saveAsMenuItem.setMnemonic('S');
-        saveAsMenuItem.addActionListener(e -> saveAsActionPerformed());
-        saveAsMenuItem.setIcon(resources.getIcon("icons/save"));
-        saveAsMenuItem.putClientProperty(MenuBar.MENU_SYNC_TOOL_BAR_KEY, MenuBar.MENU_SYNC_TOOL_BAR_TYPE_SIMPLE);
-        add(saveAsMenuItem);
-        addSeparator();
 
-        //---- closeMenuItem ----
-        closeMenuItem.setText("Close");
-        closeMenuItem.setText(I18nHelper.getMessage("app.menu.file.close"));
-        closeMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        closeMenuItem.setMnemonic('C');
-        closeMenuItem.addActionListener(e -> menuItemActionPerformed(e));
-        closeMenuItem.setIcon(resources.getIcon("icons/save"));
-        add(closeMenuItem);
-        addSeparator();
-
-        //---- exitMenuItem ----
-        exitMenuItem.setText(I18nHelper.getMessage("app.menu.file.exit"));
-        exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        exitMenuItem.setMnemonic('X');
-        exitMenuItem.addActionListener(e -> exitActionPerformed());
-        exitMenuItem.setIcon(resources.getIcon("icons/exit"));
-        add(exitMenuItem);
-
+        for (JMenuItem item : jMenuItems) {
+            add(item);
+        }
         List<JMenuItem> internalJFrameItems = UICreator.createJMenuItemForInternalJFrame(CreateNewInternalJFrame.class);
         for (JMenuItem internalJFrameItem : internalJFrameItems) {
             add(internalJFrameItem);
@@ -87,7 +51,7 @@ public class FileMenu extends JMenu {
 
         // integrate into macOS screen menu
         FlatDesktop.setQuitHandler(response -> response.performQuit());
-        return items;
+
     }
 
     private void newActionPerformed() {

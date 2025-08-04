@@ -109,7 +109,7 @@ public class UserInternalJFrame extends CommonInternalJFrame {
                 })
                 .doubleClick((tp, user) -> log.info("double click"))
                 .editClick((tp, user) -> FrameManager.publishEvent(new CreateFrameEvent<>(UserDetailJFrame.class, user)))
-                .delClick((tp, user) -> log.info("user delï¼?" + user))
+                .delClick((tp, user) -> log.info("user delï¿½?" + user))
                 .converter(UserType.class, this::convertUserType)
                 .converter(Department.class, this::convertDepartment)
                 .converter(Status.class, this::convertStatus)
@@ -224,5 +224,10 @@ public class UserInternalJFrame extends CommonInternalJFrame {
             log.error("Failed to query departments", ex);
             JOptionPane.showMessageDialog(this, "Failed to load departments", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    @Override
+    public void showHint(boolean b) {
+
     }
 }

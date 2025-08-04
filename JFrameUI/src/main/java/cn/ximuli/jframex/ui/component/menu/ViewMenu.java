@@ -1,5 +1,6 @@
 package cn.ximuli.jframex.ui.component.menu;
 
+import cn.ximuli.jframex.common.constants.PermissionConstants;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
@@ -23,114 +24,90 @@ import java.util.List;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ViewMenu extends JMenu {
     final ResourceLoaderManager resources;
-    private final JMenu scrollingPopupMenu;
-    private final JMenu showView;
-    private final JMenu components;
-    private final JMenu diisabledMenu;
-    private final JCheckBoxMenuItem toolBarCheckBook;
 
     public ViewMenu(ResourceLoaderManager resources) {
         this.resources = resources;
-        components = createComponentsView();
-        scrollingPopupMenu = createScrollingPopupMenu();
-        toolBarCheckBook = createToolBarCheckBook();
-        showView = createShowView();
-        diisabledMenu =  createDisabledMenu();
-        List<JRadioButtonMenuItem> radioButtonMenuItem = createRadioButtonMenuItem();
-        add(scrollingPopupMenu);
-        add(toolBarCheckBook);
-        add(components);
-        add(showView);
+        createComponentsView();
+        createScrollingPopupMenu();
         addSeparator();
-        radioButtonMenuItem.forEach(this::add);
+        createToolBarCheckBook();
+        createShowView();
+        createRadioButtonMenuItem();
+        createDisabledMenu();
     }
 
-    public JMenu createComponentsView() {
-        JMenu components = new JMenu(I18nHelper.getMessage("app.menu.view.components"));
-        List<JMenuItem> jMenuItemForInternalJFrame = UICreator.createJMenuItemForInternalJFrame(
-                BasicInternalJFrame.class, CreateNewInternalJFrame.class, OptionInternalJFrame.class, ContainerInternalJFrame.class, DataInternalJFrame.class, TabInternalJFrame.class, ExtrasInternalJFrame.class);
-        //---- newMenuItem ----
-        jMenuItemForInternalJFrame.forEach(components::add);
-        return components;
-    }
-
-    public JMenu createScrollingPopupMenu() {
-        JMenu scrollingPopupMenu = new JMenu(I18nHelper.getMessage("app.menu.view.scrolling"));
-        scrollingPopupMenu.add("Large menus are scrollable");
-        scrollingPopupMenu.add("Use mouse wheel to scroll");
-        scrollingPopupMenu.add("Or use up/down arrows at top/bottom");
-        for (int i = 1; i <= 100; i++) {
-            scrollingPopupMenu.add("Item " + i);
+    public void createComponentsView() {
+        JMenu components = UICreator.createJMenu(PermissionConstants.APP_MENU_VIEW_COMPONENTS, "app.menu.view.components");
+        if (components != null) {
+            List<JMenuItem> jMenuItemForInternalJFrame = UICreator.createJMenuItemForInternalJFrame(
+                    BasicInternalJFrame.class,
+                    CreateNewInternalJFrame.class,
+                    OptionInternalJFrame.class,
+                    ContainerInternalJFrame.class,
+                    DataInternalJFrame.class,
+                    TabInternalJFrame.class,
+                    ExtrasInternalJFrame.class);
+            //---- newMenuItem ----
+            jMenuItemForInternalJFrame.forEach(components::add);
+            add(components);
         }
-        return scrollingPopupMenu;
+    }
+
+    public void createScrollingPopupMenu() {
+        JMenu scrollingPopupMenu = UICreator.createJMenu(PermissionConstants.APP_MENU_VIEW_SCROLLING, "app.menu.view.scrolling");
+        if (scrollingPopupMenu != null) {
+            scrollingPopupMenu.add("Large menus are scrollable");
+            scrollingPopupMenu.add("Use mouse wheel to scroll");
+            scrollingPopupMenu.add("Or use up/down arrows at top/bottom");
+            for (int i = 1; i <= 100; i++) {
+                scrollingPopupMenu.add("Item " + i);
+            }
+            add(scrollingPopupMenu);
+        }
     }
 
 
-    public JMenu createShowView() {
-        JMenu showView = new JMenu(I18nHelper.getMessage("app.menu.view.show.view"));
-        showView.setMnemonic('V');
+    public void createShowView() {
+        JMenu showView = UICreator.createJMenu(PermissionConstants.APP_MENU_VIEW_SHOW_VIEW, "app.menu.view.show.view");
+        if (showView != null) {
+            JMenu subViewsMenu = new JMenu(I18nHelper.getMessage("app.menu.view.sub.view"));
+            JMenu subSubViewsMenu = new JMenu(I18nHelper.getMessage("app.menu.view.sub.sub.view"));
+            JMenuItem errorLogViewMenuItem = new JMenuItem(I18nHelper.getMessage("app.menu.view.sub.sub.view.error.log"));
+            JMenuItem searchViewMenuItem = new JMenuItem(I18nHelper.getMessage("app.menu.view.search"));
+            JMenuItem projectViewMenuItem = new JMenuItem(I18nHelper.getMessage("app.menu.view.project"));
+            JMenuItem structureViewMenuItem = new JMenuItem(I18nHelper.getMessage("app.menu.view.structure"));
+            JMenuItem propertiesViewMenuItem = new JMenuItem(I18nHelper.getMessage("app.menu.view.properties"));
+            // 创建子菜单
 
-        JMenu subViewsMenu = new JMenu();
-        JMenu subSubViewsMenu = new JMenu();
+            subViewsMenu.add(subSubViewsMenu);
+            showView.add(subViewsMenu);
+            //---- sub view - sub sub view - errorLogViewMenuItem ----
 
-        JMenuItem errorLogViewMenuItem = new JMenuItem();
-        JMenuItem searchViewMenuItem = new JMenuItem();
-        JMenuItem projectViewMenuItem = new JMenuItem();
-        JMenuItem structureViewMenuItem = new JMenuItem();
-        JMenuItem propertiesViewMenuItem = new JMenuItem();
+            errorLogViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+            subSubViewsMenu.add(errorLogViewMenuItem);
+            //---- sub view - sub sub view -searchViewMenuItem ----
+            searchViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+            subSubViewsMenu.add(searchViewMenuItem);
 
-        //======== subViewsMenu ========
+            //---- projectViewMenuItem ----
+            projectViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+            showView.add(projectViewMenuItem);
+            structureViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+            showView.add(structureViewMenuItem);
+            //---- propertiesViewMenuItem ----
+            propertiesViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+            showView.add(propertiesViewMenuItem);
 
-        subViewsMenu.setText(I18nHelper.getMessage("app.menu.view.sub.view"));
-        subViewsMenu.setMnemonic('S');
-        showView.add(subViewsMenu);
-
-        //======== subSubViewsMenu ========
-
-        subSubViewsMenu.setText(I18nHelper.getMessage("app.menu.view.sub.sub.view"));
-        subSubViewsMenu.setMnemonic('U');
-        subViewsMenu.add(subSubViewsMenu);
-
-        //---- sub view - sub sub view - errorLogViewMenuItem ----
-        errorLogViewMenuItem.setText(I18nHelper.getMessage("app.menu.view.sub.sub.view.error.log"));
-        errorLogViewMenuItem.setMnemonic('E');
-        errorLogViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
-        subSubViewsMenu.add(errorLogViewMenuItem);
-
-
-        //---- sub view - sub sub view -searchViewMenuItem ----
-        searchViewMenuItem.setText(I18nHelper.getMessage("app.menu.view.search"));
-        searchViewMenuItem.setMnemonic('S');
-        searchViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
-        subSubViewsMenu.add(searchViewMenuItem);
-
-
-        //---- projectViewMenuItem ----
-        projectViewMenuItem.setText(I18nHelper.getMessage("app.menu.view.project"));
-        projectViewMenuItem.setMnemonic('P');
-        projectViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
-        showView.add(projectViewMenuItem);
-
-        //---- structureViewMenuItem ----
-        structureViewMenuItem.setText(I18nHelper.getMessage("app.menu.view.structure"));
-        structureViewMenuItem.setMnemonic('T');
-        structureViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
-        showView.add(structureViewMenuItem);
-
-        //---- propertiesViewMenuItem ----
-        propertiesViewMenuItem.setText(I18nHelper.getMessage("app.menu.view.properties"));
-        propertiesViewMenuItem.setMnemonic('O');
-        propertiesViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
-        showView.add(propertiesViewMenuItem);
-        return showView;
+            add(showView);
+        }
     }
 
-    public JCheckBoxMenuItem createToolBarCheckBook() {
-        JCheckBoxMenuItem toolBarCheckBook = new JCheckBoxMenuItem(I18nHelper.getMessage("app.menu.view.show.toolbar"));
-        toolBarCheckBook.setSelected(true);
-        toolBarCheckBook.setMnemonic('T');
-        toolBarCheckBook.addActionListener(e -> menuItemActionPerformed(e));
-        return toolBarCheckBook;
+    public void createToolBarCheckBook() {
+        JCheckBoxMenuItem toolBarCheckBook = UICreator.createJCheckBoxMenuItem(PermissionConstants.APP_MENU_VIEW_SHOW_TOOLBAR, "app.menu.view.show.toolbar", KeyEvent.VK_T, 'T', e -> menuItemActionPerformed(e));
+        if (toolBarCheckBook != null) {
+            toolBarCheckBook.setSelected(true);
+            add(toolBarCheckBook);
+        }
     }
 
     private void menuItemActionPerformed(ActionEvent e) {
@@ -144,36 +121,36 @@ public class ViewMenu extends JMenu {
         return disabledMenu;
     }
 
-    private  List<JRadioButtonMenuItem> createRadioButtonMenuItem() {
+    private void createRadioButtonMenuItem() {
+        ButtonGroup buttonGroup  = UICreator.createButtonGroup(PermissionConstants.APP_MENU_VIEW_BUTTON_GROUP);
+        if (buttonGroup != null) {
+            JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
+            JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
+            JRadioButtonMenuItem radioButtonMenuItem3 = new JRadioButtonMenuItem();
 
-        JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
-        JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
-        JRadioButtonMenuItem radioButtonMenuItem3 = new JRadioButtonMenuItem();
+            buttonGroup.add(radioButtonMenuItem1);
+            buttonGroup.add(radioButtonMenuItem2);
+            buttonGroup.add(radioButtonMenuItem3);
 
-        ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(radioButtonMenuItem1);
-        buttonGroup.add(radioButtonMenuItem2);
-        buttonGroup.add(radioButtonMenuItem3);
-
-        //---- radioButtonMenuItem1 ----
-        radioButtonMenuItem1.setText(I18nHelper.getMessage("app.menu.view.radio.one"));
-        radioButtonMenuItem1.setSelected(true);
-        radioButtonMenuItem1.setMnemonic('D');
-        radioButtonMenuItem1.addActionListener(e -> menuItemActionPerformed(e));
-
-
-        //---- radioButtonMenuItem2 ----
-        radioButtonMenuItem2.setText(I18nHelper.getMessage("app.menu.view.radio.two"));
-        radioButtonMenuItem2.setMnemonic('S');
-        radioButtonMenuItem2.addActionListener(e -> menuItemActionPerformed(e));
+            //---- radioButtonMenuItem1 ----
+            radioButtonMenuItem1.setText(I18nHelper.getMessage("app.menu.view.radio.one"));
+            radioButtonMenuItem1.setSelected(true);
+            radioButtonMenuItem1.setMnemonic('D');
+            radioButtonMenuItem1.addActionListener(e -> menuItemActionPerformed(e));
 
 
-        //---- radioButtonMenuItem3 ----
-        radioButtonMenuItem3.setText(I18nHelper.getMessage("app.menu.view.radio.three"));
-        radioButtonMenuItem3.setMnemonic('L');
-        radioButtonMenuItem3.addActionListener(e -> menuItemActionPerformed(e));
+            //---- radioButtonMenuItem2 ----
+            radioButtonMenuItem2.setText(I18nHelper.getMessage("app.menu.view.radio.two"));
+            radioButtonMenuItem2.setMnemonic('S');
+            radioButtonMenuItem2.addActionListener(e -> menuItemActionPerformed(e));
 
-        return List.of(radioButtonMenuItem1, radioButtonMenuItem2, radioButtonMenuItem3);
-
+            //---- radioButtonMenuItem3 ----
+            radioButtonMenuItem3.setText(I18nHelper.getMessage("app.menu.view.radio.three"));
+            radioButtonMenuItem3.setMnemonic('L');
+            radioButtonMenuItem3.addActionListener(e -> menuItemActionPerformed(e));
+            add(radioButtonMenuItem1);
+            add(radioButtonMenuItem2);
+            add(radioButtonMenuItem3);
+        }
     }
 }
