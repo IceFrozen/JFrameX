@@ -123,14 +123,13 @@ public class SettingInternalJFrame extends CommonInternalJFrame implements Hinta
         if (reload) {
             clearHint();
         }
-        showPanelHint(reload);
-
         HintManager.Hint controlBarthemesHint = new HintManager.Hint(
-                "Use 'control bar' list to set themes.",
+                I18nHelper.getMessage("app.setting.hint.control.bar.themes"),
                 controlBar.getLookAndFeelComboBox(), SwingConstants.TOP, "hint.control.themes", null);
 
         HintManager.Hint themesHint = new HintManager.Hint(
-                "Use 'Themes' list to try out various themes.",
+
+                I18nHelper.getMessage("app.setting.hint.themes"),
                 themesPanel.getThemesPanel(), SwingConstants.LEFT, "hint.themes", controlBarthemesHint);
         HintManager.showHint(themesHint);
     }
@@ -155,20 +154,5 @@ public class SettingInternalJFrame extends CommonInternalJFrame implements Hinta
             hintable.showHint(false);
         }
 
-    }
-
-
-    public void showPanelHint(boolean reload) {
-        try {
-            SettingInfo<JComponent> currenSettings = settingListPanel.getCurrenSettings();
-            JComponent currentComponent = currenSettings.getValue();
-            log.debug("afterShow... currentComponent:{}", currenSettings.getValue());
-            Method showHint = currentComponent.getClass().getMethod("showHint", boolean.class);
-            ReflectionUtils.invokeMethod(showHint, currentComponent, reload);
-        } catch (NoSuchMethodException Ignore) {
-            log.info("Ignore Exception");
-        } catch (Exception e) {
-            log.error("Error", e);
-        }
     }
 }

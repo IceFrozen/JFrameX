@@ -1,5 +1,6 @@
 package cn.ximuli.jframex.ui.manager;
 
+import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.storage.JFramePref;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatDropShadowBorder;
@@ -209,7 +210,7 @@ public class HintManager {
             add(hintLabel, "cell 0 0");
 
             //---- gotItButton ----
-            gotItButton.setText("Got it!");
+            gotItButton.setText(I18nHelper.getMessage("app.hint.manager.got"));
             gotItButton.setFocusable(false);
             gotItButton.addActionListener(e -> gotIt());
             add(gotItButton, "cell 0 1,alignx right,growx 0");

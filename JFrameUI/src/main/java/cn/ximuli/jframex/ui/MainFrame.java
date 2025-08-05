@@ -137,15 +137,15 @@ public class MainFrame extends JFrame implements Hintable {
         }
 
         HintManager.Hint status = new HintManager.Hint(
-                "Current user is here",
+                I18nHelper.getMessage("app.mainframe.hint.user.information"),
                 statePanel.getCzyStateLabel(), SwingConstants.TOP, "main.frame.hint.status", null);
 
         HintManager.Hint userButton = new HintManager.Hint(
-                "Use this to check information and logout",
+                I18nHelper.getMessage("app.mainframe.hint.user.current"),
                 toolBar.getUsersButton(), SwingConstants.LEFT, "main.frame.hint.user.button", status);
 
         HintManager.Hint toolBarHint = new HintManager.Hint(
-                "Use tool bark do the operation",
+                I18nHelper.getMessage("app.mainframe.hint.toolbar"),
                 toolBar.getFirstToolButton(), SwingConstants.BOTTOM, "main.frame.hint.toolbar", userButton);
 
         HintManager.showHint(toolBarHint);
