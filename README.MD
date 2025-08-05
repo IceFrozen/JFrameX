@@ -1,146 +1,79 @@
-# JFrameX ÏîÄ¿ÖØ¹¹ËµÃ÷
+<p align="center">
+  <img src="./Docs/logo.png" alt="JFrameX Logo" width="200"/>
+</p>
+<p align="center">
+  A modern, internationalized Java Swing desktop application framework with rich UI components
+</p>
 
-## ÖØ¹¹ÄÚÈİ
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-17+-blue.svg" alt="Java 17+">
+  <img src="https://img.shields.io/badge/Spring%20Boot-2.7+-green.svg" alt="Spring Boot 2.7+">
+  <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="Apache License 2.0">
+  <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg" alt="Cross Platform">
+</p>
 
-### 1. ¹ú¼Ê»¯KeyÖØ¹¹
+## ğŸŒŸ Features
 
-#### ÖØ¹¹Ô­Ôò
-- ÒÆ³ıÁËËùÓĞ°üº¬ `title`¡¢`label` µÈÃèÊöĞÔ´Ê»ãµÄkey
-- Ê¹ÓÃ¸ü¼ò½à¡¢ÓïÒå»¯µÄÃüÃû¹æ·¶
-- È·±£key¿ÉÒÔ×÷ÎªÈ¨ÏŞIDÊ¹ÓÃ
-- ±£³ÖÖĞÓ¢ÎÄkeyµÄÒ»ÖÂĞÔ
+JFrameX is a comprehensive Java Swing desktop application framework that provides a rich set of features for building modern desktop applications with minimal effort.
 
-#### Ö÷Òª±ä¸ü
-- `app.mainframe.title` ¡ú `app.mainframe`
-- `app.login.title` ¡ú `app.login`
-- `app.menu.file.title` ¡ú `app.menu.file`
-- `app.menu.edit.title` ¡ú `app.menu.edit`
-- `app.menu.view.title` ¡ú `app.menu.view`
-- `app.menu.user.title` ¡ú `app.menu.user`
-- `app.menu.options.title` ¡ú `app.menu.options`
-- `app.menu.help.title` ¡ú `app.menu.help`
-- `app.setting.title` ¡ú `app.setting`
+### ğŸŒ Internationalization Support
 
-### 2. È¨ÏŞ¿ØÖÆ¸Ä½ø
+JFrameX comes with built-in internationalization support, allowing your application to be easily translated into multiple languages.
 
-#### Mate×¢½âÖØ¹¹
-- ½« `permissionId` ÊôĞÔ¸ÄÎª `id`
-- È¨ÏŞIDÓë¹ú¼Ê»¯key±£³ÖÒ»ÖÂ
-- ±ãÓÚÈ¨ÏŞ¹ÜÀíºÍÎ¬»¤
+- âœ… English (Default)
+- âœ… Chinese (Simplified)
+- âœ… Easy to extend to other languages
 
-#### È¨ÏŞ³£Á¿¸üĞÂ
-- ¸üĞÂ `PermissionConstants.java` ÖĞµÄ³£Á¿¶¨Òå
-- È¨ÏŞIDÖ±½ÓÊ¹ÓÃ¹ú¼Ê»¯key
-- Ìá¹©¸üºÃµÄÈ¨ÏŞ¿ØÖÆÁ£¶È
+<p align="center">
+  <img src="screenshots/internationalization_en.png" width="45%" alt="English Interface">
+  <img src="screenshots/internationalization_zh.png" width="45%" alt="Chinese Interface">
+</p>
 
-### 3. ´úÂë½á¹¹ÓÅ»¯
+### ğŸ¨ Theme Support
 
-#### ºöÂÔµÄÎÄ¼ş
-- ºöÂÔ `JFrameUI/src/main/java/cn/ximuli/jframex/ui/demo/` Ä¿Â¼
-- ºöÂÔ `JFrameUI/src/main/java/cn/ximuli/jframex/ui/test/` Ä¿Â¼
-- ÕâĞ©Ä¿Â¼ÖĞµÄ´úÂë²»»áÓ°ÏìÈ¨ÏŞ¿ØÖÆºÍ¹ú¼Ê»¯¹¦ÄÜ
+JFrameX supports multiple themes through FlatLaf, providing a modern look and feel for your applications.
 
-#### ¸üĞÂµÄÎÄ¼ş
-- `Mate.java` - ×¢½â¶¨Òå¸üĞÂ
-- `PermissionUtil.java` - È¨ÏŞ¹¤¾ßÀà¸üĞÂ
-- `UICreator.java` - UI´´½¨Æ÷¸üĞÂ
-- `PermissionConstants.java` - È¨ÏŞ³£Á¿¸üĞÂ
-- ËùÓĞÊ¹ÓÃMate×¢½âµÄ×é¼şÀà
+- âœ… Light and Dark themes
+- âœ… Multiple built-in theme options
+- âœ… Custom theme support
+- âœ… Runtime theme switching
 
-### 4. ¹ú¼Ê»¯ÎÄ¼ş¸üĞÂ
+<p align="center">
+  <img src="screenshots/themes_light.png" width="45%" alt="Light Theme">
+  <img src="screenshots/themes_dark.png" width="45%" alt="Dark Theme">
+</p>
 
-#### ÖĞÎÄ¹ú¼Ê»¯ÎÄ¼ş
-- `JFrameUI/src/main/resources/i18n/messages_zh.properties`
-- `JFrameCommon/src/main/resources/i18n/messages_zh_CN.properties`
+### ğŸ§© Rich UI Components
 
-#### Ó¢ÎÄ¹ú¼Ê»¯ÎÄ¼ş
-- `JFrameUI/src/main/resources/i18n/messages_en.properties`
-- `JFrameCommon/src/main/resources/i18n/messages_en_US.properties`
+JFrameX includes a wide variety of pre-built UI components that follow modern design principles.
 
-## Ê¹ÓÃËµÃ÷
+- âœ… Basic Components (Buttons, Text Fields, Labels, etc.)
+- âœ… Container Components (Panels, Split Panes, Tabbed Panes, etc.)
+- âœ… Data Components (Tables, Lists, Trees, etc.)
+- âœ… Custom Dialogs and Forms
+- âœ… Advanced Components (Charts, Progress Bars, etc.)
 
-### È¨ÏŞ¿ØÖÆ
-```java
-@Mate(value = "app.menu.file", id = "app.menu.file")
-public class FileMenu extends JMenu {
-    // ×é¼şÊµÏÖ
-}
-```
+### ğŸ”§ Development Features
 
-### ¹ú¼Ê»¯Ê¹ÓÃ
-```java
-// »ñÈ¡¹ú¼Ê»¯ÎÄ±¾
-String text = I18nHelper.getMessage("app.menu.file");
+JFrameX is designed with developers in mind, providing tools and features that make development easier.
 
-// È¨ÏŞ¼ì²é
-boolean hasPermission = PermissionUtil.hasPermission(user, "app.menu.file");
-```
+- âœ… Modular architecture based on Spring Boot
+- âœ… Built-in permission management system
+- âœ… Resource loading and management
 
-## ×¢ÒâÊÂÏî
+## ğŸ› ï¸ Technology Stack
 
-1. ËùÓĞĞÂµÄÈ¨ÏŞID¶¼Ó¦¸ÃÓë¹ú¼Ê»¯key±£³ÖÒ»ÖÂ
-2. ±ÜÃâÊ¹ÓÃ°üº¬ `title`¡¢`label` µÈÃèÊöĞÔ´Ê»ãµÄkey
-3. È¨ÏŞIDÓ¦¸Ã¾ßÓĞÃ÷È·µÄÓïÒåº¬Òå
-4. demoºÍtestÄ¿Â¼ÖĞµÄ´úÂë²»»á±»È¨ÏŞ¿ØÖÆÓ°Ïì
+- **Java 17+** - Modern Java features and performance
+- **Spring Boot 2.7+** - Dependency injection and application framework
+- **FlatLaf** - Modern look and feel for Swing applications
+- **Lombok** - Reduced boilerplate code
+- **MigLayout** - Powerful layout manager
+- **Maven** - Build automation and dependency management
 
-## ºóĞø¹¤×÷
+## ğŸ“ Support
 
-1. ¸üĞÂËùÓĞÊ¹ÓÃ¾É¹ú¼Ê»¯keyµÄ´úÂë
-2. ÍêÉÆÈ¨ÏŞ¿ØÖÆ²âÊÔ
-3. ¸üĞÂÎÄµµºÍ×¢ÊÍ
-4. ½øĞĞÈ«ÃæµÄ¹¦ÄÜ²âÊÔ
+For support, please open an issue on the GitHub repository or contact the maintainers.
 
-## È¨ÏŞ¿ØÖÆ¸Ä½ø
+---
 
-### ¾«×¼µÄJMenuItemÈ¨ÏŞ¿ØÖÆ
-
-#### ĞÂÔö¹¦ÄÜ
-- **MenuItemConfigÀà**£ºÓÃÓÚÅäÖÃ²Ëµ¥ÏîµÄ¸÷ÖÖ²ÎÊı£¬°üÀ¨È¨ÏŞID¡¢ÎÄ±¾¡¢Í¼±ê¡¢¿ì½İ¼üµÈ
-- **UICreatorÔöÇ¿**£ºĞÂÔöÁË¶à¸ö·½·¨À´´´½¨´øÈ¨ÏŞ¿ØÖÆµÄJMenuItem
-- **ÅúÁ¿È¨ÏŞ¿ØÖÆ**£ºÖ§³ÖÅúÁ¿´´½¨ºÍÈ¨ÏŞ¼ì²é
-
-#### Ê¹ÓÃ·½·¨
-
-##### µ¥¸ö²Ëµ¥ÏîÈ¨ÏŞ¿ØÖÆ
-```java
-JMenuItem item = UICreator.createJMenuItemWithPermission(
-    "app.menu.edit.undo",           // È¨ÏŞID
-    "app.menu.edit.undo",           // ¹ú¼Ê»¯ÎÄ±¾key
-    "icons/undo",                   // Í¼±êÂ·¾¶
-    KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), // ¿ì½İ¼ü
-    'U',                            // Öú¼Ç·û
-    e -> menuItemActionPerformed(e) // ¶¯×÷¼àÌıÆ÷
-);
-```
-
-##### ÅúÁ¿²Ëµ¥ÏîÈ¨ÏŞ¿ØÖÆ
-```java
-List<MenuItemConfig> configs = new ArrayList<>();
-configs.add(MenuItemConfig.builder()
-    .permissionId("app.menu.edit.undo")
-    .textKey("app.menu.edit.undo")
-    .iconPath("icons/undo")
-    .accelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()))
-    .mnemonic('U')
-    .actionListener(e -> menuItemActionPerformed(e))
-    .build());
-
-List<JMenuItem> items = UICreator.createJMenuItemsWithPermissions(configs);
-```
-
-#### ÒÑÖØ¹¹µÄ²Ëµ¥Àà
-- **EditMenu**£º±à¼­²Ëµ¥£¬°üº¬³·Ïú¡¢ÖØ×ö¡¢¼ôÇĞ¡¢¸´ÖÆ¡¢Õ³Ìù¡¢É¾³ıµÈ¹¦ÄÜ
-- **FileMenu**£ºÎÄ¼ş²Ëµ¥£¬°üº¬ĞÂ½¨¡¢´ò¿ª¡¢Áí´æÎª¡¢¹Ø±Õ¡¢ÍË³öµÈ¹¦ÄÜ
-- **ViewMenu**£ºÊÓÍ¼²Ëµ¥£¬°üº¬¸÷ÖÖÊÓÍ¼Ïà¹ØµÄ¹¦ÄÜ
-
-#### È¨ÏŞ¿ØÖÆÌØĞÔ
-- **×Ô¶¯¹ıÂË**£ºÃ»ÓĞÈ¨ÏŞµÄ²Ëµ¥Ïî»á×Ô¶¯Òş²Ø
-- **¶¯Ì¬¿ØÖÆ**£º¸ù¾İÓÃ»§È¨ÏŞ¶¯Ì¬ÏÔÊ¾/Òş²Ø²Ëµ¥Ïî
-- **Í³Ò»¹ÜÀí**£ºËùÓĞÈ¨ÏŞIDÓë¹ú¼Ê»¯key±£³ÖÒ»ÖÂ
-- **Ò×ÓÚÎ¬»¤**£ºÊ¹ÓÃÅäÖÃÀà¼ò»¯²Ëµ¥Ïî´´½¨ºÍ¹ÜÀí
-
-### ºöÂÔµÄÎÄ¼ş
-- `JFrameUI/src/main/java/cn/ximuli/jframex/ui/demo/` - ÑİÊ¾´úÂëÄ¿Â¼
-- `JFrameUI/src/main/java/cn/ximuli/jframex/ui/test/` - ²âÊÔ´úÂëÄ¿Â¼
-
-ÕâĞ©Ä¿Â¼ÖĞµÄ´úÂë²»»á±»È¨ÏŞ¿ØÖÆÓ°Ïì£¬Ò²²»»á²ÎÓëÈ¨ÏŞ¼ì²é¡£
+<p align="center">Made with â¤ï¸ by the ximuli Team</p>
