@@ -142,15 +142,15 @@ public class FontPanel extends JPanel implements Hintable {
             clearHint();
         }
         HintManager.Hint languageList = new HintManager.Hint(
-                "Use 'language' list to try out various languages.",
+                I18nHelper.getMessage("app.setting.font.panel.hint.language"),
                 langListBox, SwingConstants.RIGHT, "setting.hint.language", null);
 
         HintManager.Hint fontSizeHint = new HintManager.Hint(
-                "Use 'Size' to set Font size.",
+                I18nHelper.getMessage("app.setting.font.panel.hint.font.size"),
                 fontSizeSpinner, SwingConstants.RIGHT, "setting.hint.font.size", languageList);
 
         HintManager.Hint fontList = new HintManager.Hint(
-                "Use 'Font' list to try out various font.",
+                I18nHelper.getMessage("app.setting.font.panel.hint.font.name"),
                 fontListBox, SwingConstants.RIGHT, "setting.hint.font.name", fontSizeHint);
 
         HintManager.showHint(fontList);

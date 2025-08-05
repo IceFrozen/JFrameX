@@ -32,6 +32,10 @@ public class LoginFrame extends JFrame {
     private ResourceLoaderManager resources;
     private JProgressBar progressBar;
     private LoginService loginService;
+    private JLabel titleLabel;
+    private JLabel subtitleLabel;
+    private JLabel usernameLabel;
+    private JLabel passwordLabel;
 
     public LoginFrame(ResourceLoaderManager resources, LoginService loginService) {
         this.resources = resources;
@@ -41,7 +45,6 @@ public class LoginFrame extends JFrame {
     }
 
     private void initializeUI() {
-        setTitle(I18nHelper.getMessage("app.login"));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setUndecorated(true); // Remove title bar and borders
         Dimension windowSize = MainFrame.getScreenRatioSize();
@@ -105,21 +108,20 @@ public class LoginFrame extends JFrame {
         formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Title
-        JLabel titleLabel = new JLabel(I18nHelper.getMessage("app.login"));
+        titleLabel = new JLabel();
         Font font = UIManager.getFont("defaultFont");
 
         titleLabel.setFont(new Font(font.getName(), Font.BOLD, font.getSize() * 2));
         formPanel.add(titleLabel, "span 2, align center");
-        JLabel subtitleLabel = new JLabel(I18nHelper.getMessage("app.login.welcome"));
+        subtitleLabel = new JLabel();
         subtitleLabel.setFont(new Font(font.getName(), Font.BOLD, font.getSize() + 5));
         formPanel.add(subtitleLabel, "span 2, align center");
 
         // Username
-        JLabel usernameLabel = new JLabel(I18nHelper.getMessage("app.login.username"));
+        usernameLabel = new JLabel();
         usernameLabel.setFont(new Font(font.getName(), Font.PLAIN, font.getSize()));
         usernameField = new JTextField(20);
         usernameField.setPreferredSize(new Dimension(usernameField.getPreferredSize().width, usernameField.getPreferredSize().height + 15)); // Wider input
-        usernameField.putClientProperty("JTextField.placeholderText", I18nHelper.getMessage("app.login.username.placeholder"));
         usernameField.putClientProperty("JTextField.leadingIcon", resources.getIcon("icons/user"));
 
         // Add auto-complete decorator
@@ -129,18 +131,18 @@ public class LoginFrame extends JFrame {
         formPanel.add(usernameField, "span 2, growx");
 
         // Password
-        JLabel passwordLabel = new JLabel(I18nHelper.getMessage("app.login.password"));
+        passwordLabel = new JLabel();
         passwordLabel.setFont(new Font("Segoe UI", Font.PLAIN, font.getSize()));
         passwordField = new JPasswordField(20);
-        passwordField.putClientProperty("JTextField.placeholderText", I18nHelper.getMessage("app.login.password.placeholder"));
+
         passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, passwordField.getPreferredSize().height + 15)); // Wider input field
         passwordField.putClientProperty("JTextField.leadingIcon", resources.getIcon("icons/locked")); // Corrected to lock icon
         passwordField.putClientProperty(FlatClientProperties.STYLE, "showRevealButton: true");
         formPanel.add(passwordField, "span 2, growx");
 
         // Remember and Forget Password in the same row, centered
-        rememberCheckbox = new JCheckBox(I18nHelper.getMessage("app.login.remember"));
-        forgetPasswordLink = new JLabel("<html><a href='#'>" + I18nHelper.getMessage("app.login.forget") + "</a></html>");
+        rememberCheckbox = new JCheckBox();
+        forgetPasswordLink = new JLabel();
         forgetPasswordLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
         forgetPasswordLink.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -151,7 +153,7 @@ public class LoginFrame extends JFrame {
         formPanel.add(forgetPasswordLink, "align right"); // Same row, reduced gap
 
         // Login and Cancel Buttons
-        loginButton = new JButton(I18nHelper.getMessage("app.login.button"));
+        loginButton = new JButton();
         loginButton.setFont(new Font(font.getName(), Font.BOLD, font.getSize() + 2)); // Increased font size
         loginButton.setBackground(new Color(57, 141, 215));
         loginButton.setForeground(Color.WHITE);
@@ -161,7 +163,7 @@ public class LoginFrame extends JFrame {
         loginButton.setPreferredSize(new Dimension(150, 40)); // Increased button size
         loginButton.addActionListener(e -> handleLogin());
 
-        cancelButton = new JButton(I18nHelper.getMessage("app.login.cancel"));
+        cancelButton = new JButton();
         cancelButton.setFont(new Font(font.getName(), Font.BOLD, font.getSize() + 2));
         cancelButton.setBackground(new Color(57, 141, 215)); // Gray background for cancel
         cancelButton.setForeground(Color.WHITE);
@@ -261,6 +263,21 @@ public class LoginFrame extends JFrame {
         enableOrDisableComponents(true);
         usernameField.setText("");
         passwordField.setText("");
+        setTitle(I18nHelper.getMessage("app.login"));
+        titleLabel.setText(I18nHelper.getMessage("app.login"));
+        subtitleLabel.setText(I18nHelper.getMessage("app.login.welcome"));
+        usernameLabel.setText(I18nHelper.getMessage("app.login.username"));
+        usernameField.putClientProperty("JTextField.placeholderText", I18nHelper.getMessage("app.login.username.placeholder"));
+
+        passwordLabel.setText(I18nHelper.getMessage("app.login.password"));
+        passwordField.putClientProperty("JTextField.placeholderText", I18nHelper.getMessage("app.login.password.placeholder"));
+
+        rememberCheckbox.setText(I18nHelper.getMessage("app.login.remember"));
+
+        forgetPasswordLink.setText("<html><a href='#'>" + I18nHelper.getMessage("app.login.forget") + "</a></html>");
+        loginButton.setText(I18nHelper.getMessage("app.login.button"));
+
+        cancelButton.setText(I18nHelper.getMessage("app.login.cancel"));
         rememberCheckbox.setSelected(false);
     }
 }

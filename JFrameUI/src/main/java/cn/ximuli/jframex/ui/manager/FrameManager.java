@@ -66,16 +66,18 @@ public class FrameManager {
     }
 
     @EventListener(ResourceReadyEvent.class)
-    public void resourceLoadFinish(ResourceReadyEvent readyEvent) throws ClassNotFoundException {
+    public void resourceLoadFinish(ResourceReadyEvent readyEvent){
         if (this.status == Status.LOADING) {
             AppSplashScreen.close();
             LoggedInUser user = JFramePref.getUser();
             if (user != null && !user.isExpired()) {
                 userLogin(new UserLoginEvent(user, false));
             } else {
-                loginFrame.setVisible(true);
                 updateStatus(Status.SIGN_UP);
-//                mainFrame.setVisible(true);
+                SwingUtilities.invokeLater(() -> {
+                    loginFrame.reset();
+                    loginFrame.setVisible(true);
+                });
             }
         }
     }
@@ -92,7 +94,6 @@ public class FrameManager {
                 this.uiSession.getMainFrame().setVisible(true);
                 this.uiSession.afterUIShow();
                 updateStatus(Status.STARTED);
-                loginFrame.reset();
                 loginFrame.dispose();
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
@@ -119,7 +120,7 @@ public class FrameManager {
     }
 
     @EventListener(RestartEvent.class)
-    public void restartUI(RestartEvent event) throws ClassNotFoundException {
+    public void restartUI(RestartEvent event) {
         if (this.currentUser == null || this.currentUser.isExpired()) {
             userLogout(null);
             return;
@@ -129,7 +130,11 @@ public class FrameManager {
             this.uiSession.getMainFrame().setVisible(false);
             this.uiSession.destory();
             this.uiSession = new UISession(this.currentUser, loaderManager);
-            this.uiSession.prepareUI();
+            try {
+                this.uiSession.prepareUI();
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             this.uiSession.getMainFrame().setVisible(true);
         }
     }
