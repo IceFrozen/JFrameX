@@ -6,6 +6,7 @@ import cn.ximuli.jframex.ui.Application;
 import cn.ximuli.jframex.ui.I18nHelper;
 
 import cn.ximuli.jframex.ui.MainFrame;
+import cn.ximuli.jframex.ui.component.Hintable;
 import cn.ximuli.jframex.ui.event.RestartEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.HintManager;
@@ -26,7 +27,7 @@ import java.util.Set;
 
 @Slf4j
 @SettingMenu(value = "app.setting.item.components.font", category = "app.setting.item.category.setting", toolTipText = "app.setting.item.components.font.toolTipText", order = Ordered.HIGHEST_PRECEDENCE)
-public class FontPanel extends JPanel {
+public class FontPanel extends JPanel implements Hintable {
     JLabel fontLabel;
     JComboBox<String> fontListBox;
     JLabel fontSizeLabel;
@@ -137,14 +138,12 @@ public class FontPanel extends JPanel {
     }
 
     public void showHint(boolean reload) {
-        log.info("invoke show hint");
         if (reload) {
             clearHint();
         }
         HintManager.Hint languageList = new HintManager.Hint(
                 "Use 'language' list to try out various languages.",
                 langListBox, SwingConstants.RIGHT, "setting.hint.language", null);
-
 
         HintManager.Hint fontSizeHint = new HintManager.Hint(
                 "Use 'Size' to set Font size.",
@@ -157,8 +156,9 @@ public class FontPanel extends JPanel {
         HintManager.showHint(fontList);
     }
 
+    @Override
     public void clearHint() {
-        log.info("clearHint show hint");
+        log.debug("clearHint show hint");
         JFramePref.state.remove("setting.hint.font.name");
         JFramePref.state.remove("setting.hint.font.size");
         JFramePref.state.remove("setting.hint.language");

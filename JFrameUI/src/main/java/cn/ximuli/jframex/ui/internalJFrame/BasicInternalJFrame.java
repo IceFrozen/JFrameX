@@ -56,10 +56,4 @@ public class BasicInternalJFrame extends CommonInternalJFrame {
         setLocation(x, y);
     }
 
-    @Override
-    public void showHint(boolean b) {
-
-    }
-
-    // BasicComponentsPanel remains unchanged
 }

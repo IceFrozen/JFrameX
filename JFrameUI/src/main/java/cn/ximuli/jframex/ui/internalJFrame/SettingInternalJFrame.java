@@ -3,6 +3,7 @@ package cn.ximuli.jframex.ui.internalJFrame;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.component.ControlBar;
+import cn.ximuli.jframex.ui.component.Hintable;
 import cn.ximuli.jframex.ui.component.menu.Meta;
 import cn.ximuli.jframex.ui.component.panels.*;
 import cn.ximuli.jframex.ui.manager.HintManager;
@@ -27,7 +28,7 @@ import java.lang.reflect.Method;
 
 @Meta(value = "app.setting", icon = "icons/settings", order = 6, id = "app.setting")
 @Slf4j
-public class SettingInternalJFrame extends CommonInternalJFrame {
+public class SettingInternalJFrame extends CommonInternalJFrame implements Hintable {
     private ComponentsShowSettingPanel tabbedPane;
     private ControlBar controlBar;
     @Getter
@@ -120,8 +121,7 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
     @Override
     public void showHint(boolean reload) {
         if (reload) {
-            JFramePref.state.remove("hint.themes");
-            JFramePref.state.remove("hint.control.themes");
+            clearHint();
         }
         showPanelHint(reload);
 
@@ -135,6 +135,12 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
         HintManager.showHint(themesHint);
     }
 
+    @Override
+    public void clearHint() {
+        JFramePref.state.remove("hint.themes");
+        JFramePref.state.remove("hint.control.themes");
+    }
+
 
     private void settingPanelShow(SettingInfo<JComponent> settingInfo) {
         if (ArrayUtils.contains(controlPanel.getComponents(), settingInfo.getValue())) {
@@ -145,7 +151,10 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
         controlPanel.add(component, BorderLayout.CENTER);
         controlPanel.revalidate();
         controlPanel.updateUI();
-        showHint(false);
+        if (component instanceof Hintable hintable) {
+            hintable.showHint(false);
+        }
+
     }
 
 

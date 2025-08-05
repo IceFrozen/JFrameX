@@ -237,27 +237,6 @@ public class UISession {
     }
 
     public void afterUIShow() {
-        showHit(false);
-    }
-    public void showHit(boolean reload) {
-        if (reload) {
-            JFramePref.state.remove("main.frame.hint.user.button");
-            JFramePref.state.remove("main.frame.hint.toolbar");
-            JFramePref.state.remove("main.frame.hint.status");
-        }
-
-        HintManager.Hint status = new HintManager.Hint(
-                "Current user is here",
-                statePanel.getCzyStateLabel(), SwingConstants.TOP, "main.frame.hint.status", null);
-
-        HintManager.Hint userButton = new HintManager.Hint(
-                "Use this to check information and logout",
-                toolBar.getUsersButton(), SwingConstants.LEFT, "main.frame.hint.user.button", status);
-
-        HintManager.Hint toolBarHint = new HintManager.Hint(
-                "Use tool bark do the operation",
-                toolBar.getFirstToolButton(), SwingConstants.BOTTOM, "main.frame.hint.toolbar", userButton);
-
-        HintManager.showHint(toolBarHint);
+        mainFrame.showHint(false);
     }
 }

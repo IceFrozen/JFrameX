@@ -39,11 +39,6 @@ public class TabInternalJFrame extends CommonInternalJFrame {
         add(tabsComponentsPanel, BorderLayout.CENTER);
     }
 
-    @Override
-    public void showHint(boolean b) {
-
-    }
-
     private void adjustFrameSize() {
         // Get the preferred size of the jPanel
         Dimension panelSize = tabsComponentsPanel.getPreferredSize();

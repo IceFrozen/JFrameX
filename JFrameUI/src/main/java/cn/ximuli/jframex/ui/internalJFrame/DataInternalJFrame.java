@@ -41,11 +41,6 @@ public class DataInternalJFrame extends CommonInternalJFrame {
         add(jPanel, BorderLayout.CENTER);
     }
 
-    @Override
-    public void showHint(boolean b) {
-
-    }
-
     private void adjustFrameSize() {
         // Get the preferred size of the jPanel
         Dimension panelSize = jPanel.getPreferredSize();

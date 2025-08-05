@@ -91,13 +91,10 @@ public abstract class CommonInternalJFrame extends JInternalFrame implements Com
     public void internalFrameActivated(InternalFrameEvent e) {
         JInternalFrame frame = e.getInternalFrame();
         FrameManager.publishEvent(new FrameSelectedEvent(frame, true));
-        showHint(false);
     }
 
     @Override
     public void internalFrameDeactivated(InternalFrameEvent e) {
         FrameManager.publishEvent(new FrameSelectedEvent(e.getInternalFrame(), false));
     }
-
-    public abstract void showHint(boolean b);
 }

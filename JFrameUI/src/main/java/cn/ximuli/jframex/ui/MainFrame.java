@@ -1,10 +1,9 @@
 package cn.ximuli.jframex.ui;
 
 import cn.ximuli.jframex.common.utils.ConvertUtil;
+import cn.ximuli.jframex.ui.component.Hintable;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.component.panels.StatePanel;
-import cn.ximuli.jframex.ui.internalJFrame.SettingInternalJFrame;
-import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.HintManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.menu.MenuBar;
@@ -22,7 +21,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.*;
 
 @Slf4j
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements Hintable {
     private static final double SCREEN_RATIO_WIDTH = 0.75;
     private static final double SCREEN_RATIO_HEIGHT = 0.90;
     private static final Dimension MINIMUM_WINDOW_SIZE = new Dimension(800, 600);
@@ -129,5 +128,33 @@ public class MainFrame extends JFrame {
                 }
             }
         });
+    }
+
+    @Override
+    public void showHint(boolean reload) {
+        if (reload) {
+            clearHint();
+        }
+
+        HintManager.Hint status = new HintManager.Hint(
+                "Current user is here",
+                statePanel.getCzyStateLabel(), SwingConstants.TOP, "main.frame.hint.status", null);
+
+        HintManager.Hint userButton = new HintManager.Hint(
+                "Use this to check information and logout",
+                toolBar.getUsersButton(), SwingConstants.LEFT, "main.frame.hint.user.button", status);
+
+        HintManager.Hint toolBarHint = new HintManager.Hint(
+                "Use tool bark do the operation",
+                toolBar.getFirstToolButton(), SwingConstants.BOTTOM, "main.frame.hint.toolbar", userButton);
+
+        HintManager.showHint(toolBarHint);
+    }
+
+    @Override
+    public void clearHint() {
+        JFramePref.state.remove("main.frame.hint.user.button");
+        JFramePref.state.remove("main.frame.hint.toolbar");
+        JFramePref.state.remove("main.frame.hint.status");
     }
 }

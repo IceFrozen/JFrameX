@@ -1,5 +1,6 @@
 package cn.ximuli.jframex.ui.component.menu;
 
+import cn.ximuli.jframex.ui.component.Hintable;
 import cn.ximuli.jframex.ui.internalJFrame.CommonInternalJFrame;
 import cn.ximuli.jframex.ui.manager.HintManager;
 import cn.ximuli.jframex.ui.event.WindowsEvent;
@@ -209,11 +210,11 @@ public class OptionsMenu extends JMenu {
             JInternalFrame currentFrame = currentUISession.getStatePanel().getCurrentFrame();
             if (currentFrame == null) {
                 log.debug("show main hint");
-                currentUISession.showHit(true);
+                currentUISession.getMainFrame().showHint(true);
                 return;
             }
             log.debug("show main hint: currentFrame:{}", currentFrame);
-            if (currentFrame instanceof CommonInternalJFrame commonInternalJFrame) {
+            if (currentFrame instanceof Hintable commonInternalJFrame) {
                 commonInternalJFrame.showHint(true);
             }
         }

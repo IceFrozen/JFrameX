@@ -223,9 +223,4 @@ public class UserInternalJFrame extends CommonInternalJFrame {
             JOptionPane.showMessageDialog(this, "Failed to load departments", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-    @Override
-    public void showHint(boolean b) {
-
-    }
 }

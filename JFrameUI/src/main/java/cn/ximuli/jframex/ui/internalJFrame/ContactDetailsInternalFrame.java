@@ -153,11 +153,6 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         add(widgetsPanel, BorderLayout.SOUTH);
     }
 
-    @Override
-    public void showHint(boolean b) {
-
-    }
-
     private void adjustFrameSize() {
         // Get the desktop pane size
         Dimension desktopSize = desktopPane.getSize();
