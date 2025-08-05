@@ -1,7 +1,7 @@
 package cn.ximuli.jframex.ui.internalJFrame;
 
 import cn.ximuli.jframex.ui.I18nHelper;
-import cn.ximuli.jframex.ui.component.menu.Mate;
+import cn.ximuli.jframex.ui.component.menu.Meta;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.BasicComponentsPanel;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
@@ -13,7 +13,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 
-@Mate(value = "app.menu.view.components.basic", icon = "icons/basic_component", order = 0, id = "app.menu.view.components.basic")
+@Meta(value = "app.menu.view.components.basic", icon = "icons/basic_component", order = 0, id = "app.menu.view.components.basic")
 @Slf4j
 public class BasicInternalJFrame extends CommonInternalJFrame {
 
@@ -21,8 +21,8 @@ public class BasicInternalJFrame extends CommonInternalJFrame {
 
     public BasicInternalJFrame(ResourceLoaderManager resources, DesktopPanel desktopPane) {
         super(resources, desktopPane);
-        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
-        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Meta.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Meta.class).icon()));
     }
 
     @Override

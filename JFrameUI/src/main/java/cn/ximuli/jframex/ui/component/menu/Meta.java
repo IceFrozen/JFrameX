@@ -6,7 +6,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Mate {
+public @interface Meta {
     int order() default 0;
     String value() default "";
     String icon() default "";

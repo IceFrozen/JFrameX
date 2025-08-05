@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Mate(value = "app.menu.help", shortKey = KeyEvent.VK_F, order = Integer.MAX_VALUE, id = "app.menu.help")
+@Meta(value = "app.menu.help", shortKey = KeyEvent.VK_F, order = Integer.MAX_VALUE, id = "app.menu.help")
 public class HelpMenu extends JMenu {
     ResourceLoaderManager resources;
 

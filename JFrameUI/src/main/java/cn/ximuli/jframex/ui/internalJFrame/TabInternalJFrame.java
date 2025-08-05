@@ -1,7 +1,7 @@
 package cn.ximuli.jframex.ui.internalJFrame;
 
 import cn.ximuli.jframex.ui.I18nHelper;
-import cn.ximuli.jframex.ui.component.menu.Mate;
+import cn.ximuli.jframex.ui.component.menu.Meta;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.component.panels.TabsComponentsPanel;
@@ -12,7 +12,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-@Mate(value = "app.menu.view.components.tab", icon = "icons/tab_component", order = 9, id = "app.menu.view.components.tab")
+@Meta(value = "app.menu.view.components.tab", icon = "icons/tab_component", order = 9, id = "app.menu.view.components.tab")
 @Slf4j
 public class TabInternalJFrame extends CommonInternalJFrame {
 
@@ -20,8 +20,8 @@ public class TabInternalJFrame extends CommonInternalJFrame {
 
     public TabInternalJFrame(ResourceLoaderManager resources, DesktopPanel desktopPane) {
         super(resources, desktopPane);
-        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
-        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Meta.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Meta.class).icon()));
         // Add component listener to adjust size when shown
         addComponentListener(new ComponentAdapter() {
             @Override

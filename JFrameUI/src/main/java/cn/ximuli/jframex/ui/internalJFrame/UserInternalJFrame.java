@@ -11,15 +11,13 @@ import cn.ximuli.jframex.service.DepartmentService;
 import cn.ximuli.jframex.service.UserService;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
-import cn.ximuli.jframex.ui.component.menu.Mate;
+import cn.ximuli.jframex.ui.component.menu.Meta;
 import cn.ximuli.jframex.ui.event.CreateFrameEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.component.panels.TablePanel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.event.InternalFrameEvent;
@@ -34,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Mate(value = "app.menu.user.internal.userService", icon = "icons/users", order = 1, id = "app.menu.user.internal.userService")
+@Meta(value = "app.menu.user.internal.userService", icon = "icons/users", order = 1, id = "app.menu.user.internal.userService")
 public class UserInternalJFrame extends CommonInternalJFrame {
     private JSplitPane splitPane;
     private JTree departmentTree;
@@ -48,8 +46,8 @@ public class UserInternalJFrame extends CommonInternalJFrame {
     public UserInternalJFrame(ResourceLoaderManager resources,
                               DesktopPanel desktopPane) {
         super(resources, desktopPane);
-        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
-        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Meta.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Meta.class).icon()));
         setResizable(true);
         setIconifiable(true);
         setMaximizable(true);

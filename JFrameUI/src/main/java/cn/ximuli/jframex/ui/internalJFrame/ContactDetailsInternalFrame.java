@@ -3,12 +3,11 @@ package cn.ximuli.jframex.ui.internalJFrame;
 import cn.ximuli.jframex.model.LoggedInUser;
 import cn.ximuli.jframex.model.User;
 import cn.ximuli.jframex.ui.I18nHelper;
-import cn.ximuli.jframex.ui.component.menu.Mate;
+import cn.ximuli.jframex.ui.component.menu.Meta;
 import cn.ximuli.jframex.ui.event.UserLogoutEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
-import cn.ximuli.jframex.ui.manager.UICreator;
 import com.formdev.flatlaf.FlatClientProperties;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
@@ -19,7 +18,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 
-@Mate(value = "app.contact.info", icon = "icons/tab_component", order = 1, id = "app.contact.info")
+@Meta(value = "app.contact.info", icon = "icons/tab_component", order = 1, id = "app.contact.info")
 @Slf4j
 public class ContactDetailsInternalFrame extends CommonInternalJFrame {
     private final ResourceLoaderManager resources;
@@ -30,8 +29,8 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
     public ContactDetailsInternalFrame(ResourceLoaderManager resources, DesktopPanel desktopPanel) {
         super(resources, desktopPanel);
         this.resources = resources;
-        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
-        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Meta.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Meta.class).icon()));
         // Make the frame non-draggable and non-resizable
         setMaximizable(false);
         setResizable(false);

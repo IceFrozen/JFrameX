@@ -1,12 +1,11 @@
 package cn.ximuli.jframex.ui.internalJFrame;
 
 import cn.ximuli.jframex.ui.I18nHelper;
-import cn.ximuli.jframex.ui.component.menu.Mate;
+import cn.ximuli.jframex.ui.component.menu.Meta;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.component.panels.ExtrasPanel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -14,15 +13,15 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-@Mate(value = "app.menu.view.components.extras", icon = "icons/extras_component", order = 4, id = "app.menu.view.components.extras")
+@Meta(value = "app.menu.view.components.extras", icon = "icons/extras_component", order = 4, id = "app.menu.view.components.extras")
 @Slf4j
 public class ExtrasInternalJFrame extends CommonInternalJFrame {
     private JPanel jPanel;
 
     public ExtrasInternalJFrame(ResourceLoaderManager resources, DesktopPanel desktopPane) {
         super(resources, desktopPane);
-        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
-        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Meta.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Meta.class).icon()));
         // Add component listener to adjust size when shown
         addComponentListener(new ComponentAdapter() {
             @Override

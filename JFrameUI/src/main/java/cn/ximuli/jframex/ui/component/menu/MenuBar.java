@@ -30,13 +30,13 @@ public class MenuBar extends JMenuBar {
 
     private void initialize() {
         for (JMenu jMenu : menuList) {
-            Mate mate = AnnotationUtils.findAnnotation(jMenu.getClass(), Mate.class);
-            if (StringUtil.isNoneBlank(mate.icon())) {
-                jMenu.setIcon(resources.getIcon(mate.icon()));
+            Meta meta = AnnotationUtils.findAnnotation(jMenu.getClass(), Meta.class);
+            if (StringUtil.isNoneBlank(meta.icon())) {
+                jMenu.setIcon(resources.getIcon(meta.icon()));
             }
-            String jMenuName = I18nHelper.getMessage(mate.value());
+            String jMenuName = I18nHelper.getMessage(meta.value());
             jMenu.setText(jMenuName);
-            jMenu.setMnemonic(mate.shortKey());
+            jMenu.setMnemonic(meta.shortKey());
             add(jMenu);
         }
         boolean fullScreenableBar = ConvertUtil.toBool(System.getProperty(Application.MAC.APPLE_LAF_USE_SCREEN_MENUBAR));
@@ -50,7 +50,7 @@ public class MenuBar extends JMenuBar {
     }
 
     private int getOrder(JMenu menu) {
-        Mate annotation = menu.getClass().getAnnotation(Mate.class);
+        Meta annotation = menu.getClass().getAnnotation(Meta.class);
         return (annotation != null) ? annotation.order() : Integer.MAX_VALUE; // 默认值处理
     }
 

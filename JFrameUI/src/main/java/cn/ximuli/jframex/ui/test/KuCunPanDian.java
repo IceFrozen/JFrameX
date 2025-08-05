@@ -1,18 +1,15 @@
 package cn.ximuli.jframex.ui.test;
 
-import cn.ximuli.jframex.ui.component.menu.Mate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import cn.ximuli.jframex.ui.component.menu.Meta;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import java.util.List;
 
 import javax.swing.*;
 import javax.swing.table.*;
 
-@Mate(value = "app.menu.user.internal.userService.title", icon = "icons/left_arrow", order = 1)
+@Meta(value = "app.menu.user.internal.userService.title", icon = "icons/left_arrow", order = 1)
 public class KuCunPanDian extends JInternalFrame {
 
     private final JTable table;

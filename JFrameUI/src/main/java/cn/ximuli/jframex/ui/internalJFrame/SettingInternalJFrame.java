@@ -3,7 +3,7 @@ package cn.ximuli.jframex.ui.internalJFrame;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.component.ControlBar;
-import cn.ximuli.jframex.ui.component.menu.Mate;
+import cn.ximuli.jframex.ui.component.menu.Meta;
 import cn.ximuli.jframex.ui.component.panels.*;
 import cn.ximuli.jframex.ui.manager.HintManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
@@ -23,10 +23,9 @@ import org.springframework.util.ReflectionUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentListener;
 import java.lang.reflect.Method;
 
-@Mate(value = "app.setting", icon = "icons/settings", order = 6, id = "app.setting")
+@Meta(value = "app.setting", icon = "icons/settings", order = 6, id = "app.setting")
 @Slf4j
 public class SettingInternalJFrame extends CommonInternalJFrame {
     private ComponentsShowSettingPanel tabbedPane;
@@ -42,8 +41,8 @@ public class SettingInternalJFrame extends CommonInternalJFrame {
 
     public SettingInternalJFrame(ResourceLoaderManager resources, DesktopPanel desktopPane) {
         super(resources, desktopPane);
-        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
-        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Meta.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Meta.class).icon()));
     }
 
     private void initFullWindowContent() {

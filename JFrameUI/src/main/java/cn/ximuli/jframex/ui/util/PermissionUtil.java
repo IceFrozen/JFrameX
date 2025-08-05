@@ -1,16 +1,12 @@
 package cn.ximuli.jframex.ui.util;
 
 import cn.ximuli.jframex.model.LoggedInUser;
-import cn.ximuli.jframex.ui.I18nHelper;
-import cn.ximuli.jframex.ui.component.menu.Mate;
+import cn.ximuli.jframex.ui.component.menu.Meta;
 import cn.ximuli.jframex.ui.manager.PermissionManager;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,11 +55,11 @@ public class PermissionUtil {
         
         return components.stream()
                 .filter(component -> {
-                    Mate mate = component.getClass().getAnnotation(Mate.class);
-                    if (mate == null) {
+                    Meta meta = component.getClass().getAnnotation(Meta.class);
+                    if (meta == null) {
                         return true; // Components without Mate annotation are visible by default
                     }
-                    String permissionId = mate.id();
+                    String permissionId = meta.id();
                     if (permissionId.isEmpty()) {
                         return true; // Components without permission ID are visible by default
                     }
@@ -94,9 +90,9 @@ public class PermissionUtil {
      * @param component Component
      */
     public static void setComponentVisibilityByMate(LoggedInUser user, Component component) {
-        Mate mate = component.getClass().getAnnotation(Mate.class);
-        if (mate != null && !mate.id().isEmpty()) {
-            setComponentVisibility(user, component, mate.id());
+        Meta meta = component.getClass().getAnnotation(Meta.class);
+        if (meta != null && !meta.id().isEmpty()) {
+            setComponentVisibility(user, component, meta.id());
         }
     }
     
@@ -129,8 +125,8 @@ public class PermissionUtil {
      * @return Permission ID
      */
     public static String getComponentPermissionId(Component component) {
-        Mate mate = component.getClass().getAnnotation(Mate.class);
-        return mate != null ? mate.id() : "";
+        Meta meta = component.getClass().getAnnotation(Meta.class);
+        return meta != null ? meta.id() : "";
     }
     
     /**
@@ -139,7 +135,7 @@ public class PermissionUtil {
      * @return Whether component needs permission control
      */
     public static boolean needsPermissionControl(Component component) {
-        Mate mate = component.getClass().getAnnotation(Mate.class);
-        return mate != null && !mate.id().isEmpty();
+        Meta meta = component.getClass().getAnnotation(Meta.class);
+        return meta != null && !meta.id().isEmpty();
     }
 } 

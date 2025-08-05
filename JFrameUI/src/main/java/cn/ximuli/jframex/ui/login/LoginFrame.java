@@ -3,7 +3,6 @@ package cn.ximuli.jframex.ui.login;
 import cn.ximuli.jframex.service.LoginService;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
-import cn.ximuli.jframex.ui.component.menu.Mate;
 import cn.ximuli.jframex.ui.event.UserLoginEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;

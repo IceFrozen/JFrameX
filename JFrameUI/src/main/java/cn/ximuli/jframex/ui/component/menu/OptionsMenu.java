@@ -6,21 +6,18 @@ import cn.ximuli.jframex.ui.event.WindowsEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.manager.UISession;
-import cn.ximuli.jframex.ui.storage.JFramePref;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.util.SystemInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ReflectionUtils;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.prefs.Preferences;
 
 @Slf4j
-@Mate(value = "app.menu.options", shortKey = KeyEvent.VK_F, order = 5, id = "app.menu.options")
+@Meta(value = "app.menu.options", shortKey = KeyEvent.VK_F, order = 5, id = "app.menu.options")
 public class OptionsMenu extends JMenu {
     private final ResourceLoaderManager resources;
     private final JCheckBoxMenuItem windowDecorationsCheckBoxMenuItem;
@@ -205,7 +202,7 @@ public class OptionsMenu extends JMenu {
         HintManager.hideAllHints();
         showHints();
     }
-    
+
     private void showHints() {
         UISession currentUISession = FrameManager.getCurrentUISession();
         if (currentUISession != null) {

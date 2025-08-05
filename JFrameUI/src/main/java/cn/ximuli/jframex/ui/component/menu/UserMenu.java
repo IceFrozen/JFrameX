@@ -9,7 +9,7 @@ import javax.swing.*;
 
 
 @Slf4j
-@Mate(value = "app.menu.user", order = 6, id = "app.menu.user")
+@Meta(value = "app.menu.user", order = 6, id = "app.menu.user")
 public class UserMenu extends JMenu {
     ResourceLoaderManager resources;
 

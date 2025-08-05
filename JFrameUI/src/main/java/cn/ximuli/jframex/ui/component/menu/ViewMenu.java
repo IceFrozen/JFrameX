@@ -4,7 +4,6 @@ import cn.ximuli.jframex.common.constants.PermissionConstants;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
-import cn.ximuli.jframex.ui.event.MenuButtonClickEvent;
 import cn.ximuli.jframex.ui.internalJFrame.*;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
@@ -16,11 +15,10 @@ import org.springframework.core.annotation.Order;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Mate(value = "app.menu.view", shortKey = KeyEvent.VK_F, order = 3, id = "app.menu.view")
+@Meta(value = "app.menu.view", shortKey = KeyEvent.VK_F, order = 3, id = "app.menu.view")
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ViewMenu extends JMenu {
     final ResourceLoaderManager resources;

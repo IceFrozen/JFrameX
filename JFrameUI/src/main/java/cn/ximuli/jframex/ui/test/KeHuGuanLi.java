@@ -1,13 +1,11 @@
 package cn.ximuli.jframex.ui.test;
 
-import cn.ximuli.jframex.ui.component.menu.Mate;
-import org.springframework.stereotype.Component;
+import cn.ximuli.jframex.ui.component.menu.Meta;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-@Mate(value = "app.menu.user.internal.userService.title", icon = "icons/left_arrow", order = 1)
+
+@Meta(value = "app.menu.user.internal.userService.title", icon = "icons/left_arrow", order = 1)
 public class KeHuGuanLi extends JInternalFrame {
     public KeHuGuanLi() {
         setIconifiable(true);

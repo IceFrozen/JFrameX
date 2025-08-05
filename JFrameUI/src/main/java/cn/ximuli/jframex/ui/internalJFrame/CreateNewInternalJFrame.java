@@ -1,13 +1,12 @@
 package cn.ximuli.jframex.ui.internalJFrame;
 
 import cn.ximuli.jframex.ui.I18nHelper;
-import cn.ximuli.jframex.ui.component.menu.Mate;
+import cn.ximuli.jframex.ui.component.menu.Meta;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +14,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.util.concurrent.Callable;
 
-@Mate(value = "app.menu.file.new", icon = "icons/newFolder", order = 1, id = "app.menu.file.new")
+@Meta(value = "app.menu.file.new", icon = "icons/newFolder", order = 1, id = "app.menu.file.new")
 @Slf4j
 public class CreateNewInternalJFrame extends CommonInternalJFrame {
     private Pair<JLabel, JTextField> nameLine;
@@ -33,8 +32,8 @@ public class CreateNewInternalJFrame extends CommonInternalJFrame {
         super(resources, desktopPane);
         this.setSize(600, 320);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Mate.class).value()));
-        setFrameIcon(resources.getIcon(getClass().getAnnotation(Mate.class).icon()));
+        setTitle(I18nHelper.getMessage(getClass().getAnnotation(Meta.class).value()));
+        setFrameIcon(resources.getIcon(getClass().getAnnotation(Meta.class).icon()));
     }
 
 

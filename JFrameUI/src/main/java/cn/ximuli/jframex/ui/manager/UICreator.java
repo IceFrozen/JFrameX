@@ -1,12 +1,11 @@
 package cn.ximuli.jframex.ui.manager;
 
-import cn.ximuli.jframex.common.constants.PermissionConstants;
 import cn.ximuli.jframex.common.utils.ClassUtil;
 import cn.ximuli.jframex.model.LoggedInUser;
 import cn.ximuli.jframex.service.util.SpringUtils;
 import cn.ximuli.jframex.ui.Application;
 import cn.ximuli.jframex.ui.I18nHelper;
-import cn.ximuli.jframex.ui.component.menu.Mate;
+import cn.ximuli.jframex.ui.component.menu.Meta;
 import cn.ximuli.jframex.ui.component.menu.MenuBar;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
 import cn.ximuli.jframex.ui.component.panels.SettingMenu;
@@ -33,17 +32,17 @@ public class UICreator {
         LoggedInUser currentUser = FrameManager.getCurrentUISession().getCurrentUser();
 
         for (Class<?> aClass : classes) {
-            Mate mate = aClass.getAnnotation(Mate.class);
-            if (mate != null && !mate.id().isEmpty()) {
+            Meta meta = aClass.getAnnotation(Meta.class);
+            if (meta != null && !meta.id().isEmpty()) {
                 // Check permissions
-                if (!PermissionUtil.hasPermission(currentUser, mate.id())) {
+                if (!PermissionUtil.hasPermission(currentUser, meta.id())) {
                     continue; // Skip menu items without permission
                 }
             }
 
             JMenuItem item = new JMenuItem();
-            item.setText(I18nHelper.getMessage(mate.value()));
-            item.setIcon(resources.getIcon(mate.icon()));
+            item.setText(I18nHelper.getMessage(meta.value()));
+            item.setIcon(resources.getIcon(meta.icon()));
             item.putClientProperty("class", aClass);
             item.addActionListener(e -> FrameManager.publishEvent(new CreateFrameEvent(aClass)));
             result.add(item);
@@ -91,18 +90,18 @@ public class UICreator {
         LoggedInUser currentUser = FrameManager.getCurrentUISession().getCurrentUser();
 
         for (Class<? extends CommonInternalJFrame> aClass : classes) {
-            Mate mate = aClass.getAnnotation(Mate.class);
-            if (mate != null && !mate.id().isEmpty()) {
+            Meta meta = aClass.getAnnotation(Meta.class);
+            if (meta != null && !meta.id().isEmpty()) {
                 // Check permissions
-                if (!PermissionUtil.hasPermission(currentUser, mate.id())) {
+                if (!PermissionUtil.hasPermission(currentUser, meta.id())) {
                     continue; // Skip internal frames without permission
                 }
             }
             CommonInternalJFrame commonInternalJFrame = ClassUtil.newInstance(aClass, new Class[]{ResourceLoaderManager.class, DesktopPanel.class}, new Object[]{resources, desktopPanel});
             commonInternalJFrame.refreshUI();
             // Set permission control
-            if (mate != null && !mate.id().isEmpty()) {
-                PermissionUtil.setComponentVisibility(currentUser, commonInternalJFrame, mate.id());
+            if (meta != null && !meta.id().isEmpty()) {
+                PermissionUtil.setComponentVisibility(currentUser, commonInternalJFrame, meta.id());
             }
 
             internalJFrames.add(commonInternalJFrame);
@@ -118,17 +117,17 @@ public class UICreator {
         Set<Class<? extends JMenu>> classes = SpringUtils.scanClasses(Application.APP_COMMON_COMPONENT, JMenu.class);
 
         for (Class<? extends JMenu> aClass : classes) {
-            Mate mate = aClass.getAnnotation(Mate.class);
-            if (mate != null && !mate.id().isEmpty()) {
-                if (!PermissionUtil.hasPermission(currentUser, mate.id())) {
+            Meta meta = aClass.getAnnotation(Meta.class);
+            if (meta != null && !meta.id().isEmpty()) {
+                if (!PermissionUtil.hasPermission(currentUser, meta.id())) {
                     continue;
                 }
             }
             JMenu jMenu = ClassUtil.newInstance(aClass, new Class[]{ResourceLoaderManager.class}, new Object[]{resources});
 
             // Set permission control
-            if (mate != null && !mate.id().isEmpty()) {
-                PermissionUtil.setComponentVisibility(currentUser, jMenu, mate.id());
+            if (meta != null && !meta.id().isEmpty()) {
+                PermissionUtil.setComponentVisibility(currentUser, jMenu, meta.id());
             }
             menuList.add(jMenu);
         }
