@@ -1,16 +1,22 @@
 package cn.ximuli.jframex.common.utils;
 
-
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
 
+/**
+ * IO Utility Class
+ * Extends Apache Commons IOUtils with additional functionality
+ *
+ * @author lizhipeng
+ * @email taozi031@163.com
+ */
 public class IOUtil extends IOUtils {
 
     /**
-     * 从Reader中读取String，读取完毕后并不关闭Reader
+     * Read String from Reader, does not close the Reader after reading
      *
      * @param reader Reader
      * @return String

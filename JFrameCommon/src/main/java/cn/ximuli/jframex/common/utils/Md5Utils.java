@@ -6,9 +6,10 @@ import org.slf4j.LoggerFactory;
 import java.security.MessageDigest;
 
 /**
- * Md5加密方法
+ * MD5 Encryption Utility Class
  *
  * @author lizhipeng
+ * @email taozi031@163.com
  */
 public class Md5Utils {
     private static final Logger log = LoggerFactory.getLogger(Md5Utils.class);
@@ -43,6 +44,12 @@ public class Md5Utils {
         return buf.toString();
     }
 
+    /**
+     * Generate MD5 hash for the given string
+     *
+     * @param s String to hash
+     * @return MD5 hash string
+     */
     public static String hash(String s) {
         try {
             return new String(toHex(md5(s)).getBytes("UTF-8"), "UTF-8");

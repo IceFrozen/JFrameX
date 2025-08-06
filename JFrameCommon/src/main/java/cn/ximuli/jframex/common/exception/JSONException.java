@@ -1,9 +1,17 @@
 package cn.ximuli.jframex.common.exception;
 
-public class JSONException  extends FormativeException {
+/**
+ * JSON Exception Class
+ * A custom exception class for JSON related errors
+ *
+ * @author lizhipeng
+ * @email taozi031@163.com
+ */
+public class JSONException extends FormativeException {
     public JSONException() {
         super();
     }
+
     public JSONException(String message) {
         super(message);
     }
@@ -20,4 +28,3 @@ public class JSONException  extends FormativeException {
         super(cause, format, arguments);
     }
 }
-

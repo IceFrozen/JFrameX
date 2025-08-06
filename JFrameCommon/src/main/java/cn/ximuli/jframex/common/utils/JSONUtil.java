@@ -36,14 +36,24 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * A JSON serialization and deserialization utility class based on the Jackson library, providing rich JSON
+ * processing capabilities including conversion between objects and JSON strings, JSON field extraction,
+ * JSON format validation, and JSON content modification.
+ *
+ * @author lizhipeng
+ * @email taozi031@163.com
+ */
 public class JSONUtil {
 
-    private JSONUtil() {}
+    private JSONUtil() {
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(JSONUtil.class);
 
     private static ObjectMapper mapper = new JsonMapper();
 
-    // 来自于JsonPath，用于属性值查找，属性名称替换等方法，此类为线程安全
+    // From JsonPath, used for methods like property value lookup and property name replacement, this class is thread-safe
     private static ParseContext jsonParseContext = null;
 
     private static Set<JsonReadFeature> JSON_READ_FEATURES_ENABLED;
@@ -51,31 +61,36 @@ public class JSONUtil {
     static {
         try {
             JSON_READ_FEATURES_ENABLED = new HashSet<>();
-            //允许在JSON中使用Java注释
+            // Allow Java comments in JSON
             JSON_READ_FEATURES_ENABLED.add(JsonReadFeature.ALLOW_JAVA_COMMENTS);
-            //允许 json 存在没用双引号括起来的 field
+            // Allow fields in JSON without double quotes
             JSON_READ_FEATURES_ENABLED.add(JsonReadFeature.ALLOW_UNQUOTED_FIELD_NAMES);
-            //允许 json 存在使用单引号括起来的 field
+            // Allow fields in JSON enclosed in single quotes
             JSON_READ_FEATURES_ENABLED.add(JsonReadFeature.ALLOW_SINGLE_QUOTES);
-            //允许 json 存在没用引号括起来的 ascii 控制字符
+            // Allow unquoted ASCII control characters in JSON
             JSON_READ_FEATURES_ENABLED.add(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS);
-            //允许 json number 类型的数存在前导 0 (例: 0001)
+            // Allow leading zeros in JSON numbers (e.g., 0001)
             JSON_READ_FEATURES_ENABLED.add(JsonReadFeature.ALLOW_LEADING_ZEROS_FOR_NUMBERS);
-            //允许 json 存在 NaN, INF, -INF 作为 number 类型
+            // Allow NaN, INF, -INF as number types in JSON
             JSON_READ_FEATURES_ENABLED.add(JsonReadFeature.ALLOW_NON_NUMERIC_NUMBERS);
-            //允许 只有Key没有Value的情况
+            // Allow cases where only keys exist without values
             JSON_READ_FEATURES_ENABLED.add(JsonReadFeature.ALLOW_MISSING_VALUES);
-            //允许数组json的结尾多逗号
+            // Allow trailing commas in array JSON
             JSON_READ_FEATURES_ENABLED.add(JsonReadFeature.ALLOW_TRAILING_COMMA);
-            //初始化
+            // Initialization
             initMapper(mapper, JSON_READ_FEATURES_ENABLED);
-            // 初始化JsonPath
+            // Initialize JsonPath
             initJsonPath();
         } catch (Exception e) {
             logger.error("jackson config error", e);
         }
     }
 
+    /**
+     * Create an ObjectMapper instance
+     *
+     * @return ObjectMapper instance with configuration
+     */
     public static ObjectMapper createObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         initMapper(objectMapper, JSON_READ_FEATURES_ENABLED);
@@ -85,7 +100,13 @@ public class JSONUtil {
     }
 
 
-
+    /**
+     * Initialize ObjectMapper with specified features
+     *
+     * @param mapper           ObjectMapper instance to configure
+     * @param jsonReadFeatures Set of JsonReadFeatures to enable
+     * @return Configured ObjectMapper
+     */
     private static ObjectMapper initMapper(ObjectMapper mapper, Set<JsonReadFeature> jsonReadFeatures) {
         if (jsonReadFeatures == null || jsonReadFeatures.isEmpty()) {
             jsonReadFeatures = JSON_READ_FEATURES_ENABLED;
@@ -101,30 +122,34 @@ public class JSONUtil {
     }
 
 
+    /**
+     * Configure additional ObjectMapper settings
+     *
+     * @param objectMapper ObjectMapper to configure
+     * @return Configured ObjectMapper
+     */
     public static ObjectMapper initMapperConfig(ObjectMapper objectMapper) {
         String dateTimeFormat = DateUtil.DEFAULT_PATTERN;
         objectMapper.setDateFormat(new SimpleDateFormat(dateTimeFormat));
-        //配置序列化级别
-        //objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        //配置JSON缩进支持
+        // Configure JSON indentation support
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, false);
-        //允许单个数值当做数组处理
+        // Allow single values to be treated as arrays
         objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-        //禁止重复键, 抛出异常
+        // Disallow duplicate keys, throw exception
         objectMapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
-        //禁止使用int代表Enum的order()來反序列化Enum, 抛出异常
+        // Disallow using int to represent Enum order() for deserialization, throw exception
         objectMapper.enable(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS);
-        //有属性不能映射的时候不报错
+        // Do not throw error when unknown properties are present
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        //对象为空时不抛异常
+        // Do not throw exception when objects are empty
         objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        //时间格式
+        // Date format configuration
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        //允许未知字段
+        // Allow unknown fields
         objectMapper.enable(JsonGenerator.Feature.IGNORE_UNKNOWN);
-        //序列化BigDecimal时之间输出原始数字还是科学计数, 默认false, 即是否以toPlainString()科学计数方式来输出
+        // Serialize BigDecimal as plain string instead of scientific notation
         objectMapper.enable(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN);
-        //识别Java8时间
+        // Support Java 8 date/time types
         objectMapper.registerModule(new ParameterNamesModule());
         objectMapper.registerModule(new Jdk8Module());
         JavaTimeModule javaTimeModule = new JavaTimeModule();
@@ -135,7 +160,7 @@ public class JSONUtil {
     }
 
     /**
-     * 使用Jackson Provider初始化json path
+     * Initialize json path with Jackson Provider
      */
     private static void initJsonPath() {
         jsonParseContext = JsonPath.using(Configuration.builder() //
@@ -143,15 +168,21 @@ public class JSONUtil {
                 .jsonProvider(new JacksonJsonNodeJsonProvider()).build());
     }
 
+    /**
+     * Get the default ObjectMapper instance
+     *
+     * @return ObjectMapper instance
+     */
     public static ObjectMapper getObjectMapper() {
         return mapper;
     }
 
     /**
-     * JSON反序列化
-     * @param url URL
-     * @param type 类型
-     * @return 反序列化后的对象
+     * JSON deserialization from URL
+     *
+     * @param url  URL to read from
+     * @param type Target class type
+     * @return Deserialized object
      */
     public static <V> V from(URL url, Class<V> type) {
         try {
@@ -163,7 +194,11 @@ public class JSONUtil {
     }
 
     /**
-     * JSON反序列化
+     * JSON deserialization from URL
+     *
+     * @param url  URL to read from
+     * @param type TypeReference for generic types
+     * @return Deserialized object
      */
     public static <V> V from(URL url, TypeReference<V> type) {
         try {
@@ -174,7 +209,11 @@ public class JSONUtil {
     }
 
     /**
-     * JSON反序列化（List）
+     * JSON deserialization to List from URL
+     *
+     * @param url  URL to read from
+     * @param type Element class type
+     * @return List of deserialized objects
      */
     public static <V> List<V> fromList(URL url, Class<V> type) {
         try {
@@ -185,8 +224,12 @@ public class JSONUtil {
         }
     }
 
-    /**exception
-     * JSON反序列化
+    /**
+     * JSON deserialization from InputStream
+     *
+     * @param inputStream InputStream to read from
+     * @param type        Target class type
+     * @return Deserialized object
      */
     public static <V> V from(InputStream inputStream, Class<V> type) {
         try {
@@ -197,7 +240,11 @@ public class JSONUtil {
     }
 
     /**
-     * JSON反序列化
+     * JSON deserialization from InputStream
+     *
+     * @param inputStream InputStream to read from
+     * @param type        TypeReference for generic types
+     * @return Deserialized object
      */
     public static <V> V from(InputStream inputStream, TypeReference<V> type) {
         try {
@@ -208,7 +255,11 @@ public class JSONUtil {
     }
 
     /**
-     * JSON反序列化（List）
+     * JSON deserialization to List from InputStream
+     *
+     * @param inputStream InputStream to read from
+     * @param type        Element class type
+     * @return List of deserialized objects
      */
     public static <V> List<V> fromList(InputStream inputStream, Class<V> type) {
         try {
@@ -220,7 +271,11 @@ public class JSONUtil {
     }
 
     /**
-     * JSON反序列化
+     * JSON deserialization from File
+     *
+     * @param file File to read from
+     * @param type Target class type
+     * @return Deserialized object
      */
     public static <V> V from(File file, Class<V> type) {
         try {
@@ -231,7 +286,11 @@ public class JSONUtil {
     }
 
     /**
-     * JSON反序列化
+     * JSON deserialization from File
+     *
+     * @param file File to read from
+     * @param type TypeReference for generic types
+     * @return Deserialized object
      */
     public static <V> V from(File file, TypeReference<V> type) {
         try {
@@ -242,7 +301,11 @@ public class JSONUtil {
     }
 
     /**
-     * JSON反序列化（List）
+     * JSON deserialization to List from File
+     *
+     * @param file File to read from
+     * @param type Element class type
+     * @return List of deserialized objects
      */
     public static <V> List<V> fromList(File file, Class<V> type) {
         try {
@@ -254,21 +317,33 @@ public class JSONUtil {
     }
 
     /**
-     * JSON反序列化
+     * JSON deserialization from String
+     *
+     * @param json JSON string
+     * @param type Target class type
+     * @return Deserialized object
      */
     public static <V> V from(String json, Class<V> type) {
         return from(json, (Type) type);
     }
 
     /**
-     * JSON反序列化
+     * JSON deserialization from String
+     *
+     * @param json JSON string
+     * @param type TypeReference for generic types
+     * @return Deserialized object
      */
     public static <V> V from(String json, TypeReference<V> type) {
         return from(json, type.getType());
     }
 
     /**
-     * JSON反序列化
+     * JSON deserialization from String
+     *
+     * @param json JSON string
+     * @param type Target type
+     * @return Deserialized object
      */
     public static <V> V from(String json, Type type) {
         if (StringUtils.isEmpty(json)) {
@@ -283,7 +358,11 @@ public class JSONUtil {
     }
 
     /**
-     * JSON反序列化（List）
+     * JSON deserialization to List from String
+     *
+     * @param json JSON string
+     * @param type Element class type
+     * @return List of deserialized objects
      */
     public static <V> List<V> fromList(String json, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -298,7 +377,10 @@ public class JSONUtil {
     }
 
     /**
-     * JSON反序列化（Map）
+     * JSON deserialization to Map from String
+     *
+     * @param json JSON string
+     * @return Map of String to Object
      */
     public static Map<String, Object> fromMap(String json) {
         if (StringUtils.isEmpty(json)) {
@@ -313,7 +395,10 @@ public class JSONUtil {
     }
 
     /**
-     * 序列化为JSON
+     * Serialize List to JSON string
+     *
+     * @param list List to serialize
+     * @return JSON string
      */
     public static <V> String to(List<V> list) {
         try {
@@ -324,7 +409,10 @@ public class JSONUtil {
     }
 
     /**
-     * 序列化为JSON
+     * Serialize object to JSON string
+     *
+     * @param v Object to serialize
+     * @return JSON string
      */
     public static <V> String to(V v) {
         try {
@@ -335,7 +423,10 @@ public class JSONUtil {
     }
 
     /**
-     * 序列化为JSON
+     * Serialize List to JSON file
+     *
+     * @param path File path
+     * @param list List to serialize
      */
     public static <V> void toFile(String path, List<V> list) {
         try (Writer writer = new FileWriter(new File(path), true)) {
@@ -346,7 +437,10 @@ public class JSONUtil {
     }
 
     /**
-     * 序列化为JSON
+     * Serialize object to JSON file
+     *
+     * @param path File path
+     * @param v    Object to serialize
      */
     public static <V> void toFile(String path, V v) {
         try (Writer writer = new FileWriter(new File(path), true)) {
@@ -357,8 +451,11 @@ public class JSONUtil {
     }
 
     /**
-     * 从json串中获取某个字段
-     * @return String，默认为 null
+     * Get a field value as String from JSON
+     *
+     * @param json JSON string
+     * @param key  Field key
+     * @return Field value as String, null by default
      */
     public static String getAsString(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -375,10 +472,23 @@ public class JSONUtil {
         }
     }
 
+    /**
+     * Convert JsonNode to String
+     *
+     * @param jsonNode JsonNode to convert
+     * @return String value
+     */
     private static String getAsString(JsonNode jsonNode) {
         return jsonNode.isTextual() ? jsonNode.textValue() : jsonNode.toString();
     }
 
+    /**
+     * Get text value from JsonNode by key
+     *
+     * @param jsonNode JsonNode
+     * @param key      Field key
+     * @return Text value
+     */
     public static String getAsText(JsonNode jsonNode, String key) {
         if (jsonNode == null) {
             return null;
@@ -395,11 +505,11 @@ public class JSONUtil {
     }
 
     /**
-     * 根据指定属性的Json Path，返回属性的文本值（如果指定的属性为数组或对象，则返回空）
-     * 
-     * @param jsonNode -- json对象
-     * @param jsonPath -- 属性路径，格式参见：https://github.com/json-path/JsonPath
-     * @return
+     * Get property text value by Json Path (returns null if property is array or object)
+     *
+     * @param jsonNode -- json object
+     * @param jsonPath -- property path, format see: https://github.com/json-path/JsonPath
+     * @return Text value
      */
     public static String getAsStringByJsonPath(JsonNode jsonNode, String jsonPath) {
         JsonNode targetNode = jsonParseContext.parse(jsonNode).read(jsonPath);
@@ -410,22 +520,22 @@ public class JSONUtil {
     }
 
     /**
-     * 根据指定属性的Json Path，返回属性的文本值（如果指定的属性为数组或对象，则返回空）
-     * 
-     * @param json     -- json字符串
-     * @param jsonPath -- 属性路径，格式参见：https://github.com/json-path/JsonPath
-     * @return
+     * Get property text value by Json Path (returns null if property is array or object)
+     *
+     * @param json     -- json string
+     * @param jsonPath -- property path, format see: https://github.com/json-path/JsonPath
+     * @return Text value
      */
     public static String getAsStringByJsonPath(String json, String jsonPath) {
         return getAsStringByJsonPath(from(json, JsonNode.class), jsonPath);
     }
 
     /**
-     * 判断字段是否为空
-     * 
-     * @param jsonNode
-     * @param key
-     * @return
+     * Check if field is empty
+     *
+     * @param jsonNode JsonNode
+     * @param key      Field key
+     * @return True if empty, false otherwise
      */
     public static Boolean isEmpty(JsonNode jsonNode, String key) {
         if (jsonNode == null) {
@@ -443,8 +553,11 @@ public class JSONUtil {
     }
 
     /**
-     * 从json串中获取某个字段
-     * @return int，默认为 0
+     * Get a field value as int from JSON
+     *
+     * @param json JSON string
+     * @param key  Field key
+     * @return Field value as int, 0 by default
      */
     public static int getAsInt(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -462,8 +575,11 @@ public class JSONUtil {
     }
 
     /**
-     * 从json串中获取某个字段
-     * @return long，默认为 0
+     * Get a field value as long from JSON
+     *
+     * @param json JSON string
+     * @param key  Field key
+     * @return Field value as long, 0L by default
      */
     public static long getAsLong(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -481,8 +597,11 @@ public class JSONUtil {
     }
 
     /**
-     * 从json串中获取某个字段
-     * @return double，默认为 0.0
+     * Get a field value as double from JSON
+     *
+     * @param json JSON string
+     * @param key  Field key
+     * @return Field value as double, 0.0 by default
      */
     public static double getAsDouble(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -500,8 +619,11 @@ public class JSONUtil {
     }
 
     /**
-     * 从json串中获取某个字段
-     * @return BigInteger，默认为 0.0
+     * Get a field value as BigInteger from JSON
+     *
+     * @param json JSON string
+     * @param key  Field key
+     * @return Field value as BigInteger, 0.00 by default
      */
     public static BigInteger getAsBigInteger(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -519,8 +641,11 @@ public class JSONUtil {
     }
 
     /**
-     * 从json串中获取某个字段
-     * @return BigDecimal，默认为 0.00
+     * Get a field value as BigDecimal from JSON
+     *
+     * @param json JSON string
+     * @param key  Field key
+     * @return Field value as BigDecimal, 0.00 by default
      */
     public static BigDecimal getAsBigDecimal(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -537,10 +662,13 @@ public class JSONUtil {
         }
     }
 
-        /**
-         * 从json串中获取某个字段
-         * @return boolean, 默认为false
-         */
+    /**
+     * Get a field value as boolean from JSON
+     *
+     * @param json JSON string
+     * @param key  Field key
+     * @return Field value as boolean, false by default
+     */
     public static boolean getAsBoolean(String json, String key) {
         if (StringUtils.isEmpty(json)) {
             return false;
@@ -570,8 +698,11 @@ public class JSONUtil {
     }
 
     /**
-     * 从json串中获取某个字段
-     * @return byte[], 默认为 null
+     * Get a field value as byte array from JSON
+     *
+     * @param json JSON string
+     * @param key  Field key
+     * @return Field value as byte array, null by default
      */
     public static byte[] getAsBytes(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -589,8 +720,12 @@ public class JSONUtil {
     }
 
     /**
-     * 从json串中获取某个字段
-     * @return object, 默认为 null
+     * Get a field value as object from JSON
+     *
+     * @param json JSON string
+     * @param key  Field key
+     * @param type Target object type
+     * @return Field value as object, null by default
      */
     public static <V> V getAsObject(String json, String key, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -613,8 +748,12 @@ public class JSONUtil {
 
 
     /**
-     * 从json串中获取某个字段
-     * @return list, 默认为 null
+     * Get a field value as List from JSON
+     *
+     * @param json JSON string
+     * @param key  Field key
+     * @param type List element type
+     * @return Field value as List, empty list by default
      */
     public static <V> List<V> getAsList(String json, String key, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -633,8 +772,11 @@ public class JSONUtil {
     }
 
     /**
-     * 从json串中获取某个字段
-     * @return JsonNode, 默认为 null
+     * Get a field as JsonNode from JSON
+     *
+     * @param json JSON string
+     * @param key  Field key
+     * @return Field value as JsonNode, null by default
      */
     public static JsonNode getAsJsonObject(String json, String key) {
         try {
@@ -649,8 +791,12 @@ public class JSONUtil {
     }
 
     /**
-     * 向json中添加属性
-     * @return json
+     * Add property to JSON
+     *
+     * @param json  JSON string
+     * @param key   Property key
+     * @param value Property value
+     * @return Modified JSON string
      */
     public static <V> String add(String json, String key, V value) {
         try {
@@ -663,7 +809,11 @@ public class JSONUtil {
     }
 
     /**
-     * 向json中添加属性
+     * Add property to JsonNode
+     *
+     * @param jsonNode JsonNode to modify
+     * @param key      Property key
+     * @param value    Property value
      */
     private static <V> void add(JsonNode jsonNode, String key, V value) {
         if (value instanceof String) {
@@ -692,8 +842,11 @@ public class JSONUtil {
     }
 
     /**
-     * 除去json中的某个属性
-     * @return json
+     * Remove property from JSON
+     *
+     * @param json JSON string
+     * @param key  Property key to remove
+     * @return Modified JSON string
      */
     public static String remove(String json, String key) {
         try {
@@ -706,7 +859,12 @@ public class JSONUtil {
     }
 
     /**
-     * 修改json中的属性
+     * Update property in JSON
+     *
+     * @param json  JSON string
+     * @param key   Property key to update
+     * @param value New property value
+     * @return Modified JSON string
      */
     public static <V> String update(String json, String key, V value) {
         try {
@@ -720,10 +878,10 @@ public class JSONUtil {
     }
 
     /**
-     * 格式化Json(美化)
+     * Format JSON (pretty print)
      *
-     * @param json json格式的字符串
-     * @return json格式化
+     * @param json JSON string
+     * @return Formatted JSON string
      */
     public static String format(String json) {
         try {
@@ -736,10 +894,10 @@ public class JSONUtil {
 
 
     /**
-     * 判断字符串是否是json
+     * Check if string is valid JSON
      *
-     * @param json json格式的字符串
-     * @return 是否是json
+     * @param json String to check
+     * @return True if valid JSON, false otherwise
      */
     public static boolean isJson(String json) {
         if (StringUtils.isBlank(json)) {
@@ -753,4 +911,3 @@ public class JSONUtil {
         }
     }
 }
-

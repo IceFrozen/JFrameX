@@ -5,13 +5,20 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * String Utility Class
+ * Extends Apache Commons StringUtils with additional functionality
+ *
+ * @author lizhipeng
+ * @email taozi031@163.com
+ */
 public class StringUtil extends StringUtils {
     /**
-     * 忽略大小写去掉指定前缀
+     * Remove specified prefix ignoring case
      *
-     * @param str    字符串
-     * @param prefix 前缀
-     * @return 切掉后的字符串，若前缀不是 prefix， 返回原字符串
+     * @param str    String
+     * @param prefix Prefix
+     * @return String after cutting, if prefix is not prefix, return original string
      */
     public static String removePrefixIgnoreCase(CharSequence str, CharSequence prefix) {
         if (isEmpty(str) || isEmpty(prefix)) {
@@ -25,24 +32,42 @@ public class StringUtil extends StringUtils {
         return str2;
     }
 
+    /**
+     * Check if array is not empty
+     *
+     * @param objects Object array
+     * @return true if not empty, false otherwise
+     */
     public static boolean isNotEmpty(Object[] objects) {
         return !isEmpty(objects);
     }
 
+    /**
+     * Check if array is empty
+     *
+     * @param objects Object array
+     * @return true if empty, false otherwise
+     */
     public static boolean isEmpty(Object[] objects) {
         return isNull(objects) || (objects.length == 0);
     }
 
+    /**
+     * Check if object is null
+     *
+     * @param object Object
+     * @return true if null, false otherwise
+     */
     public static boolean isNull(Object object) {
         return object == null;
     }
 
-      /**
-     * 是否包含字符串
+    /**
+     * Check if string is contained in string array (ignore case)
      *
-     * @param str  验证字符串
-     * @param strs 字符串组
-     * @return 包含返回true
+     * @param str  String to validate
+     * @param strs String array
+     * @return true if contained, false otherwise
      */
     public static boolean inStringIgnoreCase(String str, String... strs) {
         if (str != null && strs != null) {
@@ -55,30 +80,35 @@ public class StringUtil extends StringUtils {
         return false;
     }
 
+    /**
+     * Convert strings to list
+     *
+     * @param str String array
+     * @return List of strings
+     */
     public static List<String> str2List(String ... str) {
         return Arrays.stream(str).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
-
     /**
-     * 字符串转set
+     * Convert string to set
      *
-     * @param str 字符串
-     * @param sep 分隔符
-     * @return set集合
+     * @param str String
+     * @param sep Separator
+     * @return Set collection
      */
     public static Set<String> str2Set(String str, String sep) {
         return new HashSet<String>(str2List(str, sep, true, false));
     }
 
     /**
-     * 字符串转list
+     * Convert string to list
      *
-     * @param str         字符串
-     * @param sep         分隔符
-     * @param filterBlank 过滤纯空白
-     * @param trim        去掉首尾空白
-     * @return list集合
+     * @param str         String
+     * @param sep         Separator
+     * @param filterBlank Filter blank strings
+     * @param trim        Trim leading and trailing whitespace
+     * @return List collection
      */
     public static List<String> str2List(String str, String sep, boolean filterBlank, boolean trim) {
         List<String> list = new ArrayList<String>();
@@ -86,7 +116,7 @@ public class StringUtil extends StringUtils {
             return list;
         }
 
-        // 过滤空白字符串
+        // Filter blank strings
         if (filterBlank && StringUtil.isBlank(str)) {
             return list;
         }
@@ -103,6 +133,4 @@ public class StringUtil extends StringUtils {
 
         return list;
     }
-
-
 }

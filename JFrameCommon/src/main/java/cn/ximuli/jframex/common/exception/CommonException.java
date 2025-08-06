@@ -1,9 +1,16 @@
 package cn.ximuli.jframex.common.exception;
 
+/**
+ * Common Exception Class
+ *
+ * @author lizhipeng
+ * @email taozi031@163.com
+ */
 public class CommonException extends FormativeException {
     public CommonException() {
         super();
     }
+
     public CommonException(String message) {
         super(message);
     }

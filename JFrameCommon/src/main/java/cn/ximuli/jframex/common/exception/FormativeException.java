@@ -3,14 +3,20 @@ package cn.ximuli.jframex.common.exception;
 import cn.ximuli.jframex.common.utils.ParameterFormatter;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-
+/**
+ * Formative Exception Class
+ * A custom exception class that supports formatted messages with parameter placeholders
+ *
+ * @author lizhipeng
+ * @email taozi031@163.com
+ */
 public class FormativeException extends RuntimeException {
     private int[] indices;
     private int usedCount;
     protected String message;
     private transient Throwable throwable;
     private transient Object[] args;
-    // 异常内部的附件
+
     private Object attachment;
 
     public FormativeException() {
@@ -103,7 +109,7 @@ public class FormativeException extends RuntimeException {
         this.args = args;
     }
 
-   
+
     public void attachment(Object attachment) {
         this.attachment = attachment;
     }

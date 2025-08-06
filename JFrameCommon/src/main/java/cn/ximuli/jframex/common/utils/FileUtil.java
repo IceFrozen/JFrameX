@@ -7,55 +7,54 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Pattern;
 
-
 /**
- * 文件工具
+ * File Utility Class
  *
  * @author lizhipeng
+ * @email taozi031@163.com
  */
 public class FileUtil {
     /**
-     * 类Unix路径分隔符
+     * Unix-like path separator
      */
     public static final char UNIX_SEPARATOR = CharConstants.SLASH;
     /**
-     * Windows路径分隔符
+     * Windows path separator
      */
     public static final char WINDOWS_SEPARATOR = CharConstants.BACKSLASH;
 
     /**
-     * 针对ClassPath路径的伪协议前缀（兼容Spring）: "classpath:"
+     * Pseudo-protocol prefix for ClassPath paths (Spring compatible): "classpath:"
      */
     public static final String CLASSPATH_URL_PREFIX = "classpath:";
     /**
-     * URL 前缀表示文件: "file:"
+     * URL prefix indicating file: "file:"
      */
     public static final String FILE_URL_PREFIX = "file:";
 
-    /** 字符常量：点 {@code '..'} */
+    /** Character constant: dot {@code '..'} */
     public static final String DOUBLE_DOT = "..";
 
-
     /**
-     * Windows下文件名中的无效字符
+     * Invalid characters in Windows file names
      */
     private static final Pattern FILE_NAME_INVALID_PATTERN_WIN = Pattern.compile("[\\\\/:*?\"<>|]");
 
     /**
-     * 返回文件名
+     * Return file name
      *
-     * @param file 文件
-     * @return 文件名
+     * @param file File
+     * @return File name
      */
     public static String getName(File file) {
         return (null != file) ? file.getName() : null;
     }
 
     /**
-     * 返回文件名
+     * Return file name
      *
-     * @param filePath 文件
-     * @return 文件名
+     * @param filePath File path
+     * @return File name
      */
     public static String getName(String filePath) {
         if (null == filePath) {
@@ -67,7 +66,7 @@ public class FileUtil {
         }
 
         if (isFileSeparator(filePath.charAt(len - 1))) {
-            // 以分隔符结尾的去掉结尾分隔符
+            // Remove trailing separator
             len--;
         }
 
@@ -76,7 +75,7 @@ public class FileUtil {
         for (int i = len - 1; i > -1; i--) {
             c = filePath.charAt(i);
             if (isFileSeparator(c)) {
-                // 查找最后一个路径分隔符（/或者\）
+                // Find the last path separator (/ or \)
                 begin = i + 1;
                 break;
             }
@@ -86,10 +85,10 @@ public class FileUtil {
     }
 
     /**
-     * 获取文件后缀名，扩展名不带“.”
+     * Get file extension, extension without "."
      *
-     * @param file 文件
-     * @return 扩展名
+     * @param file File
+     * @return Extension
      * @see #extName(File)
      */
     public static String getSuffix(File file) {
@@ -97,10 +96,10 @@ public class FileUtil {
     }
 
     /**
-     * 获得文件后缀名，扩展名不带“.”
+     * Get file extension, extension without "."
      *
-     * @param fileName 文件名
-     * @return 扩展名
+     * @param fileName File name
+     * @return Extension
      * @see #extName(String)
      */
     public static String getSuffix(String fileName) {
@@ -108,10 +107,10 @@ public class FileUtil {
     }
 
     /**
-     * 返回主文件名
+     * Return main file name
      *
-     * @param file 文件
-     * @return 主文件名
+     * @param file File
+     * @return Main file name
      * @see #mainName(File)
      */
     public static String getPrefix(File file) {
@@ -119,10 +118,10 @@ public class FileUtil {
     }
 
     /**
-     * 返回主文件名
+     * Return main file name
      *
-     * @param fileName 完整文件名
-     * @return 主文件名
+     * @param fileName Full file name
+     * @return Main file name
      * @see #mainName(String)
      */
     public static String getPrefix(String fileName) {
@@ -130,9 +129,9 @@ public class FileUtil {
     }
 
     /**
-     * 返回主文件名
+     * Return main file name
      *
-     * @param file 文件
+     * @param file File
      */
     public static String mainName(File file) {
         if (file.isDirectory()) {
@@ -142,9 +141,9 @@ public class FileUtil {
     }
 
     /**
-     * 返回主文件名
+     * Return main file name
      *
-     * @param fileName 完整文件名
+     * @param fileName Full file name
      */
     public static String mainName(String fileName) {
         if (null == fileName) {
@@ -164,10 +163,10 @@ public class FileUtil {
         for (int i = len - 1; i >= 0; i--) {
             c = fileName.charAt(i);
             if (len == end && CharConstants.DOT == c) {
-                // 查找最后一个文件名和扩展名的分隔符：.
+                // Find the last separator between file name and extension: .
                 end = i;
             }
-            // 查找最后一个路径分隔符（/或者\），如果这个分隔符在.之后，则继续查找，否则结束
+            // Find the last path separator (/ or \), if this separator is after ., continue searching, otherwise stop
             if (isFileSeparator(c)) {
                 begin = i + 1;
                 break;
@@ -178,21 +177,21 @@ public class FileUtil {
     }
 
     /**
-     * 是否为Windows或者Linux（Unix）文件分隔符<br>
-     * Windows平台下分隔符为\，Linux（Unix）为/
+     * Whether it is a Windows or Linux (Unix) file separator<br>
+     * Windows platform separator is \, Linux (Unix) is /
      *
-     * @param c 字符
-     * @return 是否为Windows或者Linux（Unix）文件分隔符
+     * @param c Character
+     * @return Whether it is a Windows or Linux (Unix) file separator
      */
     public static boolean isFileSeparator(char c) {
         return CharConstants.SLASH == c || CharConstants.BACKSLASH == c;
     }
 
     /**
-     * 获取文件扩展名（后缀名），扩展名不带“.”
+     * Get file extension (suffix), extension without "."
      *
-     * @param file 文件
-     * @return 扩展名
+     * @param file File
+     * @return Extension
      */
     public static String extName(File file) {
         if (null == file) {
@@ -205,10 +204,10 @@ public class FileUtil {
     }
 
     /**
-     * 获得文件的扩展名（后缀名），扩展名不带“.”
+     * Get file extension (suffix), extension without "."
      *
-     * @param fileName 文件名
-     * @return 扩展名
+     * @param fileName File name
+     * @return Extension
      */
     public static String extName(String fileName) {
         if (fileName == null) {
@@ -219,17 +218,17 @@ public class FileUtil {
             return "";
         } else {
             String ext = fileName.substring(index + 1);
-            // 扩展名中不能包含路径相关的符号
+            // Extension cannot contain path-related symbols
             return StringUtil.containsAny(ext, UNIX_SEPARATOR, WINDOWS_SEPARATOR) ? "" : ext;
         }
     }
 
     /**
-     * 修复路径<br>
-     * 如果原路径尾部有分隔符，则保留为标准分隔符（/），否则不保留
+     * Normalize path<br>
+     * If the original path ends with a separator, keep it as a standard separator (/), otherwise don't keep
      *
-     * @param path 原路径
-     * @return 修复后的路径
+     * @param path Original path
+     * @return Normalized path
      */
     public static String normalize(String path) {
         if (path == null) {
@@ -237,23 +236,23 @@ public class FileUtil {
         }
         String pathToUse = path;
         if (path.startsWith(SystemConstants.CLASSPATH_URL_PREFIX)) {
-            // 兼容Spring风格的ClassPath路径，去除前缀，不区分大小写
+            // Compatible with Spring-style ClassPath paths, remove prefix, case insensitive
              pathToUse = StringUtil.removePrefixIgnoreCase(path, SystemConstants.CLASSPATH_URL_PREFIX);
-            // 如果path 去掉 classpath 之后只剩下 '/' 则 替换为 ""
+            // If path after removing classpath is only '/' then replace with ""
             if (pathToUse.trim().equalsIgnoreCase(String.valueOf(CharConstants.SLASH))) {
                 pathToUse = "";
             }
         }
 
         if (path.startsWith(SystemConstants.FILE_URL_PREFIX)) {
-            // 去除file:前缀
+            // Remove file: prefix
             pathToUse = StringUtil.removePrefixIgnoreCase(pathToUse, SystemConstants.FILE_URL_PREFIX);
             if (StringUtil.isEmpty(pathToUse)) {
-                // 去除file:如果为空 则为根目录
+                // Remove file: if empty then it's root directory
                 pathToUse = CharConstants.SLASH + "";
             }
 
-            // 识别home目录形式，并转换为绝对路径
+            // Recognize home directory format and convert to absolute path
             if (pathToUse.startsWith(SystemConstants.USER_HOME_SHORT)) {
                 pathToUse = pathToUse.replace(SystemConstants.USER_HOME_SHORT, SystemConstants.USER_HOME);
             }
@@ -263,9 +262,9 @@ public class FileUtil {
     }
 
     /**
-     * 创建File对象，相当于调用new File()，不做任何处理
+     * Create File object, equivalent to calling new File(), no processing
      *
-     * @param path 文件路径
+     * @param path File path
      * @return File
      */
     public static File newFile(String path) {
@@ -273,19 +272,25 @@ public class FileUtil {
     }
 
     /**
-     * 获得URL，常用于使用绝对路径时的情况
+     * Get URL, commonly used when using absolute paths
      *
-     * @param file URL对应的文件对象
+     * @param file File object corresponding to URL
      * @return URL
      */
     public static URL getURL(File file) {
         try {
             return file.toURI().toURL();
         } catch (MalformedURLException e) {
-            throw new RuntimeException("Error occured when get URL!", e);
+            throw new RuntimeException("Error occurred when get URL!", e);
         }
     }
 
+    /**
+     * Check if file is an image file
+     *
+     * @param fileName File name
+     * @return true if it's an image file, false otherwise
+     */
     public static boolean isImageFile(String fileName) {
         return fileName.endsWith(".png")  ||
                 fileName.endsWith(".jpg")  ||
@@ -293,5 +298,4 @@ public class FileUtil {
                 fileName.endsWith(".svg")  ||
                 fileName.endsWith(".gif");
     }
-
 }

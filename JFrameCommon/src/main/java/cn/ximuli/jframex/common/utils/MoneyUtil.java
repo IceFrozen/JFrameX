@@ -4,29 +4,32 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * 用于支付相关的分与元的转换。
- * 金额相关不允许用float和double类型，只能用BigDecimal。
+ * Utility class for payment-related conversions between fen and yuan.
+ * For monetary calculations, float and double types are not allowed, only BigDecimal should be used.
+ *
+ * @author lizhipeng
+ * @email taozi031@163.com
  */
 public class MoneyUtil {
     private static final String YUAN = "元";
-    private  static final int DEFAULT_SCALE = 2;
+    private static final int DEFAULT_SCALE = 2;
     private static final int DEFAULT_ROUNDING_MODE = BigDecimal.ROUND_HALF_UP;
 
     /**
-     * Long分转BigDecimal元
+     * Convert Long fen to BigDecimal yuan
      *
-     * @param fen Long表示的分
-     * @return BigDecimal表示的元
+     * @param fen Long value representing fen
+     * @return BigDecimal value representing yuan
      */
     public static BigDecimal fenToYuan(Long fen) {
         return fenToYuan(fen, DEFAULT_SCALE);
     }
 
     /**
-     * Long分转BigDecimal元，指定精确位数。要求指定的位数不会丢失精度
-     * @param fen Long表示的分
-     * @param scale 小数点后精确位数
-     * @return Long表示的分
+     * Convert Long fen to BigDecimal yuan with specified precision scale. The specified scale must not lose precision.
+     * @param fen Long value representing fen
+     * @param scale Precision scale after decimal point
+     * @return Long value representing fen
      */
     public static BigDecimal fenToYuan(Long fen, int scale) {
         if (fen == null) {
@@ -36,21 +39,21 @@ public class MoneyUtil {
     }
 
     /**
-     * Integer分转BigDecimal元
+     * Convert Integer fen to BigDecimal yuan
      *
-     * @param fen Integer表示的分
-     * @return BigDecimal表示的元
+     * @param fen Integer value representing fen
+     * @return BigDecimal value representing yuan
      */
     public static BigDecimal fenToYuan(Integer fen) {
         return fenToYuan(fen, DEFAULT_SCALE);
     }
 
     /**
-     * Integer分转BigDecimal元，指定精确位数。要求指定的位数不会丢失精度
+     * Convert Integer fen to BigDecimal yuan with specified precision scale. The specified scale must not lose precision.
      *
-     * @param fen Integer表示的分
-     * @param scale 小数点后精确位数
-     * @return BigDecimal表示的元
+     * @param fen Integer value representing fen
+     * @param scale Precision scale after decimal point
+     * @return BigDecimal value representing yuan
      */
     public static BigDecimal fenToYuan(Integer fen, int scale) {
         if (fen == null) {
@@ -60,23 +63,23 @@ public class MoneyUtil {
     }
 
     /**
-     * Integer分转字符串元
+     * Convert Integer fen to String yuan
      *
-     * @param fen 分
-     * @param withUnit 是否带单位“元”
-     * @return 字符串的元
+     * @param fen fen value
+     * @param withUnit whether to include "yuan" unit
+     * @return String representation of yuan
      */
     public static String fenToYuanString(Integer fen, boolean withUnit) {
         return fenToYuanString(fen, DEFAULT_SCALE, withUnit);
     }
 
     /**
-     * Integer分转字符串元，指定精确位数
+     * Convert Integer fen to String yuan with specified precision scale
      *
-     * @param fen 分
-     * @param scale 小数点后精确位数
-     * @param withUnit 是否带单位“元”
-     * @return 字符串的元
+     * @param fen fen value
+     * @param scale Precision scale after decimal point
+     * @param withUnit whether to include "yuan" unit
+     * @return String representation of yuan
      */
     public static String fenToYuanString(Integer fen, int scale, boolean withUnit) {
         BigDecimal yuan = fenToYuan(fen, scale);
@@ -91,23 +94,23 @@ public class MoneyUtil {
     }
 
     /**
-     * BigDecimal分转字符串元
+     * Convert BigDecimal fen to String yuan
      *
-     * @param fen 分
-     * @param withUnit 是否带单位“元”
-     * @return 字符串的元
+     * @param fen fen value
+     * @param withUnit whether to include "yuan" unit
+     * @return String representation of yuan
      */
     public static String fenToYuanString(BigDecimal fen, boolean withUnit) {
         return fenToYuanString(fen, DEFAULT_SCALE, withUnit);
     }
 
     /**
-     * BigDecimal分转字符串元，指定精确位数
+     * Convert BigDecimal fen to String yuan with specified precision scale
      *
-     * @param fen 分
-     * @param scale 小数点后精确位数
-     * @param withUnit 是否带单位“元”
-     * @return 字符串的元
+     * @param fen fen value
+     * @param scale Precision scale after decimal point
+     * @param withUnit whether to include "yuan" unit
+     * @return String representation of yuan
      */
     public static String fenToYuanString(BigDecimal fen, int scale, boolean withUnit) {
         if (fen == null) {
@@ -122,23 +125,23 @@ public class MoneyUtil {
     }
 
     /**
-     * Long 分转元字符串
+     * Convert Long fen to String yuan
      *
-     * @param fen Long表示的分
-     * @param withUnit 是否带单位“元”
-     * @return 字符串的元
+     * @param fen Long value representing fen
+     * @param withUnit whether to include "yuan" unit
+     * @return String representation of yuan
      */
     public static String fenToYuanString(Long fen, boolean withUnit) {
         return fenToYuanString(fen, DEFAULT_SCALE, withUnit);
     }
 
     /**
-     * Long 分转元字符串，指定精确位数
+     * Convert Long fen to String yuan with specified precision scale
      *
-     * @param fen Long表示的分
-     * @param scale 小数点后精确位数
-     * @param withUnit 是否带单位“元”
-     * @return 字符串的元
+     * @param fen Long value representing fen
+     * @param scale Precision scale after decimal point
+     * @param withUnit whether to include "yuan" unit
+     * @return String representation of yuan
      */
     public static String fenToYuanString(Long fen, int scale, boolean withUnit) {
         BigDecimal yuan = fenToYuan(fen, scale);
@@ -153,23 +156,23 @@ public class MoneyUtil {
     }
 
     /**
-     * String的元转Long的分。若有比分小的部分，默认将会四舍五入
-     * @param yuan 元
-     * @return Long表示的fen
+     * Convert String yuan to Long fen. If there are fractional parts smaller than fen, they will be rounded by default.
+     * @param yuan yuan value
+     * @return Long value representing fen
      */
     public static Long yuanStringToFen(String yuan) {
         return yuanStringToFen(yuan, DEFAULT_ROUNDING_MODE);
     }
 
     /**
-     * String的元转Long的分，指定取整模式
-     * @param yuan 元
-     * @param roundingMode 取整模式
-     * @return Long表示的fen
+     * Convert String yuan to Long fen with specified rounding mode
+     * @param yuan yuan value
+     * @param roundingMode rounding mode
+     * @return Long value representing fen
      */
     public static Long yuanStringToFen(String yuan, int roundingMode) {
         BigDecimal bigDecimal = new BigDecimal(yuan);
-        // 保留两位小数
+        // Keep two decimal places
         bigDecimal = bigDecimal.setScale(2, roundingMode);
         BigDecimal multiply = bigDecimal.multiply(new BigDecimal(100));
         return multiply.longValue();

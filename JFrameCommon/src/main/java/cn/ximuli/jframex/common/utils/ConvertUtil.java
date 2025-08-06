@@ -1,6 +1,5 @@
 package cn.ximuli.jframex.common.utils;
 
-
 import cn.ximuli.jframex.common.constants.BaseConstants;
 
 import java.math.BigDecimal;
@@ -9,15 +8,22 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.text.NumberFormat;
 
+/**
+ * Convert Utility Class
+ * Provides various data type conversion methods
+ *
+ * @author lizhipeng
+ * @email taozi031@163.com
+ */
 public class ConvertUtil {
- /**
-     * 转换为字符串<br>
-     * 如果给定的值为null，或者转换失败，返回默认值<br>
-     * 转换失败不会报错
+    /**
+     * Convert to String<br>
+     * If the given value is null or conversion fails, return the default value<br>
+     * Conversion failure will not throw an exception
      *
-     * @param value        被转换的值
-     * @param defaultValue 转换错误时的默认值
-     * @return 结果
+     * @param value        Value to be converted
+     * @param defaultValue Default value when conversion fails
+     * @return Result
      */
     public static String toStr(Object value, String defaultValue) {
         if (null == value) {
@@ -30,25 +36,25 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为字符串<br>
-     * 如果给定的值为<code>null</code>，或者转换失败，返回默认值<code>null</code><br>
-     * 转换失败不会报错
+     * Convert to String<br>
+     * If the given value is <code>null</code> or conversion fails, return default value <code>null</code><br>
+     * Conversion failure will not throw an exception
      *
-     * @param value 被转换的值
-     * @return 结果
+     * @param value Value to be converted
+     * @return Result
      */
     public static String toStr(Object value) {
         return toStr(value, null);
     }
 
     /**
-     * 转换为字符<br>
-     * 如果给定的值为null，或者转换失败，返回默认值<br>
-     * 转换失败不会报错
+     * Convert to Character<br>
+     * If the given value is null or conversion fails, return the default value<br>
+     * Conversion failure will not throw an exception
      *
-     * @param value        被转换的值
-     * @param defaultValue 转换错误时的默认值
-     * @return 结果
+     * @param value        Value to be converted
+     * @param defaultValue Default value when conversion fails
+     * @return Result
      */
     public static Character toChar(Object value, Character defaultValue) {
         if (null == value) {
@@ -63,25 +69,25 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为字符<br>
-     * 如果给定的值为<code>null</code>，或者转换失败，返回默认值<code>null</code><br>
-     * 转换失败不会报错
+     * Convert to Character<br>
+     * If the given value is <code>null</code> or conversion fails, return default value <code>null</code><br>
+     * Conversion failure will not throw an exception
      *
-     * @param value 被转换的值
-     * @return 结果
+     * @param value Value to be converted
+     * @return Result
      */
     public static Character toChar(Object value) {
         return toChar(value, null);
     }
 
     /**
-     * 转换为byte<br>
-     * 如果给定的值为<code>null</code>，或者转换失败，返回默认值<br>
-     * 转换失败不会报错
+     * Convert to Byte<br>
+     * If the given value is <code>null</code> or conversion fails, return the default value<br>
+     * Conversion failure will not throw an exception
      *
-     * @param value        被转换的值
-     * @param defaultValue 转换错误时的默认值
-     * @return 结果
+     * @param value        Value to be converted
+     * @param defaultValue Default value when conversion fails
+     * @return Result
      */
     public static Byte toByte(Object value, Byte defaultValue) {
         if (value == null) {
@@ -105,25 +111,25 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为byte<br>
-     * 如果给定的值为<code>null</code>，或者转换失败，返回默认值<code>null</code><br>
-     * 转换失败不会报错
+     * Convert to Byte<br>
+     * If the given value is <code>null</code> or conversion fails, return default value <code>null</code><br>
+     * Conversion failure will not throw an exception
      *
-     * @param value 被转换的值
-     * @return 结果
+     * @param value Value to be converted
+     * @return Result
      */
     public static Byte toByte(Object value) {
         return toByte(value, null);
     }
 
     /**
-     * 转换为Short<br>
-     * 如果给定的值为<code>null</code>，或者转换失败，返回默认值<br>
-     * 转换失败不会报错
+     * Convert to Short<br>
+     * If the given value is <code>null</code> or conversion fails, return the default value<br>
+     * Conversion failure will not throw an exception
      *
-     * @param value        被转换的值
-     * @param defaultValue 转换错误时的默认值
-     * @return 结果
+     * @param value        Value to be converted
+     * @param defaultValue Default value when conversion fails
+     * @return Result
      */
     public static Short toShort(Object value, Short defaultValue) {
         if (value == null) {
@@ -147,25 +153,25 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为Short<br>
-     * 如果给定的值为<code>null</code>，或者转换失败，返回默认值<code>null</code><br>
-     * 转换失败不会报错
+     * Convert to Short<br>
+     * If the given value is <code>null</code> or conversion fails, return default value <code>null</code><br>
+     * Conversion failure will not throw an exception
      *
-     * @param value 被转换的值
-     * @return 结果
+     * @param value Value to be converted
+     * @return Result
      */
     public static Short toShort(Object value) {
         return toShort(value, null);
     }
 
     /**
-     * 转换为Number<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<br>
-     * 转换失败不会报错
+     * Convert to Number<br>
+     * If the given value is empty or conversion fails, return the default value<br>
+     * Conversion failure will not throw an exception
      *
-     * @param value        被转换的值
-     * @param defaultValue 转换错误时的默认值
-     * @return 结果
+     * @param value        Value to be converted
+     * @param defaultValue Default value when conversion fails
+     * @return Result
      */
     public static Number toNumber(Object value, Number defaultValue) {
         if (value == null) {
@@ -186,25 +192,25 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为Number<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<code>null</code><br>
-     * 转换失败不会报错
+     * Convert to Number<br>
+     * If the given value is empty or conversion fails, return default value <code>null</code><br>
+     * Conversion failure will not throw an exception
      *
-     * @param value 被转换的值
-     * @return 结果
+     * @param value Value to be converted
+     * @return Result
      */
     public static Number toNumber(Object value) {
         return toNumber(value, null);
     }
 
     /**
-     * 转换为int<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<br>
-     * 转换失败不会报错
+     * Convert to Integer<br>
+     * If the given value is empty or conversion fails, return the default value<br>
+     * Conversion failure will not throw an exception
      *
-     * @param value        被转换的值
-     * @param defaultValue 转换错误时的默认值
-     * @return 结果
+     * @param value        Value to be converted
+     * @param defaultValue Default value when conversion fails
+     * @return Result
      */
     public static Integer toInt(Object value, Integer defaultValue) {
         if (value == null) {
@@ -228,43 +234,43 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为int<br>
-     * 如果给定的值为<code>null</code>，或者转换失败，返回默认值<code>null</code><br>
-     * 转换失败不会报错
+     * Convert to Integer<br>
+     * If the given value is <code>null</code> or conversion fails, return default value <code>null</code><br>
+     * Conversion failure will not throw an exception
      *
-     * @param value 被转换的值
-     * @return 结果
+     * @param value Value to be converted
+     * @return Result
      */
     public static Integer toInt(Object value) {
         return toInt(value, null);
     }
 
     /**
-     * 转换为Integer数组<br>
+     * Convert to Integer array<br>
      *
-     * @param str 被转换的值
-     * @return 结果
+     * @param str Value to be converted
+     * @return Result
      */
     public static Integer[] toIntArray(String str) {
         return toIntArray(",", str);
     }
 
     /**
-     * 转换为Long数组<br>
+     * Convert to Long array<br>
      *
-     * @param str 被转换的值
-     * @return 结果
+     * @param str Value to be converted
+     * @return Result
      */
     public static Long[] toLongArray(String str) {
         return toLongArray(",", str);
     }
 
     /**
-     * 转换为Integer数组<br>
+     * Convert to Integer array<br>
      *
-     * @param split 分隔符
-     * @param str 被转换的值
-     * @return 结果
+     * @param split Separator
+     * @param str   Value to be converted
+     * @return Result
      */
     public static Integer[] toIntArray(String split, String str) {
         if (StringUtil.isEmpty(str)) {
@@ -280,11 +286,11 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为Long数组<br>
+     * Convert to Long array<br>
      *
-     * @param split 分隔符
-     * @param str   被转换的值
-     * @return 结果
+     * @param split Separator
+     * @param str   Value to be converted
+     * @return Result
      */
     public static Long[] toLongArray(String split, String str) {
         if (StringUtil.isEmpty(str)) {
@@ -300,34 +306,34 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为String数组<br>
+     * Convert to String array<br>
      *
-     * @param str 被转换的值
-     * @return 结果
+     * @param str Value to be converted
+     * @return Result
      */
     public static String[] toStrArray(String str) {
         return toStrArray(",", str);
     }
 
     /**
-     * 转换为String数组<br>
+     * Convert to String array<br>
      *
-     * @param split 分隔符
-     * @param str 被转换的值
-     * @return 结果
+     * @param split Separator
+     * @param str   Value to be converted
+     * @return Result
      */
     public static String[] toStrArray(String split, String str) {
         return str.split(split);
     }
 
     /**
-     * 转换为long<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<br>
-     * 转换失败不会报错
+     * Convert to Long<br>
+     * If the given value is empty or conversion fails, return the default value<br>
+     * Conversion failure will not throw an exception
      *
-     * @param value        被转换的值
-     * @param defaultValue 转换错误时的默认值
-     * @return 结果
+     * @param value        Value to be converted
+     * @param defaultValue Default value when conversion fails
+     * @return Result
      */
     public static Long toLong(Object value, Long defaultValue) {
         if (value == null) {
@@ -344,7 +350,7 @@ public class ConvertUtil {
             return defaultValue;
         }
         try {
-            // 支持科学计数法
+            // Support scientific notation
             return new BigDecimal(valueStr.trim()).longValue();
         } catch (Exception e) {
             return defaultValue;
@@ -352,25 +358,25 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为long<br>
-     * 如果给定的值为<code>null</code>，或者转换失败，返回默认值<code>null</code><br>
-     * 转换失败不会报错
+     * Convert to Long<br>
+     * If the given value is <code>null</code> or conversion fails, return default value <code>null</code><br>
+     * Conversion failure will not throw an exception
      *
-     * @param value 被转换的值
-     * @return 结果
+     * @param value Value to be converted
+     * @return Result
      */
     public static Long toLong(Object value) {
         return toLong(value, null);
     }
 
     /**
-     * 转换为double<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<br>
-     * 转换失败不会报错
+     * Convert to Double<br>
+     * If the given value is empty or conversion fails, return the default value<br>
+     * Conversion failure will not throw an exception
      *
-     * @param value        被转换的值
-     * @param defaultValue 转换错误时的默认值
-     * @return 结果
+     * @param value        Value to be converted
+     * @param defaultValue Default value when conversion fails
+     * @return Result
      */
     public static Double toDouble(Object value, Double defaultValue) {
         if (value == null) {
@@ -387,7 +393,7 @@ public class ConvertUtil {
             return defaultValue;
         }
         try {
-            // 支持科学计数法
+            // Support scientific notation
             return new BigDecimal(valueStr.trim()).doubleValue();
         } catch (Exception e) {
             return defaultValue;
@@ -395,25 +401,25 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为double<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<code>null</code><br>
-     * 转换失败不会报错
+     * Convert to Double<br>
+     * If the given value is empty or conversion fails, return default value <code>null</code><br>
+     * Conversion failure will not throw an exception
      *
-     * @param value 被转换的值
-     * @return 结果
+     * @param value Value to be converted
+     * @return Result
      */
     public static Double toDouble(Object value) {
         return toDouble(value, null);
     }
 
     /**
-     * 转换为Float<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<br>
-     * 转换失败不会报错
+     * Convert to Float<br>
+     * If the given value is empty or conversion fails, return the default value<br>
+     * Conversion failure will not throw an exception
      *
-     * @param value        被转换的值
-     * @param defaultValue 转换错误时的默认值
-     * @return 结果
+     * @param value        Value to be converted
+     * @param defaultValue Default value when conversion fails
+     * @return Result
      */
     public static Float toFloat(Object value, Float defaultValue) {
         if (value == null) {
@@ -437,25 +443,25 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为Float<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<code>null</code><br>
-     * 转换失败不会报错
+     * Convert to Float<br>
+     * If the given value is empty or conversion fails, return default value <code>null</code><br>
+     * Conversion failure will not throw an exception
      *
-     * @param value 被转换的值
-     * @return 结果
+     * @param value Value to be converted
+     * @return Result
      */
     public static Float toFloat(Object value) {
         return toFloat(value, null);
     }
 
     /**
-     * 转换为boolean<br>
-     * String支持的值为：true、false、yes、ok、no，1,0 如果给定的值为空，或者转换失败，返回默认值<br>
-     * 转换失败不会报错
+     * Convert to Boolean<br>
+     * String supported values: true, false, yes, ok, no, 1, 0. If the given value is empty or conversion fails, return the default value<br>
+     * Conversion failure will not throw an exception
      *
-     * @param value        被转换的值
-     * @param defaultValue 转换错误时的默认值
-     * @return 结果
+     * @param value        Value to be converted
+     * @param defaultValue Default value when conversion fails
+     * @return Result
      */
     public static Boolean toBool(Object value, Boolean defaultValue) {
         if (value == null) {
@@ -490,24 +496,24 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为boolean<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<code>null</code><br>
-     * 转换失败不会报错
+     * Convert to Boolean<br>
+     * If the given value is empty or conversion fails, return default value <code>null</code><br>
+     * Conversion failure will not throw an exception
      *
-     * @param value 被转换的值
-     * @return 结果
+     * @param value Value to be converted
+     * @return Result
      */
     public static Boolean toBool(Object value) {
         return toBool(value, null);
     }
 
     /**
-     * 转换为Enum对象<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<br>
+     * Convert to Enum object<br>
+     * If the given value is empty or conversion fails, return the default value<br>
      *
-     * @param clazz        Enum的Class
-     * @param value        值
-     * @param defaultValue 默认值
+     * @param clazz        Enum class
+     * @param value        Value
+     * @param defaultValue Default value
      * @return Enum
      */
     public static <E extends Enum<E>> E toEnum(Class<E> clazz, Object value, E defaultValue) {
@@ -531,11 +537,11 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为Enum对象<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<code>null</code><br>
+     * Convert to Enum object<br>
+     * If the given value is empty or conversion fails, return default value <code>null</code><br>
      *
-     * @param clazz Enum的Class
-     * @param value 值
+     * @param clazz Enum class
+     * @param value Value
      * @return Enum
      */
     public static <E extends Enum<E>> E toEnum(Class<E> clazz, Object value) {
@@ -543,13 +549,13 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为BigInteger<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<br>
-     * 转换失败不会报错
+     * Convert to BigInteger<br>
+     * If the given value is empty or conversion fails, return the default value<br>
+     * Conversion failure will not throw an exception
      *
-     * @param value        被转换的值
-     * @param defaultValue 转换错误时的默认值
-     * @return 结果
+     * @param value        Value to be converted
+     * @param defaultValue Default value when conversion fails
+     * @return Result
      */
     public static BigInteger toBigInteger(Object value, BigInteger defaultValue) {
         if (value == null) {
@@ -573,25 +579,25 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为BigInteger<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<code>null</code><br>
-     * 转换失败不会报错
+     * Convert to BigInteger<br>
+     * If the given value is empty or conversion fails, return default value <code>null</code><br>
+     * Conversion failure will not throw an exception
      *
-     * @param value 被转换的值
-     * @return 结果
+     * @param value Value to be converted
+     * @return Result
      */
     public static BigInteger toBigInteger(Object value) {
         return toBigInteger(value, null);
     }
 
     /**
-     * 转换为BigDecimal<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<br>
-     * 转换失败不会报错
+     * Convert to BigDecimal<br>
+     * If the given value is empty or conversion fails, return the default value<br>
+     * Conversion failure will not throw an exception
      *
-     * @param value        被转换的值
-     * @param defaultValue 转换错误时的默认值
-     * @return 结果
+     * @param value        Value to be converted
+     * @param defaultValue Default value when conversion fails
+     * @return Result
      */
     public static BigDecimal toBigDecimal(Object value, BigDecimal defaultValue) {
         if (value == null) {
@@ -621,47 +627,47 @@ public class ConvertUtil {
     }
 
     /**
-     * 转换为BigDecimal<br>
-     * 如果给定的值为空，或者转换失败，返回默认值<br>
-     * 转换失败不会报错
+     * Convert to BigDecimal<br>
+     * If the given value is empty or conversion fails, return the default value<br>
+     * Conversion failure will not throw an exception
      *
-     * @param value 被转换的值
-     * @return 结果
+     * @param value Value to be converted
+     * @return Result
      */
     public static BigDecimal toBigDecimal(Object value) {
         return toBigDecimal(value, null);
     }
 
     /**
-     * 将对象转为字符串<br>
-     * 1、Byte数组和ByteBuffer会被转换为对应字符串的数组 2、对象数组会调用Arrays.toString方法
+     * Convert object to string<br>
+     * 1. Byte array and ByteBuffer will be converted to corresponding string arrays 2. Object arrays will call Arrays.toString method
      *
-     * @param obj 对象
-     * @return 字符串
+     * @param obj Object
+     * @return String
      */
     public static String utf8Str(Object obj) {
         return str(obj, BaseConstants.UTF8);
     }
 
     /**
-     * 将对象转为字符串<br>
-     * 1、Byte数组和ByteBuffer会被转换为对应字符串的数组 2、对象数组会调用Arrays.toString方法
+     * Convert object to string<br>
+     * 1. Byte array and ByteBuffer will be converted to corresponding string arrays 2. Object arrays will call Arrays.toString method
      *
-     * @param obj         对象
-     * @param charsetName 字符集
-     * @return 字符串
+     * @param obj         Object
+     * @param charsetName Character set
+     * @return String
      */
     public static String str(Object obj, String charsetName) {
         return str(obj, Charset.forName(charsetName));
     }
 
     /**
-     * 将对象转为字符串<br>
-     * 1、Byte数组和ByteBuffer会被转换为对应字符串的数组 2、对象数组会调用Arrays.toString方法
+     * Convert object to string<br>
+     * 1. Byte array and ByteBuffer will be converted to corresponding string arrays 2. Object arrays will call Arrays.toString method
      *
-     * @param obj     对象
-     * @param charset 字符集
-     * @return 字符串
+     * @param obj     Object
+     * @param charset Character set
+     * @return String
      */
     public static String str(Object obj, Charset charset) {
         if (null == obj) {
@@ -679,22 +685,22 @@ public class ConvertUtil {
     }
 
     /**
-     * 将byte数组转为字符串
+     * Convert byte array to string
      *
-     * @param bytes   byte数组
-     * @param charset 字符集
-     * @return 字符串
+     * @param bytes   Byte array
+     * @param charset Character set
+     * @return String
      */
     public static String str(byte[] bytes, String charset) {
         return str(bytes, StringUtil.isEmpty(charset) ? Charset.defaultCharset() : Charset.forName(charset));
     }
 
     /**
-     * 解码字节码
+     * Decode byte data
      *
-     * @param data    字符串
-     * @param charset 字符集，如果此字段为空，则解码的结果取决于平台
-     * @return 解码后的字符串
+     * @param data    String
+     * @param charset Character set, if this field is empty, the decoding result depends on the platform
+     * @return Decoded string
      */
     public static String str(byte[] data, Charset charset) {
         if (data == null) {
@@ -708,11 +714,11 @@ public class ConvertUtil {
     }
 
     /**
-     * 将编码的byteBuffer数据转换为字符串
+     * Convert encoded byteBuffer data to string
      *
-     * @param data    数据
-     * @param charset 字符集，如果为空使用当前系统字符集
-     * @return 字符串
+     * @param data    Data
+     * @param charset Character set, if empty use current system character set
+     * @return String
      */
     public static String str(ByteBuffer data, String charset) {
         if (data == null) {
@@ -723,11 +729,11 @@ public class ConvertUtil {
     }
 
     /**
-     * 将编码的byteBuffer数据转换为字符串
+     * Convert encoded byteBuffer data to string
      *
-     * @param data    数据
-     * @param charset 字符集，如果为空使用当前系统字符集
-     * @return 字符串
+     * @param data    Data
+     * @param charset Character set, if empty use current system character set
+     * @return String
      */
     public static String str(ByteBuffer data, Charset charset) {
         if (null == charset) {
@@ -737,10 +743,11 @@ public class ConvertUtil {
     }
 
     /**
-     * 数字金额大写转换 先写个完整的然后将如零拾替换成零
+     * Convert numeric amount to uppercase Chinese
+     * First write a complete version then replace like "zero ten" with "zero"
      *
-     * @param n 数字
-     * @return 中文大写数字
+     * @param n Number
+     * @return Uppercase Chinese number
      */
     public static String digitUppercase(double n) {
         String[] fraction = {"角", "分"};

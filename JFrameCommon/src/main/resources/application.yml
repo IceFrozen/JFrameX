@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: JFrameX
-
-splash:
-    image: classpath:/splash.jpg

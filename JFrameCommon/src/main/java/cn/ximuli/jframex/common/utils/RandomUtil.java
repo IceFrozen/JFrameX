@@ -5,74 +5,77 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * 随机工具类
+ * Random Utility Class
  *
  * @author lizhipeng
+ * @email taozi031@163.com
  */
 public class RandomUtil {
 
 	/**
-	 * 用于随机选的数字
+	 * Numbers used for random selection
 	 */
 	public static final String BASE_NUMBER = "0123456789";
 	/**
-	 * 用于随机选的字符
+	 * Characters used for random selection
 	 */
 	public static final String BASE_CHAR = "abcdefghijklmnopqrstuvwxyz";
 	/**
-	 * 用于随机选的字符和数字
+	 * Characters and numbers used for random selection
 	 */
 	public static final String BASE_CHAR_NUMBER = BASE_CHAR + BASE_NUMBER;
 
 	/**
-	 * 获取随机数生成器对象<br>
-	 * ThreadLocalRandom是JDK 7之后提供并发产生随机数，能够解决多个线程发生的竞争争夺。
-	 * 注意：此方法返回的{@link ThreadLocalRandom}不可以在多线程环境下共享对象，否则有重复随机数问题。
+	 * Get random number generator object<br>
+	 * ThreadLocalRandom is provided in JDK 7 for concurrent random number generation,
+	 * which can solve the competition contention occurring in multiple threads.
+	 * Note: The returned {@link ThreadLocalRandom} object cannot be shared in a multi-threaded
+	 * environment, otherwise there will be duplicate random numbers.
 	 */
 	public static ThreadLocalRandom getRandom() {
 		return ThreadLocalRandom.current();
 	}
 
 	/**
-	 * 获得指定范围内的随机数
+	 * Get random number within specified range
 	 *
-	 * @param min 最小数（包含）
-	 * @param max 最大数（不包含）
-	 * @return 随机数
+	 * @param min Minimum number (inclusive)
+	 * @param max Maximum number (exclusive)
+	 * @return Random number
 	 */
 	public static int randomInt(int min, int max) {
 		return getRandom().nextInt(min, max);
 	}
 
 	/**
-	 * 获得随机数int值
+	 * Get random int value
 	 *
-	 * @return 随机数
+	 * @return Random number
 	 */
 	public static int randomInt() {
 		return getRandom().nextInt();
 	}
 
 	/**
-	 * 随机获得列表中的元素
+	 * Randomly get element from list
 	 *
-	 * @param <T>  元素类型
-	 * @param list 列表
-	 * @return 随机元素
+	 * @param <T>  Element type
+	 * @param list List
+	 * @return Random element
 	 */
 	public static <T> T randomEle(List<T> list) {
 		return list.get(randomInt());
 	}
 
 	/**
-	 * 随机获得列表中的元素
+	 * Randomly get elements from list
 	 *
-	 * @param <T>   元素类型
-	 * @param list  列表
-	 * @param length 长度
-	 * @return 随机元素
+	 * @param <T>    Element type
+	 * @param list   List
+	 * @param length Length
+	 * @return Random elements
 	 */
-	public static  <T>  List<T> randomEle(List<T> list, int length) {
+	public static <T> List<T> randomEle(List<T> list, int length) {
 		List<T> result = new ArrayList<>();
 		for (int i = 0; i < length; i++) {
 			 result.add(list.get(randomInt()));
@@ -80,13 +83,12 @@ public class RandomUtil {
 		return result;
 	}
 
-
 	/**
-	 * 获得一个随机的字符串
+	 * Get a random string
 	 *
-	 * @param baseString 随机字符选取的样本
-	 * @param length     字符串的长度
-	 * @return 随机字符串
+	 * @param baseString Sample characters for random selection
+	 * @param length     String length
+	 * @return Random string
 	 */
 	public static String randomString(String baseString, int length) {
 		if (StringUtil.isEmpty(baseString)) {
@@ -106,4 +108,3 @@ public class RandomUtil {
 	}
 
 }
-

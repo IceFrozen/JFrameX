@@ -1,5 +1,10 @@
 package cn.ximuli.jframex.common.constants;
-
+/**
+ * Content Type Constants
+ *
+ * @author lizhipeng
+ * @email taozi031@163.com
+ */
 public enum ContentTypeConstants {
     URLENCODED("x-www-form-urlencoded", "application/x-www-form-urlencoded"),
     JSON("json", "application/json"),
@@ -20,7 +25,7 @@ public enum ContentTypeConstants {
     MKV("mkv", "video/x-matroska"),
     AVI("avi", "video/x-msvideo"),
     FLV("flv", "video/x-flv");
-    
+
     public String getName() {
         return name;
     }
@@ -45,4 +50,3 @@ public enum ContentTypeConstants {
         this.contentType = contentType;
     }
 }
-

@@ -34,8 +34,6 @@ public class PermissionConstants {
     public static final String APP_MENU_VIEW_SHOW_TOOLBAR = "app.menu.view.show.toolbar";
     public static final String APP_MENU_VIEW_BUTTON_GROUP = "app.menu.view.button.group";
     public static final String APP_MENU_VIEW_SHOW_VIEW = "app.menu.view.show.view";
-
-
     public static final String MENU_USER = "app.menu.user";
     public static final String FRAME_USER_DETAIL = "app.menu.user.internal.userService";
     public static final String MENU_OPTIONS = "app.menu.options";
@@ -55,21 +53,15 @@ public class PermissionConstants {
     public static final String TOOLBAR_EDIT = "TOOLBAR_EDIT";
     public static final String TOOLBAR_VIEW = "TOOLBAR_VIEW";
 
-
-
     public static final String SYSTEM_SETTINGS = "app.setting";
     public static final String SYSTEM_CONFIG = "SYSTEM_CONFIG";
     public static final String SYSTEM_BACKUP = "SYSTEM_BACKUP";
     public static final String SYSTEM_RESTORE = "SYSTEM_RESTORE";
-
-
-
 
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_GUEST = "ROLE_GUEST";
     public static final String ROLE_OPERATOR = "ROLE_OPERATOR";
     public static final String ROLE_MANAGER = "ROLE_MANAGER";
-
 
 }

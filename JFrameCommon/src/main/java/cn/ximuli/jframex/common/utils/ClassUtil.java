@@ -5,6 +5,12 @@ import org.apache.commons.lang3.ClassUtils;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * ClassUtil Utility Class
+ *
+ * @author lizhipeng
+ * @email taozi031@163.com
+ */
 public class ClassUtil extends ClassUtils {
 
     /**

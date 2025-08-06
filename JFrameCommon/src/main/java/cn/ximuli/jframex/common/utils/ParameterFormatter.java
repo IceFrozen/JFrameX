@@ -5,9 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * 参数格式化
+ * ParameterFormatter
  *
  * @author lizhipeng
+ * @email taozi031@163.com
  */
 final public class ParameterFormatter {
     /**

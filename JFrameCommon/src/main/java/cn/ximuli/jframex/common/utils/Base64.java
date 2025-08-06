@@ -1,9 +1,10 @@
 package cn.ximuli.jframex.common.utils;
 
 /**
- * Base64工具类
+ * Base64 Utility Class
  *
  * @author lizhipeng
+ * @email taozi031@163.com
  */
 public final class Base64 {
     static private final int BASELENGTH = 128;
@@ -63,7 +64,7 @@ public final class Base64 {
     }
 
     /**
-     * Encodes hex octects into Base64
+     * Encodes hex octets into Base64
      *
      * @param binaryData Array containing binaryData
      * @return Encoded Base64 array
@@ -135,10 +136,10 @@ public final class Base64 {
     }
 
     /**
-     * Decodes Base64 data into octects
+     * Decodes Base64 data into octets
      *
      * @param encoded string containing Base64 data
-     * @return Array containind decoded data.
+     * @return Array containing decoded data.
      */
     public static byte[] decode(String encoded) {
         if (encoded == null) {

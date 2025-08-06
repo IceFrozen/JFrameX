@@ -1,32 +1,37 @@
 package cn.ximuli.jframex.common.constants;
 
+/**
+ * System Constants
+ *
+ * @author lizhipeng
+ * @email taozi031@163.com
+ */
 public class SystemConstants {
     /**
-     * 针对ClassPath路径的伪协议前缀（兼容Spring）: "classpath:"
+     * Pseudo-protocol prefix for ClassPath paths (Spring compatible): "classpath:"
      */
     public static final String CLASSPATH_URL_PREFIX = "classpath:";
+
     /**
-     * URL 前缀表示文件: "file:"
+     * URL prefix indicating file: "file:"
      */
     public static final String FILE_URL_PREFIX = "file:";
 
-    /** 当前：点 {@code '..'} */
+    /** Current directory: dot {@code '.'} */
     public static final String CUR_DIR = ".";
 
-    /** 上一层：点 {@code '..'} */
+    /** Parent directory: dot {@code '..'} */
     public static final String PRE_DIR = "..";
 
-    /**用户家目录**/
-    public static final String USER_HOME =  System.getProperty("user.home");
+    /** User home directory */
+    public static final String USER_HOME = System.getProperty("user.home");
 
-    /**用户家目录**/
-    public static final String USER_HOME_SHORT =  "~";
+    /** User home directory shorthand */
+    public static final String USER_HOME_SHORT = "~";
 
-    /**根目录**/
-    public static final String ROOT_DIR =  "/";
+    /** Root directory */
+    public static final String ROOT_DIR = "/";
 
-    /**临时目录**/
-    public static final String TMP_DIR =  "/tmp";
-
-
+    /** Temporary directory */
+    public static final String TMP_DIR = "/tmp";
 }
