@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./Docs/logo2.png" alt="JFrameX Logo" width="200"/>
+  <img src="./Docs/logo2.png" alt="JFrameX Logo" width="500"/>
 </p>
 <p align="center">
   A modern, internationalized Java Swing desktop application framework with rich UI components
@@ -64,30 +64,41 @@ JFrameX is designed with developers in mind, providing tools and features that m
 ## 🛠️ Demo 
 
 <p align="center">
-  <img src="Docs/login.png" width="45%" alt="Light Theme">
-  <img src="Docs/destop.png" width="45%" alt="Dark Theme">
+  <img src="./Docs/logo.png" alt="JFrameX Logo" width="300"/>
 </p>
+
+---
 
 <p align="center">
-  <img src="Docs/container.png" width="45%" alt="Light Theme">
-  <img src="Docs/basic.png" width="45%" alt="Dark Theme">
+  <img src="Docs/login.png" width="100%" alt="Light Theme">
 </p>
-
 <p align="center">
-  <img src="Docs/dark.png" width="45%" alt="Light Theme">
-  <img src="Docs/data.png" width="45%" alt="Dark Theme">
+  <img src="Docs/destop.png" width="100%" alt="Dark Theme">
 </p>
-
 <p align="center">
-  <img src="Docs/container.png" width="45%" alt="Light Theme">
-  <img src="Docs/basic.png" width="45%" alt="Dark Theme">
+  <img src="Docs/container.png" width="100%" alt="Light Theme">
 </p>
-
 <p align="center">
-  <img src="Docs/opt.png" width="45%" alt="Light Theme">
-  <img src="Docs/user.png" width="45%" alt="Dark Theme">
+  <img src="Docs/basic.png" width="100%" alt="Dark Theme">
 </p>
-
+<p align="center">
+  <img src="Docs/dark.png" width="100%" alt="Light Theme">
+</p>
+<p align="center">
+  <img src="Docs/data.png" width="100%" alt="Dark Theme">
+</p>
+<p align="center">
+  <img src="Docs/container.png" width="100%" alt="Light Theme">
+</p>
+<p align="center">
+  <img src="Docs/basic.png" width="100%" alt="Dark Theme">
+</p>
+<p align="center">
+  <img src="Docs/opt.png" width="100%" alt="Light Theme">
+</p>
+<p align="center">
+  <img src="Docs/user.png" width="100%" alt="Dark Theme">
+</p>
 
 
 <p align="center">Made with ❤️ by the ximuli</p>
