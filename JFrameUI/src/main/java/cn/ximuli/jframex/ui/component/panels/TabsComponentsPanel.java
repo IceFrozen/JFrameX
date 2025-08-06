@@ -1,6 +1,5 @@
 package cn.ximuli.jframex.ui.component.panels;
 
-import cn.ximuli.jframex.ui.demo.ScrollablePanel;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatTabbedPaneCloseIcon;
@@ -8,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.layout.AC;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.swing.MigLayout;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -395,7 +393,7 @@ public class TabsComponentsPanel extends JPanel {
 
     private void initComponents(ResourceLoaderManager resources) {
         JScrollPane tabsScrollPane = new JScrollPane();
-        cn.ximuli.jframex.ui.demo.ScrollablePanel panel6 = new ScrollablePanel();
+        ScrollablePanel panel6 = new ScrollablePanel();
         JPanel panel1 = new JPanel();
         JLabel tabPlacementLabel = new JLabel();
         tabPlacementToolBar = new JToolBar();

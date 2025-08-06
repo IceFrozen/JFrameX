@@ -2,8 +2,8 @@ package cn.ximuli.jframex.ui.component.menu;
 
 import cn.ximuli.jframex.common.constants.PermissionConstants;
 import cn.ximuli.jframex.ui.MainFrame;
+import cn.ximuli.jframex.ui.component.panels.NewDialog;
 import cn.ximuli.jframex.ui.internalJFrame.CreateNewInternalJFrame;
-import cn.ximuli.jframex.ui.demo.NewDialog;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.manager.UICreator;

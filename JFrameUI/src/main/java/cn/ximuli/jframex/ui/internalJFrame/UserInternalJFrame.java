@@ -106,8 +106,8 @@ public class UserInternalJFrame extends CommonInternalJFrame {
                     return userService.searchUserByPage(dpPath, input, page.getPage(), page.getPageSize());
                 })
                 .doubleClick((tp, user) -> log.info("double click"))
-                .editClick((tp, user) -> FrameManager.publishEvent(new CreateFrameEvent<>(UserDetailJFrame.class, user)))
-                .delClick((tp, user) -> log.info("user del�?" + user))
+                .editClick((tp, user) -> log.info("edit click"))
+                .delClick((tp, user) -> log.info("user del?" + user))
                 .converter(UserType.class, this::convertUserType)
                 .converter(Department.class, this::convertDepartment)
                 .converter(Status.class, this::convertStatus)
@@ -117,9 +117,7 @@ public class UserInternalJFrame extends CommonInternalJFrame {
     }
 
     private void edit(TablePanel<User> tp, User user) {
-
-
-
+        
     }
 
     private String convertSex(User user, Object value) {
