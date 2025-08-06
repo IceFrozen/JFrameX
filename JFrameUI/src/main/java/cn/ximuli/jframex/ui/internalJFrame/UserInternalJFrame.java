@@ -117,7 +117,7 @@ public class UserInternalJFrame extends CommonInternalJFrame {
     }
 
     private void edit(TablePanel<User> tp, User user) {
-        
+
     }
 
     private String convertSex(User user, Object value) {
