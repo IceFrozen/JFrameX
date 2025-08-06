@@ -4,6 +4,7 @@ import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import java.awt.*;
 
 @Slf4j
 @SettingMenu(value = "app.setting.item.components.all", category = "app.setting.item.category.components", toolTipText = "app.setting.item.components.all.toolTipText", order = 1)
@@ -36,5 +37,4 @@ public class ComponentsShowSettingPanel extends JTabbedPane {
         addTab("Option Pane", optionPanePanel);
         addTab("Extras", extrasPanel);
     }
-
 }

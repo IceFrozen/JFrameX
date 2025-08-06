@@ -4,6 +4,7 @@ import cn.ximuli.jframex.ui.event.FrameSelectedEvent;
 import cn.ximuli.jframex.ui.manager.FrameManager;
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
 import cn.ximuli.jframex.ui.component.panels.DesktopPanel;
+import cn.ximuli.jframex.ui.manager.ThemeUIManager;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -30,6 +31,12 @@ public abstract class CommonInternalJFrame extends JInternalFrame implements Com
         setIconifiable(true);
         setMaximizable(true);
         setClosable(true);
+        ThemeUIManager.themeChangeListener(() -> updateTheme());
+
+    }
+
+    private void updateTheme() {
+        SwingUtilities.updateComponentTreeUI(this);
     }
 
     public abstract void refreshUI();

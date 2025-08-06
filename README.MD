@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./Docs/logo.png" alt="JFrameX Logo" width="200"/>
+  <img src="./Docs/logo2.png" alt="JFrameX Logo" width="200"/>
 </p>
 <p align="center">
   A modern, internationalized Java Swing desktop application framework with rich UI components
@@ -24,11 +24,6 @@ JFrameX comes with built-in internationalization support, allowing your applicat
 - ✅ Chinese (Simplified)
 - ✅ Easy to extend to other languages
 
-<p align="center">
-  <img src="screenshots/internationalization_en.png" width="45%" alt="English Interface">
-  <img src="screenshots/internationalization_zh.png" width="45%" alt="Chinese Interface">
-</p>
-
 ### 🎨 Theme Support
 
 JFrameX supports multiple themes through FlatLaf, providing a modern look and feel for your applications.
@@ -37,11 +32,6 @@ JFrameX supports multiple themes through FlatLaf, providing a modern look and fe
 - ✅ Multiple built-in theme options
 - ✅ Custom theme support
 - ✅ Runtime theme switching
-
-<p align="center">
-  <img src="screenshots/themes_light.png" width="45%" alt="Light Theme">
-  <img src="screenshots/themes_dark.png" width="45%" alt="Dark Theme">
-</p>
 
 ### 🧩 Rich UI Components
 
@@ -70,10 +60,34 @@ JFrameX is designed with developers in mind, providing tools and features that m
 - **MigLayout** - Powerful layout manager
 - **Maven** - Build automation and dependency management
 
-## 📞 Support
 
-For support, please open an issue on the GitHub repository or contact the maintainers.
+## 🛠️ Demo 
 
----
+<p align="center">
+  <img src="Docs/login.png" width="45%" alt="Light Theme">
+  <img src="Docs/destop.png" width="45%" alt="Dark Theme">
+</p>
 
-<p align="center">Made with ❤️ by the ximuli Team</p>
+<p align="center">
+  <img src="Docs/container.png" width="45%" alt="Light Theme">
+  <img src="Docs/basic.png" width="45%" alt="Dark Theme">
+</p>
+
+<p align="center">
+  <img src="Docs/dark.png" width="45%" alt="Light Theme">
+  <img src="Docs/data.png" width="45%" alt="Dark Theme">
+</p>
+
+<p align="center">
+  <img src="Docs/container.png" width="45%" alt="Light Theme">
+  <img src="Docs/basic.png" width="45%" alt="Dark Theme">
+</p>
+
+<p align="center">
+  <img src="Docs/opt.png" width="45%" alt="Light Theme">
+  <img src="Docs/user.png" width="45%" alt="Dark Theme">
+</p>
+
+
+
+<p align="center">Made with ❤️ by the ximuli</p>

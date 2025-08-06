@@ -1,6 +1,7 @@
 package cn.ximuli.jframex.ui.component.panels;
 
 import cn.ximuli.jframex.ui.manager.ResourceLoaderManager;
+import cn.ximuli.jframex.ui.manager.ThemeUIManager;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
 import com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon;
@@ -12,6 +13,7 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
+import java.awt.*;
 
 
 @SettingMenu(value = "app.setting.item.components.basic", category = "app.setting.item.category.components", toolTipText = "app.setting.item.components.basic.toolTipText")

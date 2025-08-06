@@ -19,6 +19,10 @@ public class Application implements CommandLineRunner {
     public static final String APP_INTERNAL_FRAME_PACKAGE = "cn.ximuli.jframex.ui.internalJFrame";
     public static final String APP_COMMON_COMPONENT = "cn.ximuli.jframex.ui.component";
 
+
+    public static final String DEFAULT_USER_NAME = "admin";
+    public static final String DEFAULT_USER_PASSWD = "admin";
+
     public static void main(String[] args) throws Exception {
         log.debug("Start.......{}", args);
         ApplicationInitializer.init(args);

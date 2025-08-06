@@ -47,7 +47,7 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
         User user = currentUser.getUser();
 
         JPanel panel = new JPanel(new MigLayout("wrap 1, insets 30 20 20 20", "[grow, center]", ""));
-        panel.setBackground(Color.WHITE);
+
 
         // Avatar
         JLabel avatarLabel = new JLabel();
@@ -57,22 +57,19 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
 
         // Name
         JLabel nameLabel = new JLabel(user.getName());
-        nameLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
         panel.add(nameLabel);
 
         // Title
         JLabel titleLabel = new JLabel(user.getDepartment().getName());
-        titleLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         panel.add(titleLabel);
 
         // Phone
         JLabel ratingLabel = new JLabel(user.getPhone());
-        ratingLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         panel.add(ratingLabel);
 
         // ===== Contact Info Panel =====
         JPanel contactInfoPanel = new JPanel(new MigLayout("wrap 2, insets 10, gapx 5", "[][grow]", ""));
-        contactInfoPanel.setBackground(new Color(250, 250, 250));
+        //contactInfoPanel.setBackground(new Color(250, 250, 250));
         contactInfoPanel.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
         contactInfoPanel.putClientProperty(FlatClientProperties.STYLE, "arc:12");
 
@@ -85,7 +82,7 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
 
         // ===== Tags Panel =====
         JPanel tagsPanel = new JPanel(new MigLayout("insets 10, wrap 4, gapx 8, gapy 5", "[]", ""));
-        tagsPanel.setBackground(new Color(232, 246, 249));
+        //tagsPanel.setBackground(new Color(232, 246, 249));
         tagsPanel.setBorder(BorderFactory.createLineBorder(new Color(200, 230, 240)));
         tagsPanel.putClientProperty(FlatClientProperties.STYLE, "arc:12");
 
@@ -112,7 +109,7 @@ public class ContactDetailsInternalFrame extends CommonInternalJFrame {
 
     private JPanel createWidgetsPanel() {
         JPanel panel = new JPanel(new MigLayout("insets 10", "[grow]", ""));
-        panel.setBackground(new Color(240, 240, 240));
+        //panel.setBackground(new Color(240, 240, 240));
 
         Font font = UIManager.getFont("defaultFont");
         // Login and Cancel Buttons

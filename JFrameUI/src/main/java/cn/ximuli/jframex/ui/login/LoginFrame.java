@@ -1,6 +1,7 @@
 package cn.ximuli.jframex.ui.login;
 
 import cn.ximuli.jframex.service.LoginService;
+import cn.ximuli.jframex.ui.Application;
 import cn.ximuli.jframex.ui.I18nHelper;
 import cn.ximuli.jframex.ui.MainFrame;
 import cn.ximuli.jframex.ui.event.UserLoginEvent;
@@ -261,8 +262,8 @@ public class LoginFrame extends JFrame {
 
     public void reset() {
         enableOrDisableComponents(true);
-        usernameField.setText("");
-        passwordField.setText("");
+        usernameField.setText(Application.DEFAULT_USER_NAME);
+        passwordField.setText(Application.DEFAULT_USER_PASSWD);
         setTitle(I18nHelper.getMessage("app.login"));
         titleLabel.setText(I18nHelper.getMessage("app.login"));
         subtitleLabel.setText(I18nHelper.getMessage("app.login.welcome"));

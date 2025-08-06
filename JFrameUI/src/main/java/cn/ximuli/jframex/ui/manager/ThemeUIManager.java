@@ -193,44 +193,47 @@ public class ThemeUIManager {
         if (themeInfo == null) {
             return;
         }
-        // change look and feel
-        if (themeInfo.getLafClassName() != null) {
-            if (!reload && themeInfo.getLafClassName().equals(UIManager.getLookAndFeel().getClass().getName())) {
-                return;
-            }
-            if (!reload) {
-                FlatAnimatedLafChange.showSnapshot();
-            }
-            try {
-                log.info("change theme: {}", themeInfo);
-                UIManager.setLookAndFeel(themeInfo.getLafClassName());
-            } catch (Exception ex) {
-                throw new RuntimeException("Failed to create '" + themeInfo.getThemeFile() + "'.", ex);
-
-            }
-        } else if (themeInfo.getThemeFile() != null) {
-            if (!reload)
-                FlatAnimatedLafChange.showSnapshot();
-            try {
-                if (themeInfo.getThemeFile().getName().endsWith(".properties")) {
-                    FlatLaf.setup(new FlatPropertiesLaf(themeInfo.getName(), themeInfo.getThemeFile()));
-                } else {
-                    FlatLaf.setup(IntelliJTheme.createLaf(new FileInputStream(themeInfo.getThemeFile())));
+        EventQueue.invokeLater(() -> {
+            if (themeInfo.getLafClassName() != null) {
+                if (!reload && themeInfo.getLafClassName().equals(UIManager.getLookAndFeel().getClass().getName())) {
+                    return;
                 }
-                JFramePref.state.put(ThemeUIManager.KEY_LAF_THEME_FILE, themeInfo.getThemeFile().getAbsolutePath());
-            } catch (Exception ex) {
-                LoggingFacade.INSTANCE.logSevere(null, ex);
-                throw new RuntimeException("Failed to load '" + themeInfo.getThemeFile() + "'.", ex);
-            }
-        } else {
-            throw new RuntimeException("Missing lafClassName for '" + themeInfo.getThemeFile() + "'.");
-        }
+                if (!reload) {
+                    FlatAnimatedLafChange.showSnapshot();
+                }
+                try {
+                    log.info("change theme: {}", themeInfo);
+                    UIManager.setLookAndFeel(themeInfo.getLafClassName());
+                } catch (Exception ex) {
+                    throw new RuntimeException("Failed to create '" + themeInfo.getThemeFile() + "'.", ex);
 
-        // update all components
-        FlatLaf.updateUI();
-        if (!reload) {
-            FlatAnimatedLafChange.hideSnapshotWithAnimation();
-        }
+                }
+            } else if (themeInfo.getThemeFile() != null) {
+                if (!reload)
+                    FlatAnimatedLafChange.showSnapshot();
+                try {
+                    if (themeInfo.getThemeFile().getName().endsWith(".properties")) {
+                        FlatLaf.setup(new FlatPropertiesLaf(themeInfo.getName(), themeInfo.getThemeFile()));
+                    } else {
+                        FlatLaf.setup(IntelliJTheme.createLaf(new FileInputStream(themeInfo.getThemeFile())));
+                    }
+                    JFramePref.state.put(ThemeUIManager.KEY_LAF_THEME_FILE, themeInfo.getThemeFile().getAbsolutePath());
+                } catch (Exception ex) {
+                    LoggingFacade.INSTANCE.logSevere(null, ex);
+                    throw new RuntimeException("Failed to load '" + themeInfo.getThemeFile() + "'.", ex);
+                }
+            } else {
+                throw new RuntimeException("Missing lafClassName for '" + themeInfo.getThemeFile() + "'.");
+            }
+
+            // update all components
+            FlatLaf.updateUI();
+            if (!reload) {
+                FlatAnimatedLafChange.hideSnapshotWithAnimation();
+            }
+        });
+        // change look and feel
+
     }
 
     public static void fontFamilyChanged(String fontFamily) {

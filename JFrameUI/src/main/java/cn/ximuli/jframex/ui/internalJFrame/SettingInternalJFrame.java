@@ -20,8 +20,6 @@ import net.miginfocom.layout.LC;
 import net.miginfocom.layout.UnitValue;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.util.ReflectionUtils;
-
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Method;
@@ -142,17 +140,26 @@ public class SettingInternalJFrame extends CommonInternalJFrame implements Hinta
 
 
     private void settingPanelShow(SettingInfo<JComponent> settingInfo) {
-        if (ArrayUtils.contains(controlPanel.getComponents(), settingInfo.getValue())) {
-            return;
-        }
+        log.info("debug show 1");
         JComponent component =  settingInfo.getValue();
+//        component.revalidate();
+//        component.repaint();
+//        if (component instanceof JPanel jPanel) {
+//            log.info("debug show 2");
+//            jPanel.updateUI();
+//        }
+
+        SwingUtilities.updateComponentTreeUI(component);
+
         controlPanel.removeAll();
-        controlPanel.add(component, BorderLayout.CENTER);
-        controlPanel.revalidate();
+        SwingUtilities.updateComponentTreeUI(controlPanel);
         controlPanel.updateUI();
+        controlPanel.add(component, BorderLayout.CENTER);
+        log.info("debug show 2");
         if (component instanceof Hintable hintable) {
             hintable.showHint(false);
         }
+
 
     }
 }
